@@ -1,0 +1,155 @@
+.LeftNavigationBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 220px;
+  background: linear-gradient(180deg, #e8d4f0 0%, #d4c4e0 100%);
+  padding: 20px 16px;
+  border-radius: 0;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  cursor: default;          
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  z-index: 100;
+
+  .logo {
+    width: 150px;
+    height: 100px;
+    object-fit: contain;
+    margin-bottom: 40px;
+    cursor: default;
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    cursor: pointer;
+
+    /* add/replace inside .LeftNavigationBar .row (or at the end of file) */
+
+.row > a.active {
+  background: linear-gradient(90deg, #8b4dff 0%, #a05fff 100%);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(139, 77, 255, 0.3);
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+
+/* ensure the icon/text inside active row still look correct */
+.row.active a,
+.row > a.active {
+  color: #fff;
+}
+
+/* keep submenu .row1 .active as before (no change needed) */
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* active state for regular rows */
+    &.active {
+      background: linear-gradient(90deg, #8b4dff 0%, #a05fff 100%);
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(139, 77, 255, 0.3);
+    }
+
+    &.active svg,
+    &.active a {
+      color: white;
+    }
+
+    svg {
+      font-size: 18px;
+      color: #4a4a4a;
+    }
+
+    a {
+      text-decoration: none;
+      color: #2d2d2d;
+      font-size: 15px;
+      font-weight: 500;
+      flex: 1;
+    }
+
+    /* manage row specific */
+    &.manage-row {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 12px 0;
+      background: none;
+
+      .manage-label {
+        padding: 12px 16px;
+        font-size: 15px;
+        font-weight: 500;
+        color: #2d2d2d;
+        width: 100%;
+      }
+
+      &.active .manage-label {
+        color: #8b4dff;
+        font-weight: 600;
+      }
+    }
+
+    /* submenu styling */
+    .row1 {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      margin-left: 0;
+      margin-top: 0;
+      border-left: 2px solid #b8a3c9;
+      padding-left: 16px;
+
+      a {
+        padding: 10px 12px;
+        margin-bottom: 6px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        position: relative;
+        background: transparent;
+        color: #2d2d2d;
+        font-size: 13px;
+
+        &:hover {
+          background: rgba(139, 77, 255, 0.1);
+          padding-left: 16px;
+        }
+
+        /* active submenu link */
+        &.active {
+          background: linear-gradient(90deg, #8b4dff 0%, #a05fff 100%);
+          color: white;
+          font-weight: 600;
+          box-shadow: 0 2px 8px rgba(139, 77, 255, 0.3);
+          padding-left: 12px;
+
+          &::before {
+            content: '→';
+            position: absolute;
+            left: -14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8b4dff;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+}

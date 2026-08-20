@@ -1,0 +1,240 @@
+// ProjectAddForm.scss
+$purple-primary: #8b4dff;
+$purple-light: #E4D4F6;
+$purple-dark: #5c4391;
+$text-dark: #2d2d2d;
+$text-light: #666666;
+$border-color: #e0e0e0;
+$success-color: #10b981;
+$hover-color: #7a3fdd;
+
+.project-form-container {
+  padding: 40px;
+  background: linear-gradient(135deg, #f5f5f5 0%, #f9f9f9 100%);
+  min-height: 100vh;
+}
+
+.form-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  max-width: 700px;
+  margin: 0 auto;
+  border: 1px solid rgba(139, 77, 255, 0.1);
+
+  .form-header {
+    background: linear-gradient(135deg, $purple-primary 0%, $hover-color 100%);
+    color: white;
+    padding: 40px;
+    text-align: center;
+
+    h2 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    p {
+      margin: 0;
+      font-size: 14px;
+      opacity: 0.9;
+      font-weight: 400;
+    }
+  }
+}
+
+.modern-form {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .form-label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      color: $text-dark;
+      text-transform: capitalize;
+
+      .required {
+        color: #ef4444;
+        font-weight: 700;
+      }
+    }
+
+    .form-input,
+    .form-textarea {
+      padding: 12px 16px;
+      border: 2px solid $border-color;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      background: #fafafa;
+
+      &:focus {
+        outline: none;
+        border-color: $purple-primary;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(139, 77, 255, 0.1);
+      }
+
+      &:hover {
+        border-color: rgba(139, 77, 255, 0.3);
+      }
+
+      &::placeholder {
+        color: #999999;
+      }
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 120px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+      &:focus {
+        box-shadow: 0 0 0 3px rgba(139, 77, 255, 0.1);
+      }
+    }
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+
+    .form-group {
+      margin: 0;
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid $border-color;
+
+    button {
+      flex: 1;
+      padding: 14px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+
+      &:hover {
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, $purple-primary 0%, $hover-color 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(139, 77, 255, 0.3);
+
+      &:hover {
+        box-shadow: 0 6px 20px rgba(139, 77, 255, 0.4);
+      }
+    }
+
+    .btn-secondary {
+      background: white;
+      color: $purple-primary;
+      border: 2px solid $purple-primary;
+
+      &:hover {
+        background: $purple-light;
+        border-color: $purple-primary;
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .project-form-container {
+    padding: 20px;
+  }
+
+  .form-card {
+    .form-header {
+      padding: 30px 20px;
+
+      h2 {
+        font-size: 24px;
+      }
+    }
+  }
+
+  .modern-form {
+    padding: 24px;
+    gap: 20px;
+
+    .form-row {
+      grid-template-columns: 1fr;
+      gap: 0;
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+    }
+
+    .form-actions {
+      flex-direction: column;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .form-card {
+    border-radius: 8px;
+
+    .form-header {
+      padding: 24px 16px;
+
+      h2 {
+        font-size: 20px;
+      }
+
+      p {
+        font-size: 12px;
+      }
+    }
+  }
+
+  .modern-form {
+    padding: 16px;
+    gap: 16px;
+
+    .form-group {
+      gap: 6px;
+
+      .form-label {
+        font-size: 13px;
+      }
+    }
+  }
+}

@@ -1,0 +1,96 @@
+body {
+  background-color: #fff;
+}
+.member-add-form{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: #d9c2f8; /* form card background */
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(78, 78, 78, 0.367);
+  margin: 24px auto;
+  max-width: 760px;
+  width: calc(100% - 48px);
+  box-sizing: border-box;
+  align-items: stretch;
+}
+
+/* headings */
+.member-add-form h2{
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #222;
+}
+
+/* make each form a two-column grid: label | control */
+.member-add-form form {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 12px 16px;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* hide existing <br/> used in markup so layout isn't broken */
+.member-add-form br {
+  display: none;
+}
+
+/* label styling and alignment */
+.member-add-form label {
+  justify-self: start;
+  color: #333;
+  font-size: 0.95rem;
+  padding-right: 8px;
+}
+
+/* input/select/textarea styles - force same background color */
+.member-add-form input,
+.member-add-form select,
+.member-add-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: #d9c2f8; /* match form background */
+  font-size: 14px;
+  box-sizing: border-box;
+  color: #1f1f1f; /* ensure readable text */
+}
+
+/* ensure labels and headings sit cleanly on same bg */
+.member-add-form h2,
+.member-add-form label {
+  background: transparent;
+  color: #1f1f1f;
+}
+
+/* button placement - center under the form card */
+.member-add-form > button {
+  align-self: center;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  background: #7c5bbd;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 6px;
+}
+
+/* responsive: single column on small screens */
+@media (max-width: 700px) {
+  .member-add-form form {
+    grid-template-columns: 1fr;
+  }
+  .member-add-form label {
+    justify-self: stretch;
+    margin-bottom: 4px;
+  }
+  .member-add-form > button {
+    width: 100%;
+    align-self: stretch;
+  }
+}

@@ -1,0 +1,315 @@
+.my-project-page {
+  margin-left: 250px;
+  margin-top: 80px;
+  min-height: calc(100vh - 80px);
+  background: linear-gradient(135deg, #e8d4f0 0%, #f0e6fa 100%);
+
+  .loading-state,
+  .error-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 80px);
+    font-size: 18px;
+    color: #666;
+
+    button {
+      margin-top: 16px;
+      background: #8b4dff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+
+      &:hover {
+        background: #7a3fd6;
+      }
+    }
+  }
+
+  .project-hero {
+    position: relative;
+    padding: 40px 48px;
+
+    .hero-background {
+      position: absolute;
+      top: 0;
+      left: 250px;
+      right: 0;
+      height: 300px;
+      background: linear-gradient(135deg, rgba(139, 77, 255, 0.1) 0%, rgba(155, 135, 245, 0.1) 100%);
+      pointer-events: none;
+    }
+
+    .project-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+  }
+
+  /* Project Title */
+  .project-title {
+    font-size: 48px;
+    font-weight: 700;
+    color: #6f4bd8;
+    margin: 0 0 32px 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Project Overview Section */
+  .project-overview {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 32px;
+    margin-bottom: 48px;
+    align-items: start;
+
+    .project-image-section {
+      .project-image-placeholder {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        height: 200px;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+    }
+
+    .project-description-section {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+      .project-description {
+        font-size: 15px;
+        line-height: 1.8;
+        color: #444;
+        margin: 0 0 20px 0;
+        text-align: justify;
+      }
+
+      .project-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(0, 0, 0, 0.06);
+
+        .meta-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 14px;
+
+          strong {
+            color: #2d2d2d;
+            font-weight: 600;
+          }
+
+          span {
+            color: #666;
+
+            &.status-badge {
+              display: inline-block;
+              padding: 4px 12px;
+              border-radius: 16px;
+              font-weight: 600;
+              font-size: 12px;
+
+              &.status-pending {
+                background: #fff3cd;
+                color: #856404;
+              }
+
+              &.status-ongoing,
+              &.status-in-progress {
+                background: #cfe2ff;
+                color: #084298;
+              }
+
+              &.status-completed {
+                background: #d1e7dd;
+                color: #0f5132;
+              }
+
+              &.status-on-hold {
+                background: #f8d7da;
+                color: #842029;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /* Chair Persons Section */
+  .chair-persons-section {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #2d2d2d;
+      margin: 0 0 24px 0;
+      text-align: center;
+    }
+
+    .chair-persons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-center, minmax(120px, 1fr));
+      gap: 24px;
+      justify-items: center;
+
+      .chair-person-card {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+
+        .chair-avatar {
+          width: 100px;
+          height: 100px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #8b4dff 0%, #a05fff 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 4px 12px rgba(139, 77, 255, 0.3);
+          border: 3px solid white;
+
+          .avatar-initials {
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+          }
+        }
+
+        .chair-name {
+          font-size: 14px;
+          font-weight: 700;
+          color: #2d2d2d;
+          margin: 0;
+        }
+
+        .chair-role {
+          font-size: 12px;
+          color: #8b4dff;
+          margin: 0;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .my-project-page {
+    margin-left: 250px;
+
+    .project-hero {
+      padding: 32px 24px;
+
+      .hero-background {
+        left: 250px;
+      }
+    }
+
+    .project-title {
+      font-size: 36px;
+    }
+
+    .project-overview {
+      grid-template-columns: 1fr;
+      gap: 24px;
+
+      .project-image-section {
+        .project-image-placeholder {
+          height: 250px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .my-project-page {
+    margin-left: 0;
+    margin-top: 60px;
+
+    .project-hero {
+      padding: 24px 16px;
+
+      .hero-background {
+        left: 0;
+      }
+    }
+
+    .project-title {
+      font-size: 28px;
+      margin-bottom: 24px;
+    }
+
+    .project-overview {
+      grid-template-columns: 1fr;
+      gap: 16px;
+
+      .project-image-section {
+        .project-image-placeholder {
+          height: 200px;
+        }
+      }
+
+      .project-description-section {
+        padding: 16px;
+      }
+    }
+
+    .chair-persons-section {
+      padding: 24px 16px;
+
+      h2 {
+        font-size: 20px;
+      }
+
+      .chair-persons-grid {
+        grid-template-columns: repeat(auto-center, 100px);
+        gap: 16px;
+
+        .chair-person-card {
+          .chair-avatar {
+            width: 80px;
+            height: 80px;
+
+            .avatar-initials {
+              font-size: 24px;
+            }
+          }
+
+          .chair-name {
+            font-size: 12px;
+          }
+
+          .chair-role {
+            font-size: 11px;
+          }
+        }
+      }
+    }
+  }
+}
