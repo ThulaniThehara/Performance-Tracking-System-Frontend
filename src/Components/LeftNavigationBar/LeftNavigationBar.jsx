@@ -40,7 +40,8 @@ function LeftNavigationBar() {
           <FaChevronRight className="nav-arrow" />
         </NavLink>
 
-        <NavLink to="/AdminProjects" className={({ isActive }) => (isActive ? 'row active' : 'row')}>
+        {/* Society project management: what you lead and contribute to. */}
+        <NavLink to="/projects" className={({ isActive }) => (isActive ? 'row active' : 'row')}>
           <div className="icon-wrapper">
             <FaProjectDiagram className="row-icon" />
           </div>
