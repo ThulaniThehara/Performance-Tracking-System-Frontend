@@ -15,6 +15,10 @@ import AdminAddProject from "./Pages/Admin/AdminAddProject.jsx";
 import AdminAddMember from "./Pages/Admin/AdminAddMember.jsx";
 import AdminViewAccount from "./Pages/Admin/AdminViewAccount.jsx";
 
+// Projects module (society project management)
+import ProjectsHome from "./Pages/Projects/ProjectsHome.jsx";
+import ProjectDetails from "./Pages/Projects/ProjectDetails.jsx";
+
 // Chairperson
 import ChairDashboard from "./Pages/Chair/ChairDashboard.jsx";
 import ManageCommitees from "./Pages/Chair/ManageCommitees.jsx";
@@ -64,6 +68,27 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
+  // Projects module — any signed-in role; the page itself shows "Projects You
+  // Lead" only to chairpersons, and the API enforces the same split.
+  {
+    path: "/projects",
+    element: (
+      <ProtectedRoute>
+        <ProjectsHome />
+      </ProtectedRoute>
+    ),
+    errorElement: <div>Page Not Found</div>,
+  },
+  {
+    path: "/projects/:projectId",
+    element: (
+      <ProtectedRoute>
+        <ProjectDetails />
+      </ProtectedRoute>
+    ),
+    errorElement: <div>Page Not Found</div>,
+  },
+
   {
     path: "/chairperson/dashboard",
     element: <ChairDashboard />,
@@ -88,7 +113,16 @@ const router = createBrowserRouter([
 
   { path: "/AdminHome", element: <AdminHome />, errorElement: <div>Page Not Found</div> },
   { path: "/AdminDashboard", element: <AdminDashboard />, errorElement: <div>Page Not Found</div> },
-  { path: "/AdminProjects", element: <AdminProjects />, errorElement: <div>Page Not Found</div> },
+  // Where projects are actually created and assigned a chairperson.
+  {
+    path: "/AdminProjects",
+    element: (
+      <ProtectedRoute allowedRoles={["ADMIN"]}>
+        <AdminProjects />
+      </ProtectedRoute>
+    ),
+    errorElement: <div>Page Not Found</div>,
+  },
   { path: "/AdminAddProjects", element: <AdminAddProject />, errorElement: <div>Page Not Found</div> },
   { path: "/AdminAddMember", element: <AdminAddMember />, errorElement: <div>Page Not Found</div> },
   { path: "/AdminCommittees", element: <AdminCommittees />, errorElement: <div>Page Not Found</div> },
