@@ -1,67 +1,85 @@
-// ...existing code...
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { FaHome, FaUser, FaProjectDiagram } from 'react-icons/fa'
-import { FaCodeCommit } from 'react-icons/fa6'
+import { FaHome, FaUser, FaProjectDiagram, FaChevronRight, FaChartLine } from 'react-icons/fa'
+import { FaCodeCommit, FaUsers } from 'react-icons/fa6'
 import '../../SCSS/componentStyle/LeftNavigationBar.scss'
 
 function LeftNavigationBar() {
   return (
     <div className="LeftNavigationBar">
+      {/* Brand logo container */}
       <div className="brand">
-        <img
-          src="https://rcunialumni.home.blog/wp-content/uploads/2023/05/racualu-full-black-logo.png?w=1080"
-          alt="Rotaract logo"
-          className="logo"
-        />
+        <div className="brand-badge">
+          <FaChartLine className="brand-icon" />
+        </div>
+        <div className="brand-text-box">
+          <span className="brand-title">PTS</span>
+          <span className="brand-subtitle">Performance Tracker</span>
+        </div>
       </div>
 
-      <NavLink to="/" className={({ isActive }) => (isActive ? 'row active' : 'row')}>
-        <FaHome />
-        <span>Home</span>
-      </NavLink>
+      <div className="nav-menu">
+        <NavLink to="/admin/dashboard" className={({ isActive }) => (isActive ? 'row active' : 'row')}>
+          <FaHome className="row-icon" />
+          <span>Dashboard</span>
+          <FaChevronRight className="nav-arrow" />
+        </NavLink>
 
-      <NavLink to="/AdminProjects" className={({ isActive }) => (isActive ? 'row active' : 'row')}>
-        <FaProjectDiagram />
-        <span>My Projects</span>
-      </NavLink>
+        <NavLink to="/AdminProjects" className={({ isActive }) => (isActive ? 'row active' : 'row')}>
+          <FaProjectDiagram className="row-icon" />
+          <span>My Projects</span>
+          <FaChevronRight className="nav-arrow" />
+        </NavLink>
 
-      <NavLink to="/AdminDashboard" className={({ isActive }) => (isActive ? 'row active' : 'row')}>
-        <FaUser />
-        <span>Profile</span>
-      </NavLink>
+        <NavLink to="/AdminDashboard" className={({ isActive }) => (isActive ? 'row active' : 'row')}>
+          <FaUser className="row-icon" />
+          <span>Profile</span>
+          <FaChevronRight className="nav-arrow" />
+        </NavLink>
 
-      <a
-        href="https://rotaractalumnimora.org/"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="row"
-      >
-        <span>Rotaract</span>
-      </a>
+        <div className="row-divider">MANAGE</div>
 
-      <div className="row-divider">Manage</div>
+        <NavLink to="/AdminProjects" className={({ isActive }) => (isActive ? 'row submenu active' : 'row submenu')}>
+          <span>Projects</span>
+          <FaChevronRight className="nav-arrow" />
+        </NavLink>
 
-      <NavLink to="/AdminProjects" className={({ isActive }) => (isActive ? 'row submenu active' : 'row submenu')}>
-        <span>Projects</span>
-      </NavLink>
+        <NavLink to="/AdminCommittees" className={({ isActive }) => (isActive ? 'row submenu active' : 'row submenu')}>
+          <span>Committees</span>
+          <FaChevronRight className="nav-arrow" />
+        </NavLink>
 
-      <NavLink to="/AdminCommittees" className={({ isActive }) => (isActive ? 'row submenu active' : 'row submenu')}>
-        <span>Committees</span>
-      </NavLink>
+        <NavLink to="/AdminAddMember" className={({ isActive }) => (isActive ? 'row submenu active' : 'row submenu')}>
+          <FaUsers className="row-icon" />
+          <span>Member</span>
+          <FaChevronRight className="nav-arrow" />
+        </NavLink>
 
-      <NavLink to="/AdminAddMember" className={({ isActive }) => (isActive ? 'row submenu active' : 'row submenu')}>
-        <span>Member</span>
-      </NavLink>
+        <NavLink to="/Reports" className={({ isActive }) => (isActive ? 'row active' : 'row')}>
+          <FaCodeCommit className="row-icon" />
+          <span>Reports</span>
+          <FaChevronRight className="nav-arrow" />
+        </NavLink>
 
-      <NavLink to="/Reports" className={({ isActive }) => (isActive ? 'row active' : 'row')}>
-        <FaCodeCommit />
-        <span>Reports</span>
-      </NavLink>
+        <NavLink to="/Settings" className={({ isActive }) => (isActive ? 'row active' : 'row')}>
+          <span>Settings</span>
+          <FaChevronRight className="nav-arrow" />
+        </NavLink>
+      </div>
 
-      <NavLink to="/Settings" className={({ isActive }) => (isActive ? 'row active' : 'row')}>
-        <span>Settings</span>
-      </NavLink>
+      {/* Bottom sidebar user profile card as seen in reference image */}
+      <div className="sidebar-footer-user">
+        <img
+          src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150"
+          alt="Thulani M."
+          className="user-avatar-mini"
+        />
+        <div className="user-info-mini">
+          <span className="user-name-mini">Thulani M.</span>
+          <span className="user-role-mini">Administrator</span>
+        </div>
+        <span className="footer-dots">•••</span>
+      </div>
     </div>
   )
 }

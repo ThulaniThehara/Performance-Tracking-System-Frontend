@@ -1,0 +1,94 @@
+$pt-50: #f3eff8;
+$pt-100: #d6c7e6;
+$pt-300: #b79ad2;
+$pt-500: #9a6ebe;
+$pt-700: #744b93;
+$pt-800: #4b2f61;
+$pt-900: #261633;
+
+:root {
+  /* ---- Brand Colors ---- */
+  --purple-50:  #{$pt-50};   /* Light off-white purple canvas */
+  --purple-100: #{$pt-100};  /* Soft purple highlight / border */
+  --purple-200: #{$pt-300};  /* Muted purple accent */
+  --purple-300: #{$pt-500};  /* Vibrant purple accent */
+  --purple-500: #{$pt-700};  /* Deep rich purple / primary */
+  --purple-700: #{$pt-800};  /* Dark purple / primary hover */
+  --purple-900: #{$pt-900};  /* Very dark purple / text & dark bg */
+
+  /* ---- Functional Tokens ---- */
+  --accent:         var(--purple-500);
+  --accent-hover:   var(--purple-700);
+  --accent-vibrant: var(--purple-300);
+  --accent-soft:    var(--purple-200);
+  --accent-tint:    rgba(116, 75, 147, 0.08);
+  --accent-ring:    rgba(154, 110, 190, 0.3);
+  --on-accent:      #FFFFFF;
+
+  /* ---- Surface & Canvas ---- */
+  --bg:             #F7F5FA;
+  --surface:        #FFFFFF;
+  --surface-2:      var(--purple-50);
+  --surface-glass:  rgba(255, 255, 255, 0.85);
+
+  /* ---- Structural Hairlines & Borders ---- */
+  --fill:           var(--purple-50);
+  --fill-hover:     var(--purple-100);
+  --separator:      #E6DFEF;
+  --separator-light:#F2ECF7;
+  --border-glow:    rgba(154, 110, 190, 0.25);
+
+  /* ---- Typography / Foreground ---- */
+  --label:          var(--purple-900);
+  --label-2:        var(--purple-700);
+  --label-3:        var(--purple-500);
+  --label-muted:    #7E6C8E;
+
+  /* ---- Status Colors ---- */
+  --danger:        #E53935;
+  --danger-bg:     rgba(229, 57, 53, 0.08);
+  --danger-label:  #C62828;
+
+  --success:       #10B981;
+  --success-bg:    rgba(16, 185, 129, 0.08);
+
+  /* ---- Elevation & Glass Shadows ---- */
+  --sh-1: 0 4px 12px rgba(38, 22, 51, 0.04), 0 1px 2px rgba(38, 22, 51, 0.02);
+  --sh-2: 0 8px 24px rgba(116, 75, 147, 0.08), 0 2px 6px rgba(38, 22, 51, 0.04);
+  --sh-3: 0 16px 36px rgba(75, 47, 97, 0.12), 0 4px 12px rgba(38, 22, 51, 0.06);
+  --sh-glow: 0 0 20px rgba(116, 75, 147, 0.2);
+
+  /* ---- Radii ---- */
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-pill: 9999px;
+}
+
+@mixin marker-shapes {
+  &.event {
+    background: var(--purple-500);
+    border-radius: 50%;
+  }
+
+  &.special_task {
+    background: var(--purple-900);
+    border-radius: 2px;
+  }
+
+  &.meeting {
+    background: var(--purple-300);
+    border-radius: 2px;
+    transform: rotate(45deg);
+  }
+
+  &.deadline {
+    background: transparent;
+    border-radius: 0;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 9px solid var(--danger);
+  }
+}
