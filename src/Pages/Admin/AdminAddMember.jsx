@@ -5,9 +5,8 @@ import LeftNavigationBar from "../../Components/LeftNavigationBar/LeftNavigation
 import Toast from "../../Components/Toast/Toast";
 import "../../SCSS/AdminStyles/AdminAddMember/AdminAddMember.scss";
 import MemberAddFormComponent from "../../Components/AdminComponents/MemberAddFormComponent";
-import TaskBar from "../../Components/SerachAnd/SearchAndButton";
 import MemberViewAccountComponent from "../../Components/AdminComponents/MemberViewAccountComponent";
-import "../../SCSS/AdminStyles/AdminViewAccount/AdminViewAccount.scss";
+import { FaPlus, FaSearch } from "react-icons/fa";
 
 const AdminAddMember = () => {
   const navigate = useNavigate();
@@ -55,7 +54,7 @@ const AdminAddMember = () => {
   const handleMemberAdded = async () => {
     setShowToast(true);
     await fetchMembers();
-    setTimeout(() => setActiveView("view"), 300);
+    setTimeout(() => setActiveView("view"), 400);
   };
 
   const fetchMembers = async () => {
@@ -65,7 +64,6 @@ const AdminAddMember = () => {
 
       const token = localStorage.getItem("token");
 
-      // ✅ backend mount: app.use('/api/user', baseUserRoute)
       const res = await fetch(`${baseURL}/user/all`, {
         headers: {
           "Content-Type": "application/json",
@@ -73,7 +71,6 @@ const AdminAddMember = () => {
         },
       });
 
-      // safe parse
       const text = await res.text();
       const data = text ? JSON.parse(text) : null;
 
@@ -100,46 +97,69 @@ const AdminAddMember = () => {
   }, []);
 
   const handleMemberDeleted = (memberId) => {
-    // local UI update (we will later connect to backend delete)
     setMembers((prev) => prev.filter((m) => m._id !== memberId && m.id !== memberId));
   };
 
   const handleMemberUpdated = (updatedMember) => {
-    // local UI update (we will later connect to backend update)
     setMembers((prev) =>
       prev.map((m) => (m._id === updatedMember._id || m.id === updatedMember.id ? updatedMember : m))
     );
   };
 
   return (
-    <div className="admin-add-member">
+    <div className="admin-add-member-page">
       <Header />
       <LeftNavigationBar />
-      <Toast message="Account created successfully!" isVisible={showToast} duration={2000} />
+      <Toast message="Member account created successfully!" isVisible={showToast} duration={2200} />
 
-      <div className="taskbar-wrapper">
-        <TaskBar
-          title1="Add New Member"
-          title2="View Members"
-          onAddClick={() => handleViewChange("add")}
-          onViewClick={() => handleViewChange("view")}
-          activeView={activeView}
-        />
-      </div>
+      <main className="admin-add-member-main">
+        <div className="admin-member-container">
+          {/* Top Segmented TaskBar (Matching screenshot style) */}
+          <header className="member-navigation-header">
+            <div className="member-segmented-taskbar" role="tablist">
+              <button
+                type="button"
+                className={`tab-segment ${activeView === "add" ? "active" : ""}`}
+                onClick={() => handleViewChange("add")}
+                role="tab"
+                aria-selected={activeView === "add"}
+              >
+                <FaPlus className="segment-icon" />
+                <span className="segment-text">Add Member</span>
+              </button>
 
-      <div className="content-wrapper">
-        {activeView === "add" && <MemberAddFormComponent onMemberAdded={handleMemberAdded} />}
+              <button
+                type="button"
+                className={`tab-segment ${activeView === "view" ? "active" : ""}`}
+                onClick={() => handleViewChange("view")}
+                role="tab"
+                aria-selected={activeView === "view"}
+              >
+                <FaSearch className="segment-icon" />
+                <span className="segment-text">View Members</span>
+                {members.length > 0 && <span className="segment-count">({members.length})</span>}
+              </button>
+            </div>
+          </header>
 
-        {activeView === "view" && (
-          <MemberViewAccountComponent
-            members={members}
-            loading={loadingMembers}
-            error={membersError}
-            onMemberDeleted={handleMemberDeleted}
-            onMemberUpdated={handleMemberUpdated}
-          />
-        )}
-      </div>
+          {/* Dynamic Content View */}
+          <section className="member-content-section">
+            {activeView === "add" && <MemberAddFormComponent onMemberAdded={handleMemberAdded} />}
+
+            {activeView === "view" && (
+              <div className="member-directory-wrapper">
+                <MemberViewAccountComponent
+                  members={members}
+                  loading={loadingMembers}
+                  error={membersError}
+                  onMemberDeleted={handleMemberDeleted}
+                  onMemberUpdated={handleMemberUpdated}
+                />
+              </div>
+            )}
+          </section>
+        </div>
+      </main>
     </div>
   );
 };
