@@ -1,7 +1,7 @@
 @use "../tokens" as *;
 
 /* ==========================================================================
-   Admin sidebar  ·  Performance Tracking System (Reference UI Style)
+   Admin Sidebar  ·  Modern Glassmorphic Performance Tracking System Theme
    ========================================================================== */
 
 .LeftNavigationBar {
@@ -9,40 +9,60 @@
   top: 0;
   left: 0;
   height: 100vh;
-  width: 230px;
-  background: #FFFFFF;
-  border-right: 1px solid var(--separator);
-  padding: 20px 14px 16px;
+  width: 240px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+  border-right: 1px solid var(--purple-100);
+  padding: 24px 16px 20px;
   z-index: 1000;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   font-family: "Poppins", sans-serif;
-  box-shadow: 2px 0 16px rgba(38, 22, 51, 0.02);
+  box-shadow: 4px 0 24px rgba(38, 22, 51, 0.03);
+  transition: all 0.25s ease;
 
+  /* Custom slim scrollbar */
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--purple-100);
+    border-radius: 4px;
+  }
+
+  /* ---------------- Modern Brand Header ---------------- */
   .brand {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 10px 10px 24px;
+    padding: 6px 8px 24px;
     border-bottom: 1px solid var(--purple-50);
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 
     .brand-badge {
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--purple-700) 0%, var(--purple-500) 100%);
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #6b52d1 0%, #9d7bf0 100%);
       display: flex;
       align-items: center;
       justify-content: center;
       color: #FFFFFF;
-      box-shadow: 0 4px 12px rgba(116, 75, 147, 0.25);
+      box-shadow: 0 6px 16px rgba(107, 82, 209, 0.32);
       flex-shrink: 0;
+      transition: transform 0.22s ease;
 
       .brand-icon {
-        font-size: 1.15rem;
+        font-size: 1.25rem;
       }
+    }
+
+    &:hover .brand-badge {
+      transform: scale(1.05) rotate(-3deg);
     }
 
     .brand-text-box {
@@ -51,32 +71,46 @@
       line-height: 1.2;
 
       .brand-title {
-        font-weight: 700;
-        font-size: 1rem;
+        font-weight: 800;
+        font-size: 1.05rem;
         color: var(--purple-900);
-        letter-spacing: 0.02em;
+        letter-spacing: -0.01em;
       }
 
       .brand-subtitle {
         font-size: 0.68rem;
         color: var(--purple-500);
-        font-weight: 500;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
       }
     }
   }
 
+  /* ---------------- Navigation Menu ---------------- */
   .nav-menu {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .nav-group-label {
+    padding: 14px 12px 6px;
+    font-size: 0.64rem;
+    font-weight: 800;
+    color: var(--purple-300);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
   }
 
   .row {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 11px 14px;
-    margin-bottom: 4px;
-    border-radius: var(--r-md);
-    transition: all 0.2s ease;
+    padding: 10px 14px;
+    border-radius: 14px;
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     text-decoration: none;
     color: var(--purple-700);
@@ -84,42 +118,21 @@
     font-weight: 500;
     cursor: pointer;
 
-    &:hover {
+    .icon-wrapper {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background: var(--purple-50);
-      color: var(--purple-900);
-
-      .nav-arrow {
-        opacity: 0.8;
-        transform: translateX(2px);
-      }
-    }
-
-    /* Active state filled purple pill as shown in reference image */
-    &.active {
-      background: linear-gradient(135deg, var(--purple-700) 0%, var(--purple-800) 100%);
-      color: #FFFFFF;
-      font-weight: 600;
-      box-shadow: 0 4px 14px rgba(75, 47, 97, 0.2);
-
-      .row-icon, svg {
-        color: #FFFFFF !important;
-      }
-
-      span {
-        color: #FFFFFF !important;
-      }
-
-      .nav-arrow {
-        color: #FFFFFF !important;
-        opacity: 0.9;
-      }
-    }
-
-    .row-icon {
-      font-size: 15px;
-      color: var(--purple-300);
-      transition: color 0.18s ease;
+      color: var(--purple-500);
+      transition: all 0.2s ease;
       flex-shrink: 0;
+
+      .row-icon {
+        font-size: 0.88rem;
+      }
     }
 
     span {
@@ -129,44 +142,98 @@
     }
 
     .nav-arrow {
-      font-size: 10px;
+      font-size: 0.65rem;
       color: var(--purple-300);
-      opacity: 0.5;
+      opacity: 0.4;
       transition: transform 0.2s ease, opacity 0.2s ease, color 0.2s ease;
       flex-shrink: 0;
     }
 
-    /* Submenu items */
-    &.submenu {
-      padding-left: 20px;
-      font-size: 0.83rem;
+    &:hover {
+      background: rgba(116, 75, 147, 0.07);
+      color: var(--purple-900);
+      transform: translateX(3px);
+
+      .icon-wrapper {
+        background: var(--purple-100);
+        color: var(--purple-700);
+      }
+
+      .nav-arrow {
+        opacity: 0.85;
+        transform: translateX(2px);
+      }
+    }
+
+    /* Floating Active Gradient Pill */
+    &.active {
+      background: linear-gradient(135deg, #6b52d1 0%, #9d7bf0 100%);
+      color: #FFFFFF;
+      font-weight: 600;
+      box-shadow: 0 6px 20px rgba(107, 82, 209, 0.32);
+
+      .icon-wrapper {
+        background: rgba(255, 255, 255, 0.2);
+        color: #FFFFFF;
+      }
+
+      span {
+        color: #FFFFFF;
+      }
+
+      .nav-arrow {
+        color: #FFFFFF;
+        opacity: 0.9;
+        transform: translateX(1px);
+      }
+
+      &:hover {
+        transform: translateX(2px);
+      }
     }
   }
 
-  .row-divider {
-    padding: 14px 14px 6px;
-    font-size: 0.65rem;
-    font-weight: 700;
-    color: var(--purple-300);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-  }
-
-  /* Bottom User profile footer item matching reference image */
+  /* ---------------- Sidebar Footer Profile Card ---------------- */
   .sidebar-footer-user {
     margin-top: auto;
-    padding-top: 14px;
-    border-top: 1px solid var(--purple-50);
+    padding: 12px;
+    border-radius: 16px;
+    background: var(--purple-50);
+    border: 1px solid var(--purple-100);
     display: flex;
     align-items: center;
     gap: 10px;
+    transition: all 0.2s ease;
 
-    .user-avatar-mini {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 1px solid var(--separator);
+    &:hover {
+      background: #FFFFFF;
+      box-shadow: 0 8px 22px rgba(75, 47, 97, 0.08);
+      border-color: var(--purple-300);
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      flex-shrink: 0;
+
+      .user-avatar-mini {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #FFFFFF;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .online-indicator {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #10B981;
+        border: 2px solid #FFFFFF;
+      }
     }
 
     .user-info-mini {
@@ -177,26 +244,38 @@
       overflow: hidden;
 
       .user-name-mini {
-        font-size: 0.82rem;
-        font-weight: 600;
+        font-size: 0.83rem;
+        font-weight: 700;
         color: var(--purple-900);
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
       }
 
-      .user-role-mini {
-        font-size: 0.68rem;
-        color: var(--purple-500);
-        white-space: nowrap;
+      .user-role-badge {
+        font-size: 0.65rem;
+        color: var(--purple-700);
+        font-weight: 600;
       }
     }
 
-    .footer-dots {
-      font-size: 0.76rem;
-      letter-spacing: 2px;
+    .user-action-btn {
+      background: transparent;
+      border: none;
       color: var(--purple-300);
+      font-size: 0.88rem;
       cursor: pointer;
+      padding: 6px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.18s ease;
+
+      &:hover {
+        color: var(--danger, #EF4444);
+        background: rgba(239, 68, 68, 0.08);
+      }
     }
   }
 }

@@ -471,7 +471,7 @@ const AdminHome = () => {
             <section className="home-right">
               <article className="panel calendar-panel">
                 <div className="panel-head">
-                  <h2>Society Calendar</h2>
+                  <h2>Organization Calendar</h2>
                   <button
                     className="btn btn-ghost btn-sm"
                     onClick={() => {
