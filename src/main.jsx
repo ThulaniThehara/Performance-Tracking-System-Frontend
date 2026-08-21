@@ -7,6 +7,7 @@ import LoginPage from "./Pages/LoginPage/LoginPage.jsx";
 import SetPassword from "./Pages/Auth/SetPassword";
 import ProtectedRoute from "./Components/ProtectedRoute";
 // Admin
+import AdminHome from "./Pages/Admin/AdminHome.jsx";
 import AdminDashboard from "./Pages/Admin/AdminDashboard.jsx";
 import AdminProjects from "./Pages/Admin/AdminProjects.jsx";
 import AdminCommittees from "./Pages/Admin/AdminCommitees.jsx";
@@ -46,11 +47,20 @@ const router = createBrowserRouter([
   },
 
   // ✅ NEW role-based dashboard routes (used by Login redirect)
+  // Admin lands here straight after login: counters + society calendar.
   {
     path: "/admin/dashboard",
     element: (
       <ProtectedRoute allowedRoles={["ADMIN"]}>
-        <AdminDashboard />
+        <AdminHome />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/admin/home",
+    element: (
+      <ProtectedRoute allowedRoles={["ADMIN"]}>
+        <AdminHome />
       </ProtectedRoute>
     ),
   },
@@ -76,6 +86,7 @@ const router = createBrowserRouter([
   { path: "/ManageCommittees", element: <ManageCommitees />, errorElement: <div>Page Not Found</div> },
   { path: "/ManageTasks", element: <ManageTask />, errorElement: <div>Page Not Found</div> },
 
+  { path: "/AdminHome", element: <AdminHome />, errorElement: <div>Page Not Found</div> },
   { path: "/AdminDashboard", element: <AdminDashboard />, errorElement: <div>Page Not Found</div> },
   { path: "/AdminProjects", element: <AdminProjects />, errorElement: <div>Page Not Found</div> },
   { path: "/AdminAddProjects", element: <AdminAddProject />, errorElement: <div>Page Not Found</div> },

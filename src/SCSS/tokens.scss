@@ -1,0 +1,107 @@
+/* ==========================================================================
+   HoneyDesign Inspired 2-Color Combined Purple System
+   ========================================================================== */
+$pt-50:  #f8f6fe; /* Ultra-soft lavender off-white canvas */
+$pt-100: #eae2f8; /* Soft pastel lavender highlight / border */
+$pt-300: #c2adf3; /* Soft lavender purple */
+$pt-400: #9d7bf0; /* Color 2: Vibrant Bright Lavender Purple */
+$pt-500: #7b5ec9; /* Mid Periwinkle Purple */
+$pt-600: #6b52d1; /* Color 1: Rich Deep Periwinkle Purple */
+$pt-700: #563eb5; /* Deep Indigo Purple */
+$pt-800: #3b2a82; /* Dark Indigo frame background */
+$pt-900: #1d1545; /* Deep dark midnight indigo text */
+
+:root {
+  /* ---- 2-Color Combination Gradient System ---- */
+  --color-primary-1: #6b52d1; /* Deep Periwinkle Purple */
+  --color-primary-2: #9d7bf0; /* Bright Soft Lavender Purple */
+  --gradient-primary: linear-gradient(135deg, #6b52d1 0%, #9d7bf0 100%);
+  --gradient-deep:    linear-gradient(135deg, #563eb5 0%, #9d7bf0 100%);
+  --gradient-soft:    linear-gradient(135deg, #eae2f8 0%, #f8f6fe 100%);
+
+  /* ---- Brand Colors ---- */
+  --purple-50:  #{$pt-50};
+  --purple-100: #{$pt-100};
+  --purple-200: #{$pt-300};
+  --purple-300: #{$pt-400};
+  --purple-500: #{$pt-600};
+  --purple-700: #{$pt-700};
+  --purple-800: #{$pt-800};
+  --purple-900: #{$pt-900};
+
+  /* ---- Functional Tokens ---- */
+  --accent:         #6b52d1;
+  --accent-hover:   #563eb5;
+  --accent-vibrant: #9d7bf0;
+  --accent-soft:    #eae2f8;
+  --accent-tint:    rgba(107, 82, 209, 0.08);
+  --accent-ring:    rgba(157, 123, 240, 0.3);
+  --on-accent:      #FFFFFF;
+
+  /* ---- Surface & Canvas ---- */
+  --bg:             #f8f6fe;
+  --surface:        #FFFFFF;
+  --surface-2:      #f8f6fe;
+  --surface-glass:  rgba(255, 255, 255, 0.92);
+
+  /* ---- Structural Hairlines & Borders ---- */
+  --fill:           #f6f3fc;
+  --fill-hover:     #e6dcf7;
+  --separator:      #e6dcf7;
+  --separator-light:#f0e9fa;
+  --border-glow:    rgba(123, 94, 201, 0.25);
+
+  /* ---- Typography / Foreground ---- */
+  --label:          #1e163b;
+  --label-2:        #5b45b0;
+  --label-3:        #7b5ec9;
+  --label-muted:    #8b7eb5;
+
+  /* ---- Status Colors ---- */
+  --danger:        #E53935;
+  --danger-bg:     rgba(229, 57, 53, 0.08);
+  --danger-label:  #C62828;
+
+  --success:       #10B981;
+  --success-bg:    rgba(16, 185, 129, 0.08);
+
+  /* ---- Elevation & Glass Shadows ---- */
+  --sh-1: 0 4px 12px rgba(30, 22, 59, 0.04), 0 1px 2px rgba(30, 22, 59, 0.02);
+  --sh-2: 0 8px 24px rgba(91, 69, 176, 0.09), 0 2px 6px rgba(30, 22, 59, 0.04);
+  --sh-3: 0 16px 36px rgba(64, 48, 110, 0.16), 0 4px 12px rgba(30, 22, 59, 0.06);
+  --sh-glow: 0 0 24px rgba(123, 94, 201, 0.28);
+
+  /* ---- Radii ---- */
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-pill: 9999px;
+}
+
+@mixin marker-shapes {
+  &.event {
+    background: var(--purple-500);
+    border-radius: 50%;
+  }
+
+  &.special_task {
+    background: var(--purple-900);
+    border-radius: 2px;
+  }
+
+  &.meeting {
+    background: var(--purple-300);
+    border-radius: 2px;
+    transform: rotate(45deg);
+  }
+
+  &.deadline {
+    background: transparent;
+    border-radius: 0;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 9px solid var(--danger);
+  }
+}

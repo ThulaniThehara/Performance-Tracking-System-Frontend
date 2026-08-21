@@ -37,10 +37,10 @@ function LeftNavigationBar() {
     } else if (path.includes('Settings')) {
       setActive('settings');
     } else {
-      
+
       setActive('home');
     }
- 
+
   }, []);
 
   const handleNav = (key) => {
@@ -56,17 +56,17 @@ function LeftNavigationBar() {
         </div>
 
         <div className={`row ${active === 'home' ? 'active' : ''}`} onClick={() => handleNav('home')}>
-          <FaHome/>
+          <FaHome />
           <Link to="/" className={active === 'home' ? 'active' : ''} onClick={() => handleNav('home')}>Home</Link>
         </div>
 
         <div className={`row ${active === 'projects' ? 'active' : ''}`} onClick={() => handleNav('projects')}>
-          <FaProjectDiagram/>
+          <FaProjectDiagram />
           <Link to="/MyProject" className={active === 'projects' ? 'active' : ''} onClick={() => handleNav('projects')}>My Projects</Link>
         </div>
 
         <div className={`row ${active === 'profile' ? 'active' : ''}`} onClick={() => handleNav('profile')}>
-          <FaUser/>
+          <FaUser />
           <Link to="/ChairDashboard" className={active === 'profile' ? 'active' : ''} onClick={() => handleNav('profile')}>Profile</Link>
         </div>
 
@@ -102,7 +102,7 @@ function LeftNavigationBar() {
         </div>
 
         <div className={`row ${active === 'reports' ? 'active' : ''}`} onClick={() => handleNav('reports')}>
-          <FaCodeCommit/>
+          <FaCodeCommit />
           <Link to="/Reports" className={active === 'reports' ? 'active' : ''} onClick={() => handleNav('reports')}>Reports</Link>
         </div>
 
