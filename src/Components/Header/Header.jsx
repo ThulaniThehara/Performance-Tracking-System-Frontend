@@ -1,9 +1,39 @@
-
-import React from 'react'
-import { FaSearch, FaBell, FaChevronDown } from 'react-icons/fa'
-import '../../SCSS/Header.scss'
+import React, { useState, useEffect } from "react";
+import { FaSearch, FaBell, FaChevronDown } from "react-icons/fa";
+import { getUser } from "../../utils/auth";
+import "../../SCSS/Header.scss";
 
 function Header() {
+  const [currentUser, setCurrentUser] = useState(null);
+
+  const loadUserData = () => {
+    const user = getUser();
+    setCurrentUser(user);
+  };
+
+  useEffect(() => {
+    loadUserData();
+
+    // Listen for custom profile update events and storage events
+    window.addEventListener("userProfileUpdated", loadUserData);
+    window.addEventListener("storage", loadUserData);
+
+    return () => {
+      window.removeEventListener("userProfileUpdated", loadUserData);
+      window.removeEventListener("storage", loadUserData);
+    };
+  }, []);
+
+  const getInitials = (name) => {
+    if (!name) return "AD";
+    const parts = name.trim().split(/\s+/);
+    if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+    return name.slice(0, 2).toUpperCase();
+  };
+
+  const displayName = currentUser?.name || "Admin User";
+  const userAvatar = currentUser?.profileImage || currentUser?.avatar || null;
+
   return (
     <header className="app-header">
       <div className="header-search">
@@ -26,17 +56,23 @@ function Header() {
         <div className="header-divider" />
 
         <div className="user-profile-menu">
-          <img
-            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150"
-            alt="Thulani M."
-            className="user-avatar"
-          />
-          <span className="user-name">Thulani M.</span>
+          {userAvatar ? (
+            <img
+              src={userAvatar}
+              alt={displayName}
+              className="user-avatar"
+            />
+          ) : (
+            <div className="user-avatar-initials">
+              {getInitials(displayName)}
+            </div>
+          )}
+          <span className="user-name">{displayName}</span>
           <FaChevronDown className="dropdown-arrow" />
         </div>
       </div>
     </header>
-  )
+  );
 }
 
-export default Header
+export default Header;
