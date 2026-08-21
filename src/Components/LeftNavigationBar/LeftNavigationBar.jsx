@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import {
   FaHome,
   FaUser,
@@ -16,6 +16,8 @@ import {
 import '../../SCSS/componentStyle/LeftNavigationBar.scss'
 
 function LeftNavigationBar() {
+  const location = useLocation();
+
   return (
     <aside className="LeftNavigationBar">
       {/* Brand logo container */}
@@ -41,7 +43,7 @@ function LeftNavigationBar() {
         </NavLink>
 
         {/* Society project management: what you lead and contribute to. */}
-        <NavLink to="/projects" className={({ isActive }) => (isActive ? 'row active' : 'row')}>
+        <NavLink to="/projects" end className={({ isActive }) => (isActive ? 'row active' : 'row')}>
           <div className="icon-wrapper">
             <FaProjectDiagram className="row-icon" />
           </div>
@@ -59,7 +61,10 @@ function LeftNavigationBar() {
 
         <div className="nav-group-label">MANAGEMENT</div>
 
-        <NavLink to="/AdminProjects" className={({ isActive }) => (isActive ? 'row active' : 'row')}>
+        <NavLink
+          to="/AdminProjects"
+          className={({ isActive }) => (isActive || location.pathname.startsWith('/projects/')) ? 'row active' : 'row'}
+        >
           <div className="icon-wrapper">
             <FaFolder className="row-icon" />
           </div>

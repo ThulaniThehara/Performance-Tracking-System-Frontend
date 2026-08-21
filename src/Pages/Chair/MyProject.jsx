@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 const MyProject = () => {
   const projectId = '68d799d39f75e374f4e80aef'; // hardcoded for now
   const navigate = useNavigate();
-  
+
   const [project, setProject] = useState(null);
   const [chairPersons, setChairPersons] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +27,7 @@ const MyProject = () => {
       // fetch project by ID
       const projectRes = await axios.get(`http://localhost:5000/api/project/${projectId}`);
       const projectData = projectRes.data.data || projectRes.data;
-      
+
       if (!projectData) {
         setError('Project not found');
         setLoading(false);
@@ -114,8 +114,8 @@ const MyProject = () => {
               {/* Left: Project Image (placeholder) */}
               <div className="project-image-section">
                 <div className="project-image-placeholder">
-                  <img 
-                    src={project?.image || 'https://via.placeholder.com/280x200?text=' + encodeURIComponent(project?.PName || 'Project')} 
+                  <img
+                    src={project?.image || 'https://via.placeholder.com/280x200?text=' + encodeURIComponent(project?.PName || 'Project')}
                     alt={project?.PName}
                   />
                 </div>

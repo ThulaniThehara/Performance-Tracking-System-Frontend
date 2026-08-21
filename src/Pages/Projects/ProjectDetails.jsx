@@ -11,7 +11,7 @@ import TaskCard from "../../Components/Projects/TaskCard";
 import Modal from "../../Components/Projects/Modal";
 
 import { apiFetch } from "../../utils/api";
-import { getUser } from "../../utils/auth";
+import { getUser, getRole } from "../../utils/auth";
 import { byDeadline, displayStatusOf } from "../../utils/projectUtils";
 import "../../SCSS/Projects/Projects.scss";
 
@@ -36,6 +36,7 @@ const emptyTask = () => ({
 const ProjectDetails = () => {
   const { projectId } = useParams();
   const viewerId = getUser()?.id;
+  const backLink = getRole() === "ADMIN" ? "/AdminProjects" : "/projects";
 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -279,7 +280,7 @@ const ProjectDetails = () => {
         <LeftNavigationBar />
         <div className="pm-page">
           <div className="pm-wrapper">
-            <Link to="/projects" className="pm-back">
+            <Link to={backLink} className="pm-back">
               <FaArrowLeft aria-hidden="true" /> Back to projects
             </Link>
             <div className="pm-empty-state">
@@ -301,7 +302,7 @@ const ProjectDetails = () => {
 
       <div className="pm-page">
         <div className="pm-wrapper">
-          <Link to="/projects" className="pm-back">
+          <Link to={backLink} className="pm-back">
             <FaArrowLeft aria-hidden="true" /> Back to projects
           </Link>
 
