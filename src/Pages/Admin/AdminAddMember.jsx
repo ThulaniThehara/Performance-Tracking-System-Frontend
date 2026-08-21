@@ -6,7 +6,7 @@ import Toast from "../../Components/Toast/Toast";
 import "../../SCSS/AdminStyles/AdminAddMember/AdminAddMember.scss";
 import MemberAddFormComponent from "../../Components/AdminComponents/MemberAddFormComponent";
 import MemberViewAccountComponent from "../../Components/AdminComponents/MemberViewAccountComponent";
-import { FaPlus, FaSearch } from "react-icons/fa";
+import { FaUserPlus, FaUsers } from "react-icons/fa";
 
 const AdminAddMember = () => {
   const navigate = useNavigate();
@@ -113,33 +113,31 @@ const AdminAddMember = () => {
       <Toast message="Member account created successfully!" isVisible={showToast} duration={2200} />
 
       <main className="admin-add-member-main">
-        <div className="admin-member-container">
-          {/* Top Segmented TaskBar (Matching screenshot style) */}
+        <div className={`admin-member-container ${activeView === "view" ? "view-mode-active" : ""}`}>
+          {/* Top Underline Indicator Navigation Bar (Matching second reference image) */}
           <header className="member-navigation-header">
-            <div className="member-segmented-taskbar" role="tablist">
+            <nav className="underline-tab-bar" aria-label="Member navigation">
               <button
                 type="button"
-                className={`tab-segment ${activeView === "add" ? "active" : ""}`}
+                className={`underline-tab ${activeView === "add" ? "active" : ""}`}
                 onClick={() => handleViewChange("add")}
-                role="tab"
-                aria-selected={activeView === "add"}
               >
-                <FaPlus className="segment-icon" />
-                <span className="segment-text">Add Member</span>
+                <FaUserPlus className="tab-icon" />
+                <span className="tab-text">Add New Member</span>
+                {activeView === "add" && <span className="active-underline" />}
               </button>
 
               <button
                 type="button"
-                className={`tab-segment ${activeView === "view" ? "active" : ""}`}
+                className={`underline-tab ${activeView === "view" ? "active" : ""}`}
                 onClick={() => handleViewChange("view")}
-                role="tab"
-                aria-selected={activeView === "view"}
               >
-                <FaSearch className="segment-icon" />
-                <span className="segment-text">View Members</span>
-                {members.length > 0 && <span className="segment-count">({members.length})</span>}
+                <FaUsers className="tab-icon" />
+                <span className="tab-text">View Members</span>
+                {members.length > 0 && <span className="tab-count-pill">{members.length}</span>}
+                {activeView === "view" && <span className="active-underline" />}
               </button>
-            </div>
+            </nav>
           </header>
 
           {/* Dynamic Content View */}
@@ -154,6 +152,7 @@ const AdminAddMember = () => {
                   error={membersError}
                   onMemberDeleted={handleMemberDeleted}
                   onMemberUpdated={handleMemberUpdated}
+                  onAddMemberClick={() => handleViewChange("add")}
                 />
               </div>
             )}
