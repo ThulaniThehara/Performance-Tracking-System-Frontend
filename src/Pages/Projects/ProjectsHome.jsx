@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
 import { FaCrown, FaUsers, FaFolderOpen } from "react-icons/fa";
 
 import Header from "../../Components/Header/Header";
@@ -7,7 +8,7 @@ import ProjectCard from "../../Components/Projects/ProjectCard";
 import MyTasksWidget from "../../Components/Projects/MyTasksWidget";
 
 import { apiFetch } from "../../utils/api";
-import { getUser } from "../../utils/auth";
+import { getUser, getRole } from "../../utils/auth";
 import "../../SCSS/Projects/Projects.scss";
 
 /**
@@ -22,6 +23,12 @@ import "../../SCSS/Projects/Projects.scss";
  */
 const ProjectsHome = () => {
   const user = getUser();
+  const role = getRole();
+
+  if (role === "MEMBER") {
+    return <Navigate to="/member/dashboard?tab=projects" replace />;
+  }
+
   const firstName = (user?.name || "there").split(" ")[0];
 
   const [led, setLed] = useState([]);

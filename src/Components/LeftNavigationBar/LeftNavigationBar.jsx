@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import {
   FaHome,
   FaUser,
@@ -13,9 +13,20 @@ import {
   FaCog,
   FaSignOutAlt,
 } from 'react-icons/fa'
+import { logout } from '../../utils/auth'
 import '../../SCSS/componentStyle/LeftNavigationBar.scss'
 
 function LeftNavigationBar() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = (e) => {
+    e?.preventDefault();
+    e?.stopPropagation();
+    logout();
+    window.location.href = '/';
+  };
+
   return (
     <aside className="LeftNavigationBar">
       {/* Brand logo container */}
@@ -41,7 +52,7 @@ function LeftNavigationBar() {
         </NavLink>
 
         {/* Society project management: what you lead and contribute to. */}
-        <NavLink to="/projects" className={({ isActive }) => (isActive ? 'row active' : 'row')}>
+        <NavLink to="/projects" end className={({ isActive }) => (isActive ? 'row active' : 'row')}>
           <div className="icon-wrapper">
             <FaProjectDiagram className="row-icon" />
           </div>
@@ -59,7 +70,10 @@ function LeftNavigationBar() {
 
         <div className="nav-group-label">MANAGEMENT</div>
 
-        <NavLink to="/AdminProjects" className={({ isActive }) => (isActive ? 'row active' : 'row')}>
+        <NavLink
+          to="/AdminProjects"
+          className={({ isActive }) => (isActive || location.pathname.startsWith('/projects/')) ? 'row active' : 'row'}
+        >
           <div className="icon-wrapper">
             <FaFolder className="row-icon" />
           </div>
@@ -100,26 +114,31 @@ function LeftNavigationBar() {
         </NavLink>
       </nav>
 
-      {/* Bottom sidebar user profile card with status indicator */}
-      <div className="sidebar-footer-user">
-        <div className="avatar-wrapper">
-          <img
-            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150"
-            alt="Thulani M."
-            className="user-avatar-mini"
-          />
-          <span className="online-indicator" title="Online" />
-        </div>
-
-        <div className="user-info-mini">
-          <span className="user-name-mini">Thulani M.</span>
-          <span className="user-role-badge">Administrator</span>
-        </div>
-
-        <button className="user-action-btn" title="Logout">
-          <FaSignOutAlt />
-        </button>
-      </div>
+      {/* Bottom sidebar logout button */}
+      <button
+        className="sidebar-logout-btn"
+        onClick={handleLogout}
+        style={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '10px',
+          padding: '12px',
+          borderRadius: '14px',
+          border: '1px solid #fee2e2',
+          backgroundColor: '#fef2f2',
+          color: '#ef4444',
+          fontWeight: 700,
+          fontSize: '0.88rem',
+          cursor: 'pointer',
+          transition: 'all 0.2s ease',
+          marginTop: 'auto',
+        }}
+      >
+        <FaSignOutAlt style={{ fontSize: '1rem' }} />
+        <span>Logout</span>
+      </button>
     </aside>
   )
 }

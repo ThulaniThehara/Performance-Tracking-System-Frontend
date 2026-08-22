@@ -11,7 +11,7 @@ import TaskCard from "../../Components/Projects/TaskCard";
 import Modal from "../../Components/Projects/Modal";
 
 import { apiFetch } from "../../utils/api";
-import { getUser } from "../../utils/auth";
+import { getUser, getRole } from "../../utils/auth";
 import { byDeadline, displayStatusOf } from "../../utils/projectUtils";
 import "../../SCSS/Projects/Projects.scss";
 
@@ -36,6 +36,57 @@ const emptyTask = () => ({
 const ProjectDetails = () => {
   const { projectId } = useParams();
   const viewerId = getUser()?.id;
+  const isAdmin = getRole() === "ADMIN";
+  const backLink = isAdmin ? "/AdminProjects" : "/member/dashboard";
+
+  const renderNavigation = () => {
+    if (isAdmin) {
+      return (
+        <>
+          <Header />
+          <LeftNavigationBar />
+        </>
+      );
+    }
+    return (
+      <header
+        style={{
+          backgroundColor: "#ffffff",
+          borderBottom: "1px solid #eae2f8",
+          padding: "16px 32px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
+          boxShadow: "0 2px 12px rgba(29, 21, 69, 0.04)",
+        }}
+      >
+        <Link
+          to={backLink}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "8px",
+            fontSize: "0.88rem",
+            fontWeight: 700,
+            color: "#6b52d1",
+            textDecoration: "none",
+            backgroundColor: "#f4effa",
+            padding: "8px 18px",
+            borderRadius: 999,
+            transition: "all 0.2s ease",
+          }}
+        >
+          <FaArrowLeft style={{ fontSize: "0.78rem" }} /> Back to Dashboard
+        </Link>
+        <span style={{ fontWeight: 800, fontSize: "1.1rem", color: "#1d1545" }}>
+          Project Details
+        </span>
+      </header>
+    );
+  };
 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -273,9 +324,8 @@ const ProjectDetails = () => {
   if (loading) {
     return (
       <>
-        <Header />
-        <LeftNavigationBar />
-        <div className="pm-page">
+        {renderNavigation()}
+        <div className="pm-page" style={!isAdmin ? { marginLeft: 0 } : undefined}>
           <div className="pm-wrapper">
             <div className="pm-skeleton-card is-tall" />
           </div>
@@ -287,12 +337,11 @@ const ProjectDetails = () => {
   if (error || !data) {
     return (
       <>
-        <Header />
-        <LeftNavigationBar />
-        <div className="pm-page">
+        {renderNavigation()}
+        <div className="pm-page" style={!isAdmin ? { marginLeft: 0 } : undefined}>
           <div className="pm-wrapper">
-            <Link to="/projects" className="pm-back">
-              <FaArrowLeft aria-hidden="true" /> Back to projects
+            <Link to={backLink} className="pm-back">
+              <FaArrowLeft aria-hidden="true" /> Back to Dashboard
             </Link>
             <div className="pm-empty-state">
               <h3>Project unavailable</h3>
@@ -308,13 +357,12 @@ const ProjectDetails = () => {
 
   return (
     <>
-      <Header />
-      <LeftNavigationBar />
+      {renderNavigation()}
 
-      <div className="pm-page">
+      <div className="pm-page" style={!isAdmin ? { marginLeft: 0 } : undefined}>
         <div className="pm-wrapper">
-          <Link to="/projects" className="pm-back">
-            <FaArrowLeft aria-hidden="true" /> Back to projects
+          <Link to={backLink} className="pm-back">
+            <FaArrowLeft aria-hidden="true" /> Back to Dashboard
           </Link>
 
           <ProjectOverviewCard

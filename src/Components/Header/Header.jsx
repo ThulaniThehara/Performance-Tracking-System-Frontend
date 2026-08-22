@@ -1,38 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { FaSearch, FaBell, FaChevronDown } from "react-icons/fa";
-import { getUser } from "../../utils/auth";
-import "../../SCSS/Header.scss";
+import React, { useState } from 'react'
+import { FaSearch, FaBell, FaChevronDown, FaSignOutAlt } from 'react-icons/fa'
+import { useNavigate } from 'react-router-dom'
+import { getUser, logout } from '../../utils/auth'
+import '../../SCSS/Header.scss'
 
 function Header() {
-  const [currentUser, setCurrentUser] = useState(null);
+  const navigate = useNavigate();
+  const user = getUser();
+  const [showDropdown, setShowDropdown] = useState(false);
 
-  const loadUserData = () => {
-    const user = getUser();
-    setCurrentUser(user);
+  const userName = user?.name || user?.username || user?.userRole || "User";
+  const userAvatar =
+    user?.image ||
+    `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=6b52d1&color=fff`;
+
+  const handleLogout = (e) => {
+    e?.preventDefault();
+    e?.stopPropagation();
+    logout();
+    window.location.href = '/';
   };
-
-  useEffect(() => {
-    loadUserData();
-
-    // Listen for custom profile update events and storage events
-    window.addEventListener("userProfileUpdated", loadUserData);
-    window.addEventListener("storage", loadUserData);
-
-    return () => {
-      window.removeEventListener("userProfileUpdated", loadUserData);
-      window.removeEventListener("storage", loadUserData);
-    };
-  }, []);
-
-  const getInitials = (name) => {
-    if (!name) return "AD";
-    const parts = name.trim().split(/\s+/);
-    if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
-    return name.slice(0, 2).toUpperCase();
-  };
-
-  const displayName = currentUser?.name || "Admin User";
-  const userAvatar = currentUser?.profileImage || currentUser?.avatar || null;
 
   return (
     <header className="app-header">
@@ -55,20 +42,55 @@ function Header() {
 
         <div className="header-divider" />
 
-        <div className="user-profile-menu">
-          {userAvatar ? (
-            <img
-              src={userAvatar}
-              alt={displayName}
-              className="user-avatar"
-            />
-          ) : (
-            <div className="user-avatar-initials">
-              {getInitials(displayName)}
+        <div
+          className="user-profile-menu"
+          onClick={() => setShowDropdown(!showDropdown)}
+          style={{ position: 'relative', cursor: 'pointer' }}
+        >
+          <img
+            src={userAvatar}
+            alt={userName}
+            className="user-avatar"
+          />
+          <span className="user-name">{userName}</span>
+          <FaChevronDown className="dropdown-arrow" />
+
+          {showDropdown && (
+            <div
+              style={{
+                position: 'absolute',
+                top: '100%',
+                right: 0,
+                marginTop: 8,
+                backgroundColor: '#ffffff',
+                border: '1px solid #eae2f8',
+                borderRadius: 12,
+                boxShadow: '0 8px 24px rgba(107, 82, 209, 0.15)',
+                padding: '8px 0',
+                minWidth: 140,
+                zIndex: 1000,
+              }}
+            >
+              <button
+                onClick={handleLogout}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '8px 16px',
+                  border: 'none',
+                  background: 'none',
+                  color: '#ef4444',
+                  fontWeight: 600,
+                  fontSize: '0.85rem',
+                  cursor: 'pointer',
+                }}
+              >
+                <FaSignOutAlt /> Logout
+              </button>
             </div>
           )}
-          <span className="user-name">{displayName}</span>
-          <FaChevronDown className="dropdown-arrow" />
         </div>
       </div>
     </header>

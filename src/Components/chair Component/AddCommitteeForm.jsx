@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaSearch, FaTimes } from "react-icons/fa";
+import { FaSearch, FaTimes, FaFolderOpen, FaUsers, FaTag, FaAlignLeft } from "react-icons/fa";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,6 +11,8 @@ const AddCommitteeForm = ({ projectId, onSuccess, onCancel }) => {
         description: ""
     });
 
+    const [projects, setProjects] = useState([]);
+    const [selectedProjectId, setSelectedProjectId] = useState(projectId || "");
     const [allMembers, setAllMembers] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [filteredMembers, setFilteredMembers] = useState([]);
@@ -19,7 +21,28 @@ const AddCommitteeForm = ({ projectId, onSuccess, onCancel }) => {
 
     useEffect(() => {
         fetchAllMembers();
+        fetchProjects();
     }, []);
+
+    const fetchProjects = async () => {
+        try {
+            // Fetch projects from backend /api/project/get endpoint
+            let response;
+            try {
+                response = await axios.get("http://localhost:5000/api/project/get");
+            } catch (err) {
+                response = await axios.get("http://localhost:5000/api/project/all");
+            }
+            const projectList = response.data.data || response.data || [];
+            if (Array.isArray(projectList) && projectList.length > 0) {
+                setProjects(projectList);
+            } else {
+                throw new Error("No projects found");
+            }
+        } catch (error) {
+            console.error("Error fetching projects from backend:", error);
+        }
+    };
 
     useEffect(() => {
         if (searchQuery.trim() === "") {
@@ -74,6 +97,11 @@ const AddCommitteeForm = ({ projectId, onSuccess, onCancel }) => {
         e.preventDefault();
         
         // Validation
+        if (!selectedProjectId && !projectId) {
+            toast.error("Please select a project for this committee");
+            return;
+        }
+
         if (!formData.committeeName.trim()) {
             toast.error("Please enter a committee name");
             return;
@@ -95,7 +123,8 @@ const AddCommitteeForm = ({ projectId, onSuccess, onCancel }) => {
             const committeeData = {
                 CName: formData.committeeName,
                 Description: formData.description,
-                ProjectId: projectId,
+                projectId: selectedProjectId || projectId,
+                ProjectId: selectedProjectId || projectId,
                 Members: selectedMembers.map(member => ({
                     UserId: member._id,
                     UserName: member.name,
@@ -124,6 +153,7 @@ const AddCommitteeForm = ({ projectId, onSuccess, onCancel }) => {
                 committeeName: "",
                 description: ""
             });
+            if (!projectId) setSelectedProjectId("");
             setSelectedMembers([]);
             
             // Call success callback after a short delay
@@ -168,34 +198,58 @@ const AddCommitteeForm = ({ projectId, onSuccess, onCancel }) => {
             />
             
             <form onSubmit={handleSubmit} className="add-committee-form">
+                <div className="form-header">
+                    <h2>Create New Committee</h2>
+                    <p>Select a project, specify details, and assign members.</p>
+                </div>
+
                 <div className="form-group">
-                    <label>Committee Name *</label>
+                    <label><FaFolderOpen className="field-icon" /> Select Project *</label>
+                    <select
+                        name="projectId"
+                        value={selectedProjectId}
+                        onChange={(e) => setSelectedProjectId(e.target.value)}
+                        className="project-select-input"
+                        disabled={isSubmitting || !!projectId}
+                        required
+                    >
+                        <option value="">-- Choose a Project --</option>
+                        {projects.map((proj) => (
+                            <option key={proj._id || proj.id} value={proj._id || proj.id}>
+                                {proj.PName || proj.projectName || proj.title}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="form-group">
+                    <label><FaTag className="field-icon" /> Committee Name *</label>
                     <input
                         type="text"
                         name="committeeName"
                         value={formData.committeeName}
                         onChange={handleChange}
-                        placeholder="Enter committee name"
+                        placeholder="e.g. Technical Operations Committee"
                         disabled={isSubmitting}
                         required
                     />
                 </div>
 
                 <div className="form-group">
-                    <label>Description *</label>
+                    <label><FaAlignLeft className="field-icon" /> Description *</label>
                     <textarea
                         name="description"
                         value={formData.description}
                         onChange={handleChange}
-                        placeholder="Enter committee description"
-                        rows="4"
+                        placeholder="Describe the responsibilities and scope of this committee..."
+                        rows="3"
                         disabled={isSubmitting}
                         required
                     />
                 </div>
 
                 <div className="form-group">
-                    <label>Search and Add Members *</label>
+                    <label><FaUsers className="field-icon" /> Search and Add Members *</label>
                     <div className="search-input-wrapper">
                         <FaSearch className="search-icon" />
                         <input
