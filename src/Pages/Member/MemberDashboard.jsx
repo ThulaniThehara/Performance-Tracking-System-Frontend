@@ -3,6 +3,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "../../SCSS/MemberStyles/MemberDashboard.scss";
 import { Link } from "react-router-dom";
+import ProjectsDashboardView from "../../Components/MemberProjects/ProjectsDashboardView";
 
 import { apiFetch } from "../../utils/api";
 import { getUser } from "../../utils/auth";
@@ -488,106 +489,14 @@ const MemberDashboard = () => {
           )}
 
           {/* =========================================================================
-             TAB 2: PROJECTS VIEW (Total Projects Worked + Highlighted Chairperson)
+             TAB 2: REDESIGNED PROJECTS DASHBOARD VIEW
              ========================================================================= */}
           {activeTab === "projects" && (
-            <div className="member-projects-view">
-              {/* Header Bar */}
-              <div className="projects-header-bar">
-                <div className="title-area">
-                  <h2>Total Projects Worked</h2>
-                  <span className="count-pill">{stats.totalWorked}</span>
-                </div>
-
-                <div className="filter-tabs">
-                  <button
-                    className={`filter-btn ${projectFilter === "all" ? "active" : ""}`}
-                    onClick={() => setProjectFilter("all")}
-                  >
-                    All Projects ({allWorkedProjects.length})
-                  </button>
-                  <button
-                    className={`filter-btn ${projectFilter === "chaired" ? "active" : ""}`}
-                    onClick={() => setProjectFilter("chaired")}
-                  >
-                    👑 Chaired ({stats.chairedCount})
-                  </button>
-                  <button
-                    className={`filter-btn ${projectFilter === "contributed" ? "active" : ""}`}
-                    onClick={() => setProjectFilter("contributed")}
-                  >
-                    Contributed ({stats.contributingCount})
-                  </button>
-                </div>
-              </div>
-
-              {/* Projects Grid */}
-              <div className="projects-grid">
-                {filteredProjects.length === 0 ? (
-                  <div className="empty-projects-state">
-                    <FaFolder className="empty-icon" />
-                    <h3>No projects found</h3>
-                    <p>There are no projects matching the selected filter.</p>
-                  </div>
-                ) : (
-                  filteredProjects.map((p) => (
-                    <Link
-                      to={`/projects/${p._id}`}
-                      key={p._id}
-                      className={`project-card ${
-                        p.isChairperson ? "is-chairperson-card" : ""
-                      }`}
-                    >
-                      <div className="card-media">
-                        <img
-                          src={
-                            p.image ||
-                            "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800"
-                          }
-                          alt={p.PName}
-                        />
-                        <span className="status-badge">{p.status || "Ongoing"}</span>
-
-                        {/* PROMINENT CHAIRPERSON BADGE */}
-                        {p.isChairperson && (
-                          <div className="chairperson-glowing-badge">
-                            <FaCrown className="crown-icon" /> CHAIR PERSON
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="card-content">
-                        <h3 className="card-title">{p.PName}</h3>
-                        <p className="card-desc">
-                          {p.description ||
-                            "Society management project activity and committee task assignments."}
-                        </p>
-                        <div className="card-footer">
-                          <span
-                            className={`role-tag ${
-                              p.isChairperson ? "chair" : "member"
-                            }`}
-                          >
-                            {p.isChairperson ? (
-                              <>
-                                <FaCrown /> Chair Person
-                              </>
-                            ) : (
-                              <>
-                                <FaUserCheck /> Contributor
-                              </>
-                            )}
-                          </span>
-                          <span className="btn-view">
-                            View <FaArrowRight />
-                          </span>
-                        </div>
-                      </div>
-                    </Link>
-                  ))
-                )}
-              </div>
-            </div>
+            <ProjectsDashboardView
+              allWorkedProjects={allWorkedProjects}
+              ledProjects={ledProjects}
+              contributingProjects={contributingProjects}
+            />
           )}
 
         </div>

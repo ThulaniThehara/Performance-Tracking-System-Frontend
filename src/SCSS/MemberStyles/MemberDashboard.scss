@@ -11,7 +11,7 @@ body:has(.member-dashboard-layout) {
 .member-dashboard-layout {
   min-height: 100vh;
   margin-top: -70px; /* Cancels out body padding-top: 70px from Header.scss */
-  background: #f4effa;
+  background: #ffffff;
   font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color: #1d1545;
   display: flex;
@@ -777,6 +777,7 @@ body:has(.member-dashboard-layout) {
   gap: 32px;
 
   .projects-header-bar {
+    margin-top: 64px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1009,3 +1010,134 @@ body:has(.member-dashboard-layout) {
     box-shadow: 0 4px 14px rgba(255, 140, 0, 0.4);
   }
 }
+
+/* --------------------------------------------------------------------------
+   ENTERPRISE SAAS PROJECTS DASHBOARD STYLING — TWO-PANEL LAYOUT
+   -------------------------------------------------------------------------- */
+.saas-projects-page-wrapper {
+  animation: fadeInSaas 0.3s ease;
+}
+
+@keyframes fadeInSaas {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* Task Sidebar */
+.task-sidebar {
+  position: sticky;
+  top: 88px;
+  max-height: calc(100vh - 100px);
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #eae2f8;
+    border-radius: 999px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+.task-sidebar-item {
+  &:hover {
+    background-color: #f4effa !important;
+    border-color: #6b52d1 !important;
+    box-shadow: 0 4px 12px rgba(107, 82, 209, 0.08);
+  }
+}
+
+/* Header & Filter Bar */
+.saas-projects-header {
+  box-shadow: 0 10px 30px rgba(107, 82, 209, 0.07) !important;
+  background-color: #ffffff !important;
+  border: 1px solid rgba(234, 226, 248, 0.85) !important;
+}
+
+.project-filter-segmented-bar {
+  box-shadow: 0 8px 24px rgba(107, 82, 209, 0.06) !important;
+  background-color: #ffffff !important;
+  border: 1px solid rgba(234, 226, 248, 0.85) !important;
+}
+
+/* Project Cards */
+.saas-project-card {
+  box-shadow: 0 8px 24px rgba(107, 82, 209, 0.06) !important;
+  background-color: #ffffff !important;
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1) !important;
+
+  &:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 16px 40px rgba(107, 82, 209, 0.14) !important;
+    border-color: #6b52d1 !important;
+  }
+
+  &.chairperson-card:hover {
+    box-shadow: 0 16px 40px rgba(107, 82, 209, 0.22) !important;
+  }
+
+  .btn-action {
+    &.primary-btn:hover {
+      background: linear-gradient(135deg, #573eb8 0%, #8b6ef3 100%) !important;
+      transform: scale(1.04);
+      box-shadow: 0 6px 18px rgba(107, 82, 209, 0.3) !important;
+    }
+    &.secondary-btn:hover {
+      background-color: #eae2f8 !important;
+      border-color: #6b52d1 !important;
+      color: #1d1545 !important;
+      transform: scale(1.04);
+    }
+  }
+}
+
+/* Responsive: Two-Panel → Stacked */
+@media (max-width: 992px) {
+  .saas-projects-page-wrapper {
+    flex-direction: column !important;
+  }
+
+  .task-sidebar {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-height: 350px !important;
+    position: static !important;
+    border-right: none !important;
+    border-bottom: 1px solid #eae2f8 !important;
+    border-radius: 20px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .saas-projects-page-wrapper {
+    gap: 14px !important;
+    margin-top: 14px !important;
+  }
+
+  .saas-projects-header {
+    padding: 16px 18px !important;
+
+    h2 {
+      font-size: 1.1rem !important;
+    }
+  }
+
+  .saas-project-card {
+    border-radius: 16px !important;
+  }
+}
+
+
