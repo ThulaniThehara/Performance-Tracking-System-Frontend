@@ -511,6 +511,12 @@
               color: #475569;
               border: 1px solid #e2e8f0;
             }
+
+            &.upcoming {
+              background: #f1edfc;
+              color: #6b52d1;
+              border: 1px solid #ded4f7;
+            }
           }
         }
       }
@@ -582,8 +588,22 @@
             color: #64748b;
             border: 1px solid #e2e8f0;
           }
+
+          &.upcoming {
+            background: #f1edfc;
+            color: #6b52d1;
+            border: 1px solid #ded4f7;
+          }
         }
       }
+    }
+
+    .empty-state-text {
+      margin: 0;
+      padding: 18px 4px;
+      font-size: 0.82rem;
+      color: #94a3b8;
+      text-align: center;
     }
 
     /* Recent Activity Feed */

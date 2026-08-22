@@ -3,6 +3,7 @@ import "../../SCSS/AdminStyles/AdminDashboard/AdminDashboard.scss";
 import Header from "../../Components/Header/Header";
 import LeftNavigationBar from "../../Components/LeftNavigationBar/LeftNavigationBar";
 import { getUser, getToken } from "../../utils/auth";
+import { apiFetch } from "../../utils/api";
 import {
   FaPhoneAlt,
   FaEnvelope,
@@ -26,6 +27,12 @@ import {
 } from "react-icons/fa";
 
 const baseURL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+const ROLE_LABELS = {
+  CHAIRPERSON: "Chairperson",
+  COMMITTEE_LEAD: "Committee Lead",
+  MEMBER: "Member",
+};
 
 const AdminDashboard = () => {
   const fileInputRef = useRef(null);
@@ -166,116 +173,86 @@ const AdminDashboard = () => {
     window.dispatchEvent(new Event("userProfileUpdated"));
   };
 
-  // Admin's Own Projects Portfolio (Projects done / contributed by admin)
-  const [myProjects] = useState([
-    {
-      id: 1,
-      name: "Wanakkam 2025",
-      role: "Project Chair",
-      year: "2025",
-      category: "Cultural",
-      status: "Active",
-      contribution: "95%",
-    },
-    {
-      id: 2,
-      name: "Sabandi 2024",
-      role: "Co-Lead",
-      year: "2024",
-      category: "Social Welfare",
-      status: "Completed",
-      contribution: "100%",
-    },
-    {
-      id: 3,
-      name: "Binara Padura",
-      role: "Logistics Head",
-      year: "2024",
-      category: "Music & Art",
-      status: "Completed",
-      contribution: "100%",
-    },
-    {
-      id: 4,
-      name: "Cricket Fiesta",
-      role: "Organizing Member",
-      year: "2023",
-      category: "Sports",
-      status: "Completed",
-      contribution: "100%",
-    },
-    {
-      id: 5,
-      name: "Grama Prabodya",
-      role: "Technical Lead",
-      year: "2023",
-      category: "Community",
-      status: "Completed",
-      contribution: "100%",
-    },
-    {
-      id: 6,
-      name: "Web3 Ceylon",
-      role: "Design Lead",
-      year: "2022",
-      category: "Technology",
-      status: "Completed",
-      contribution: "100%",
-    },
-  ]);
+  // Admin's own project/committee/activity data, computed from the database
+  // via GET /pm/my-dashboard (no more hardcoded arrays).
+  const [myProjects, setMyProjects] = useState([]);
+  const [myCommittees, setMyCommittees] = useState([]);
+  const [recentActivities, setRecentActivities] = useState([]);
+  const [dashboardStats, setDashboardStats] = useState({
+    totalProjects: 0,
+    completedProjects: 0,
+    totalCommittees: 0,
+    committeesLed: 0,
+    totalTasksAssigned: 0,
+    tasksCompleted: 0,
+    contributionScore: 0,
+  });
+  const [loadingDashboard, setLoadingDashboard] = useState(true);
 
-  // Admin's Committees Participated / Led
-  const [myCommittees] = useState([
-    {
-      id: 1,
-      name: "Flyer & Graphics Design",
-      role: "Committee Head",
-      year: "2024/2025",
-      membersCount: 8,
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "Content Creation & PR",
-      role: "Senior Member",
-      year: "2024",
-      membersCount: 12,
-      status: "Completed",
-    },
-    {
-      id: 3,
-      name: "Logistics & Operational Support",
-      role: "Committee Head",
-      year: "2023/2024",
-      membersCount: 10,
-      status: "Completed",
-    },
-  ]);
+  const formatRelativeTime = (dateVal) => {
+    if (!dateVal) return "";
+    const diffMs = Date.now() - new Date(dateVal).getTime();
+    const minutes = Math.floor(diffMs / 60000);
+    if (minutes < 1) return "Just now";
+    if (minutes < 60) return `${minutes} minute${minutes === 1 ? "" : "s"} ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours} hour${hours === 1 ? "" : "s"} ago`;
+    const days = Math.floor(hours / 24);
+    if (days === 1) return "Yesterday";
+    if (days < 7) return `${days} days ago`;
+    return new Date(dateVal).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  };
 
-  // Admin Recent Activity Log (Matching Image 1 style)
-  const [recentActivities] = useState([
-    {
-      id: 1,
-      type: "project",
-      title: "Completed Milestone Review for Wanakkam 2025",
-      detail: "Phase 2 budget & design approval submitted",
-      time: "Just now",
-    },
-    {
-      id: 2,
-      type: "committee",
-      title: "Chaired Flyer & Graphics Design Meeting",
-      detail: "Assigned event banners and social media promo cards",
-      time: "2 hours ago",
-    },
-    {
-      id: 3,
-      type: "task",
-      title: "Submitted Final Report for Sabandi 2024",
-      detail: "Performance assessment archived successfully",
-      time: "Yesterday",
-    },
-  ]);
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      try {
+        setLoadingDashboard(true);
+        const res = await apiFetch("/pm/my-dashboard");
+        const data = res?.data || {};
+
+        setMyProjects(
+          (data.projects || []).map((p) => ({
+            id: p.id,
+            name: p.name,
+            role: p.position || ROLE_LABELS[p.role] || "Member",
+            year: p.year,
+            category: p.societyName || "",
+            status: p.status ? p.status.charAt(0) + p.status.slice(1).toLowerCase() : "Active",
+            contribution: p.contribution === null || p.contribution === undefined ? "—" : `${p.contribution}%`,
+          }))
+        );
+
+        setMyCommittees(
+          (data.committees || []).map((c) => ({
+            id: c.id,
+            name: c.name,
+            role: c.role === "COMMITTEE_LEAD" ? "Committee Head" : (c.position || "Member"),
+            year: c.year,
+            membersCount: c.membersCount,
+            status: c.status ? c.status.charAt(0) + c.status.slice(1).toLowerCase() : "Active",
+          }))
+        );
+
+        setRecentActivities(
+          (data.recentActivity || []).map((a, idx) => ({
+            id: idx,
+            type: a.type,
+            title: a.title,
+            detail: a.detail,
+            time: formatRelativeTime(a.date),
+          }))
+        );
+
+        if (data.stats) setDashboardStats(data.stats);
+      } catch (err) {
+        console.warn("Could not fetch admin dashboard data:", err);
+      } finally {
+        setLoadingDashboard(false);
+      }
+    };
+
+    fetchDashboard();
+  }, []);
 
   const getInitials = (name) => {
     if (!name) return "AD";
@@ -407,19 +384,27 @@ const AdminDashboard = () => {
             </div>
 
             <div className="stats-cards-grid">
-              {/* Card 1: Completed Projects */}
+              {/* Card 1: My Projects */}
               <div className="stat-overview-card">
                 <div className="card-top-row">
                   <div className="stat-icon-wrapper">
                     <FaProjectDiagram />
                   </div>
-                  <span className="trend-badge">↑ 12.5%</span>
                 </div>
                 <div className="stat-body">
                   <span className="stat-title">Projects Done</span>
-                  <span className="stat-number">6</span>
+                  <span className="stat-number">
+                    {loadingDashboard ? "…" : `${dashboardStats.completedProjects}/${dashboardStats.totalProjects}`}
+                  </span>
                 </div>
-                <div className="stat-progress-bar" style={{ "--progress": "85%" }} />
+                <div
+                  className="stat-progress-bar"
+                  style={{
+                    "--progress": `${dashboardStats.totalProjects
+                      ? Math.round((dashboardStats.completedProjects / dashboardStats.totalProjects) * 100)
+                      : 0}%`,
+                  }}
+                />
               </div>
 
               {/* Card 2: Committees Led */}
@@ -428,43 +413,60 @@ const AdminDashboard = () => {
                   <div className="stat-icon-wrapper">
                     <FaUsers />
                   </div>
-                  <span className="trend-badge">↑ 8.4%</span>
                 </div>
                 <div className="stat-body">
                   <span className="stat-title">Committees Headed</span>
-                  <span className="stat-number">3</span>
+                  <span className="stat-number">
+                    {loadingDashboard ? "…" : `${dashboardStats.committeesLed}/${dashboardStats.totalCommittees}`}
+                  </span>
                 </div>
-                <div className="stat-progress-bar" style={{ "--progress": "70%" }} />
+                <div
+                  className="stat-progress-bar"
+                  style={{
+                    "--progress": `${dashboardStats.totalCommittees
+                      ? Math.round((dashboardStats.committeesLed / dashboardStats.totalCommittees) * 100)
+                      : 0}%`,
+                  }}
+                />
               </div>
 
-              {/* Card 3: Key Milestones */}
+              {/* Card 3: Tasks Completed */}
               <div className="stat-overview-card">
                 <div className="card-top-row">
                   <div className="stat-icon-wrapper">
                     <FaTasks />
                   </div>
-                  <span className="trend-badge">↑ 15.7%</span>
                 </div>
                 <div className="stat-body">
                   <span className="stat-title">Tasks Completed</span>
-                  <span className="stat-number">48</span>
+                  <span className="stat-number">
+                    {loadingDashboard ? "…" : dashboardStats.tasksCompleted}
+                  </span>
                 </div>
-                <div className="stat-progress-bar" style={{ "--progress": "92%" }} />
+                <div
+                  className="stat-progress-bar"
+                  style={{
+                    "--progress": `${dashboardStats.totalTasksAssigned
+                      ? Math.round((dashboardStats.tasksCompleted / dashboardStats.totalTasksAssigned) * 100)
+                      : 0}%`,
+                  }}
+                />
               </div>
 
-              {/* Card 4: Overall Rating */}
+              {/* Card 4: Contribution Score */}
               <div className="stat-overview-card">
                 <div className="card-top-row">
                   <div className="stat-icon-wrapper">
                     <FaAward />
                   </div>
-                  <span className="trend-badge">↑ 9.2%</span>
                 </div>
                 <div className="stat-body">
                   <span className="stat-title">Contribution Score</span>
-                  <span className="stat-number">96%</span>
+                  <span className="stat-number">
+                    {loadingDashboard ? "…" : `${dashboardStats.contributionScore}%`}
+                  </span>
                 </div>
-                <div className="stat-progress-bar" style={{ "--progress": "96%" }} />
+                <div className="stat-progress-bar" style={{ "--progress": `${dashboardStats.contributionScore}%` }} />
               </div>
             </div>
           </section>
@@ -482,6 +484,9 @@ const AdminDashboard = () => {
               </div>
 
               <div className="event-cards-list">
+                {!loadingDashboard && myProjects.length === 0 && (
+                  <p className="empty-state-text">No projects yet — you haven't been added to any project.</p>
+                )}
                 {myProjects.map((p) => (
                   <div key={p.id} className="event-card-item">
                     <div className="event-date-box">
@@ -492,7 +497,7 @@ const AdminDashboard = () => {
                     <div className="event-details">
                       <div className="event-title-row">
                         <h4 className="event-title">{p.name}</h4>
-                        <span className="event-category-tag">{p.category}</span>
+                        {p.category && <span className="event-category-tag">{p.category}</span>}
                       </div>
                       <p className="event-subtitle">
                         <span>{p.role}</span>
@@ -524,6 +529,9 @@ const AdminDashboard = () => {
                 </div>
 
                 <div className="committees-mini-list">
+                  {!loadingDashboard && myCommittees.length === 0 && (
+                    <p className="empty-state-text">No committee assignments yet.</p>
+                  )}
                   {myCommittees.map((c) => (
                     <div key={c.id} className="committee-mini-item">
                       <div className="committee-year-badge">
@@ -551,6 +559,9 @@ const AdminDashboard = () => {
                 </div>
 
                 <div className="recent-activity-feed">
+                  {!loadingDashboard && recentActivities.length === 0 && (
+                    <p className="empty-state-text">No recent activity yet.</p>
+                  )}
                   {recentActivities.map((a) => (
                     <div key={a.id} className="activity-feed-row">
                       <div className="activity-icon-bubble">

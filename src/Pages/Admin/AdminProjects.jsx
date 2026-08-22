@@ -12,7 +12,6 @@ import "../../SCSS/Projects/Projects.scss";
 
 const emptyForm = () => ({
   title: "",
-  societyName: "",
   description: "",
   status: "UPCOMING",
   startDate: "",
@@ -90,7 +89,6 @@ const AdminProjects = () => {
         method: "POST",
         body: JSON.stringify({
           title: form.title.trim(),
-          societyName: form.societyName.trim(),
           description: form.description.trim(),
           status: form.status,
           startDate: form.startDate,
@@ -263,17 +261,7 @@ const AdminProjects = () => {
           </label>
 
           <label>
-            Society
-            <input
-              name="societyName"
-              value={form.societyName}
-              onChange={onFormChange}
-              placeholder="e.g. Rotaract University Alumni"
-            />
-          </label>
-
-          <label>
-            Description <span className="opt">optional</span>
+            <span>Description <span className="opt">optional</span></span>
             <textarea
               name="description"
               rows={3}
@@ -285,11 +273,11 @@ const AdminProjects = () => {
 
           <div className="pm-form-row">
             <label>
-              Start date
+              <span>Start date</span>
               <input type="date" name="startDate" value={form.startDate} onChange={onFormChange} />
             </label>
             <label>
-              End date <span className="opt">optional</span>
+              <span>End date <span className="opt">optional</span></span>
               <input type="date" name="endDate" value={form.endDate} onChange={onFormChange} />
             </label>
           </div>

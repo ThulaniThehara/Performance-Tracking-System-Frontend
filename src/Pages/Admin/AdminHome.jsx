@@ -591,7 +591,7 @@ const AdminHome = () => {
 
               <div className="row-2">
                 <label>
-                  Start date
+                  <span>Start date</span>
                   <input
                     type="date"
                     name="startDate"
@@ -600,7 +600,7 @@ const AdminHome = () => {
                   />
                 </label>
                 <label>
-                  End date <span className="opt">optional</span>
+                  <span>End date <span className="opt">optional</span></span>
                   <input
                     type="date"
                     name="endDate"

@@ -183,12 +183,13 @@
 .pm-section {
   margin-bottom: 34px;
 
-  /* "Projects You Lead" gets a tinted plate so it reads as the special one. */
+  /* Modern subtle plate for highlighted section */
   &.is-highlighted {
     padding: 24px;
-    border-radius: var(--r-lg);
-    background: var(--gradient-soft);
-    border: 1px solid var(--purple-100);
+    border-radius: 20px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
   }
 }
 
@@ -196,44 +197,46 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 
   h2 {
     display: flex;
     align-items: center;
-    gap: 11px;
-    font-size: 1.05rem;
+    gap: 10px;
+    font-size: 1.1rem;
     font-weight: 700;
     letter-spacing: -0.015em;
-    color: var(--label);
+    color: #0f172a;
   }
 
   .section-icon {
     display: grid;
     place-items: center;
-    width: 32px; height: 32px;
-    border-radius: 9px;
-    background: var(--fill);
-    color: var(--label-3);
-    font-size: 0.82rem;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: #f1f5f9;
+    color: #64748b;
+    font-size: 0.85rem;
 
     &.is-chair {
-      background: var(--gradient-primary);
-      color: #fff;
-      box-shadow: var(--sh-glow);
+      background: #f3e8ff;
+      color: #7c3aed;
+      box-shadow: none;
+      border: 1px solid #e9d5ff;
     }
   }
 }
 
 .pm-count-pill {
   min-width: 24px;
-  padding: 3px 10px;
-  border-radius: var(--r-pill);
-  background: var(--surface);
-  border: 1px solid var(--separator);
-  color: var(--label-2);
-  font-size: 0.74rem;
-  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  font-size: 0.75rem;
+  font-weight: 600;
   text-align: center;
 }
 
@@ -247,26 +250,23 @@
 .pm-project-card {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
   padding: 22px;
-  background: var(--surface);
-  border: 1px solid var(--separator);
-  border-radius: var(--r-lg);
-  box-shadow: var(--sh-1);
-  transition: box-shadow 0.24s ease, transform 0.24s ease, border-color 0.24s ease;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.22s ease-in-out;
 
   &:hover {
     transform: translateY(-3px);
-    box-shadow: var(--sh-3);
-    border-color: var(--purple-200);
+    box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.08);
+    border-color: #cbd5e1;
   }
 
-  /* Led projects carry a purple spine — ownership, at a glance. */
+  /* Led projects carry a clean, soft accent line */
   &.is-led {
-    border-left: 3px solid transparent;
-    border-image: var(--gradient-primary) 1;
-    border-image-slice: 1;
-    border-width: 1px 1px 1px 3px;
+    border-top: 3px solid #7c3aed;
   }
 
   .card-top {
@@ -278,26 +278,27 @@
 
   .society {
     display: block;
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--label-3);
-    margin-bottom: 5px;
+    color: #64748b;
+    margin-bottom: 4px;
   }
 
   h3 {
-    font-size: 1.02rem;
+    font-size: 1.08rem;
     font-weight: 700;
     letter-spacing: -0.015em;
-    color: var(--label);
-    line-height: 1.3;
+    color: #0f172a;
+    line-height: 1.35;
+    text-transform: capitalize;
   }
 
   .card-desc {
-    font-size: 0.83rem;
-    line-height: 1.6;
-    color: var(--label-muted);
+    font-size: 0.84rem;
+    line-height: 1.55;
+    color: #64748b;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -309,43 +310,67 @@
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      margin-bottom: 7px;
-      font-size: 0.76rem;
-      color: var(--label-muted);
+      margin-bottom: 8px;
+      font-size: 0.78rem;
+      color: #64748b;
+      font-weight: 500;
 
-      strong { color: var(--label-2); font-size: 0.86rem; font-weight: 700; }
+      strong {
+        color: #0f172a;
+        font-size: 0.85rem;
+        font-weight: 700;
+      }
     }
   }
 
   .card-stats {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 8px;
-    padding-top: 14px;
-    border-top: 1px solid var(--separator-light);
+    padding-top: 4px;
 
     span {
-      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2px;
+      justify-content: center;
+      padding: 10px 4px;
+      background: #f8fafc;
+      border: 1px solid #f1f5f9;
+      border-radius: 12px;
       font-size: 0.95rem;
       font-weight: 700;
-      color: var(--label);
+      color: #0f172a;
 
-      svg { font-size: 0.78rem; color: var(--label-3); margin-bottom: 3px; }
-      em {
-        font-style: normal;
-        font-size: 0.66rem;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        color: var(--label-muted);
+      svg {
+        font-size: 0.78rem;
+        color: #64748b;
+        margin-bottom: 3px;
       }
 
-      /* Outstanding work is worth noticing, but it is not a task STATUS,
-         so it stays in the purple family rather than turning orange. */
-      &.is-flagged { color: var(--accent); svg { color: var(--accent); } }
+      em {
+        font-style: normal;
+        font-size: 0.62rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #64748b;
+        margin-top: 2px;
+      }
+
+      &.is-flagged {
+        background: #fef2f2;
+        border-color: #fee2e2;
+        color: #dc2626;
+
+        svg {
+          color: #dc2626;
+        }
+
+        em {
+          color: #ef4444;
+        }
+      }
     }
   }
 
@@ -355,7 +380,25 @@
     justify-content: space-between;
     gap: 12px;
     padding-top: 14px;
-    border-top: 1px solid var(--separator-light);
+    border-top: 1px solid #f1f5f9;
+
+    .pm-btn {
+      border-radius: 9999px;
+      padding: 6px 16px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: #475569;
+      transition: all 0.18s ease;
+
+      &:hover {
+        background: #4f46e5;
+        border-color: #4f46e5;
+        color: #ffffff;
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+      }
+    }
   }
 
   .chair-mini {
@@ -368,12 +411,12 @@
       display: block;
       font-size: 0.8rem;
       font-weight: 600;
-      color: var(--label);
+      color: #0f172a;
     }
     .chair-role {
       display: block;
       font-size: 0.68rem;
-      color: var(--label-3);
+      color: #64748b;
     }
   }
 
@@ -381,58 +424,78 @@
     display: flex;
     align-items: center;
     gap: 7px;
-    font-size: 0.74rem;
-    color: var(--label-muted);
-    svg { font-size: 0.72rem; color: var(--label-3); }
+    font-size: 0.76rem;
+    color: #64748b;
+    font-weight: 500;
+    svg {
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
   }
 }
 
 /* progress bar, shared */
 .progress-track {
-  height: 7px;
-  border-radius: var(--r-pill);
-  background: var(--fill-hover);
+  height: 6px;
+  border-radius: 9999px;
+  background: #e2e8f0;
   overflow: hidden;
 }
+
 .progress-fill {
   height: 100%;
-  border-radius: var(--r-pill);
-  background: var(--gradient-primary);
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #6366f1, #4f46e5);
   transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ---------------- project status chip ---------------- */
-/* Project lifecycle is NOT task status, so it stays in the purple ramp. */
 .pm-project-status {
   flex-shrink: 0;
-  padding: 5px 12px;
-  border-radius: var(--r-pill);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  border: 1px solid transparent;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
 
-  &.is-upcoming  { background: var(--fill); color: var(--label-3); border-color: var(--separator); }
-  &.is-active    { background: var(--accent-soft); color: var(--accent-hover); border-color: var(--purple-200); }
-  &.is-completed { background: var(--purple-800); color: #fff; }
+  &.is-upcoming {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #dbeafe;
+  }
+  &.is-active {
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+  }
+  &.is-completed {
+    background: #f8fafc;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+  }
 }
 
 /* ---------------- chairperson badge ---------------- */
 .pm-chair-badge {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 6px 13px;
-  border-radius: var(--r-pill);
-  background: var(--gradient-primary);
-  color: #fff;
-  font-size: 0.74rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  box-shadow: var(--sh-1);
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: #f3e8ff;
+  border: 1px solid #e9d5ff;
+  color: #6b21a8;
+  font-size: 0.73rem;
+  font-weight: 600;
 
-  svg { font-size: 0.72rem; }
-  &.is-compact { padding: 4px 10px; font-size: 0.68rem; }
+  svg {
+    font-size: 0.72rem;
+    color: #7e22ce;
+  }
+  &.is-compact {
+    padding: 3px 10px;
+    font-size: 0.7rem;
+  }
 }
 
 /* ---------------- avatars ---------------- */
@@ -1215,6 +1278,12 @@
     font-size: 0.79rem;
     font-weight: 600;
     color: var(--label-2);
+
+    > span {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 6px;
+    }
 
     .opt { font-weight: 400; font-size: 0.72rem; color: var(--label-muted); }
   }
