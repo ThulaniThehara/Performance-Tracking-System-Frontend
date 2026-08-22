@@ -74,61 +74,67 @@ const ProjectsHome = () => {
               {[1, 2, 3].map((i) => <div key={i} className="pm-skeleton-card" />)}
             </div>
           ) : (
-            <>
-              {/* Only appears for someone who is actually a project's chairperson. */}
-              {led.length > 0 && (
-                <section className="pm-section is-highlighted">
-                  <div className="pm-section-head">
-                    <h2>
-                      <span className="section-icon is-chair" aria-hidden="true">
-                        <FaCrown />
-                      </span>
-                      Projects You Lead
-                    </h2>
-                    <span className="pm-count-pill">{led.length}</span>
+            <div className="pm-home-grid">
+              {/* Left Column: Projects */}
+              <div className="pm-home-projects">
+                {/* Only appears for someone who is actually a project's chairperson. */}
+                {led.length > 0 && (
+                  <section className="pm-section is-highlighted">
+                    <div className="pm-section-head">
+                      <h2>
+                        <span className="section-icon is-chair" aria-hidden="true">
+                          <FaCrown />
+                        </span>
+                        Projects You Lead
+                      </h2>
+                      <span className="pm-count-pill">{led.length}</span>
+                    </div>
+
+                    <div className="pm-card-grid">
+                      {led.map((p) => (
+                        <ProjectCard key={p._id} project={p} variant="led" />
+                      ))}
+                    </div>
+                  </section>
+                )}
+
+                {contributing.length > 0 && (
+                  <section className="pm-section">
+                    <div className="pm-section-head">
+                      <h2>
+                        <span className="section-icon" aria-hidden="true">
+                          <FaUsers />
+                        </span>
+                        Projects You Contribute To
+                      </h2>
+                      <span className="pm-count-pill">{contributing.length}</span>
+                    </div>
+
+                    <div className="pm-card-grid">
+                      {contributing.map((p) => (
+                        <ProjectCard key={p._id} project={p} variant="contributing" />
+                      ))}
+                    </div>
+                  </section>
+                )}
+
+                {nothingAtAll && (
+                  <div className="pm-empty-state">
+                    <span className="empty-icon" aria-hidden="true"><FaFolderOpen /></span>
+                    <h3>No projects yet</h3>
+                    <p>
+                      You'll see a project here as soon as an admin adds you to
+                      one, or names you its chairperson.
+                    </p>
                   </div>
+                )}
+              </div>
 
-                  <div className="pm-card-grid">
-                    {led.map((p) => (
-                      <ProjectCard key={p._id} project={p} variant="led" />
-                    ))}
-                  </div>
-                </section>
-              )}
-
-              {contributing.length > 0 && (
-                <section className="pm-section">
-                  <div className="pm-section-head">
-                    <h2>
-                      <span className="section-icon" aria-hidden="true">
-                        <FaUsers />
-                      </span>
-                      Projects You Contribute To
-                    </h2>
-                    <span className="pm-count-pill">{contributing.length}</span>
-                  </div>
-
-                  <div className="pm-card-grid">
-                    {contributing.map((p) => (
-                      <ProjectCard key={p._id} project={p} variant="contributing" />
-                    ))}
-                  </div>
-                </section>
-              )}
-
-              {nothingAtAll && (
-                <div className="pm-empty-state">
-                  <span className="empty-icon" aria-hidden="true"><FaFolderOpen /></span>
-                  <h3>No projects yet</h3>
-                  <p>
-                    You'll see a project here as soon as an admin adds you to
-                    one, or names you its chairperson.
-                  </p>
-                </div>
-              )}
-
-              <MyTasksWidget />
-            </>
+              {/* Right Column: Pending & Active Tasks */}
+              <aside className="pm-home-tasks">
+                <MyTasksWidget />
+              </aside>
+            </div>
           )}
         </div>
       </div>

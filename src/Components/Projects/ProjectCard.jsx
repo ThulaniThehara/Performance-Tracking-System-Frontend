@@ -9,7 +9,7 @@ import {
 } from "react-icons/fa";
 import ChairpersonBadge from "./ChairpersonBadge";
 import Avatar from "./Avatar";
-import { formatDate, humanise } from "../../utils/projectUtils";
+import { formatDate, formatDateRange, humanise } from "../../utils/projectUtils";
 
 /**
  * One project on the dashboard. `variant="led"` is the highlighted treatment
@@ -81,8 +81,7 @@ const ProjectCard = ({ project, variant = "contributing" }) => {
           <div className="date-mini">
             <FaRegCalendarAlt aria-hidden="true" />
             <span>
-              {formatDate(project.StartDate)}
-              {project.EndDate ? ` – ${formatDate(project.EndDate)}` : ""}
+              {formatDateRange(project.StartDate, project.EndDate)}
             </span>
           </div>
         )}

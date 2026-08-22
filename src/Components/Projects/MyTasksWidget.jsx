@@ -1,25 +1,22 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useMemo } from "react";
 import { FaRegCalendarCheck } from "react-icons/fa";
 import TaskCard from "./TaskCard";
 import { apiFetch } from "../../utils/api";
 
 /**
- * The dashboard "My Tasks" widget.
- *
- * Self-contained — it fetches its own data — so it can be dropped onto any
- * dashboard without that page knowing about the Projects API. The server
- * returns the buckets already sorted by nearest deadline.
+ * The dashboard "Pending Tasks" widget.
+ * Only displays active, pending, and overdue tasks that require action.
  */
 const TABS = [
+  { key: "all", label: "All" },
   { key: "today", label: "Today" },
   { key: "upcoming", label: "Upcoming" },
   { key: "overdue", label: "Overdue" },
-  { key: "completed", label: "Completed" },
 ];
 
-const MyTasksWidget = ({ title = "My Tasks" }) => {
+const MyTasksWidget = ({ title = "Pending Tasks" }) => {
   const [data, setData] = useState(null);
-  const [tab, setTab] = useState("today");
+  const [tab, setTab] = useState("all");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [busyId, setBusyId] = useState(null);
@@ -29,7 +26,7 @@ const MyTasksWidget = ({ title = "My Tasks" }) => {
       setLoading(true);
       setError("");
       const res = await apiFetch("/pm/my-tasks");
-      if (!res) return; // apiFetch already redirected on 401
+      if (!res) return;
       setData(res.data);
     } catch (e) {
       setError(e.message || "Could not load your tasks.");
@@ -42,12 +39,13 @@ const MyTasksWidget = ({ title = "My Tasks" }) => {
     load();
   }, [load]);
 
-  // Land on the tab that actually needs attention.
-  useEffect(() => {
-    if (!data) return;
-    if (data.counts.overdue > 0) setTab("overdue");
-    else if (data.counts.today > 0) setTab("today");
-    else if (data.counts.upcoming > 0) setTab("upcoming");
+  // If there are overdue tasks, focus on all or overdue
+  const counts = useMemo(() => {
+    const today = data?.counts?.today || 0;
+    const upcoming = data?.counts?.upcoming || 0;
+    const overdue = data?.counts?.overdue || 0;
+    const all = today + upcoming + overdue;
+    return { all, today, upcoming, overdue };
   }, [data]);
 
   const changeStatus = async (task, status) => {
@@ -58,7 +56,7 @@ const MyTasksWidget = ({ title = "My Tasks" }) => {
         body: JSON.stringify({ status }),
       });
       if (!res) return;
-      await load(); // re-bucket: the task has probably moved tabs
+      await load();
     } catch (e) {
       setError(e.message || "Could not update the task.");
     } finally {
@@ -66,7 +64,13 @@ const MyTasksWidget = ({ title = "My Tasks" }) => {
     }
   };
 
-  const list = data?.[tab] || [];
+  const list = useMemo(() => {
+    if (!data) return [];
+    if (tab === "all") {
+      return [...(data.overdue || []), ...(data.today || []), ...(data.upcoming || [])];
+    }
+    return data[tab] || [];
+  }, [data, tab]);
 
   return (
     <section className="pm-panel pm-tasks-widget">
@@ -74,11 +78,12 @@ const MyTasksWidget = ({ title = "My Tasks" }) => {
         <h2>
           <FaRegCalendarCheck aria-hidden="true" /> {title}
         </h2>
+        <span className="pm-count-pill">{counts.all}</span>
       </header>
 
       <div className="pm-tabs" role="tablist">
         {TABS.map((t) => {
-          const n = data?.counts?.[t.key] ?? 0;
+          const n = counts[t.key] ?? 0;
           return (
             <button
               key={t.key}
@@ -106,9 +111,11 @@ const MyTasksWidget = ({ title = "My Tasks" }) => {
         <p className="pm-empty-inline">
           {tab === "overdue"
             ? "Nothing overdue — nicely done."
-            : tab === "completed"
-            ? "No completed tasks yet."
-            : "Nothing here right now."}
+            : tab === "today"
+            ? "No tasks due today."
+            : tab === "upcoming"
+            ? "No upcoming tasks scheduled."
+            : "No pending tasks — all caught up!"}
         </p>
       ) : (
         <div className="pm-task-list">

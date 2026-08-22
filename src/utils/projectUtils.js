@@ -36,6 +36,34 @@ export const formatShort = (d) =>
     ? new Date(d).toLocaleDateString(undefined, { day: "numeric", month: "short" })
     : "—";
 
+export const formatDateRange = (start, end) => {
+  if (!start) return "—";
+  const sDate = new Date(start);
+  const sDay = sDate.getDate();
+  const sMonth = sDate.toLocaleDateString(undefined, { month: "short" });
+  const sYear = sDate.getFullYear();
+
+  if (!end) {
+    return `${sMonth} ${sDay}, ${sYear}`;
+  }
+
+  const eDate = new Date(end);
+  const eDay = eDate.getDate();
+  const eMonth = eDate.toLocaleDateString(undefined, { month: "short" });
+  const eYear = eDate.getFullYear();
+
+  if (sYear === eYear) {
+    if (sMonth === eMonth) {
+      if (sDay === eDay) {
+        return `${sMonth} ${sDay}, ${sYear}`;
+      }
+      return `${sMonth} ${sDay} – ${eDay}, ${sYear}`;
+    }
+    return `${sMonth} ${sDay} – ${eMonth} ${eDay}, ${sYear}`;
+  }
+  return `${sMonth} ${sDay}, ${sYear} – ${eMonth} ${eDay}, ${eYear}`;
+};
+
 /** "14:30" -> "2:30 PM"; empty stays empty so the UI can omit it. */
 export const formatTime = (t) => {
   if (!t) return "";

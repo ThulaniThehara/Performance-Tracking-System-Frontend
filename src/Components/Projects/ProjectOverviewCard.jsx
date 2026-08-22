@@ -9,11 +9,11 @@ import {
 } from "react-icons/fa";
 import Avatar from "./Avatar";
 import ChairpersonBadge from "./ChairpersonBadge";
-import { formatDate, humanise } from "../../utils/projectUtils";
+import { formatDate, formatDateRange, humanise } from "../../utils/projectUtils";
 
 /**
  * The header block of the details page: identity, timeline, progress, and the
- * chairperson card (the one element deliberately painted in the primary purple).
+ * chairperson card.
  */
 const ProjectOverviewCard = ({ project, chairperson, stats, canEdit, onEdit }) => (
   <section className="pm-overview">
@@ -41,8 +41,7 @@ const ProjectOverviewCard = ({ project, chairperson, stats, canEdit, onEdit }) =
       <div className="overview-timeline">
         <FaRegCalendarAlt aria-hidden="true" />
         <span>
-          {formatDate(project.StartDate)}
-          {project.EndDate ? ` – ${formatDate(project.EndDate)}` : ""}
+          {formatDateRange(project.StartDate, project.EndDate)}
         </span>
       </div>
 

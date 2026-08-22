@@ -90,11 +90,23 @@ const ProjectDetails = () => {
     return map;
   }, [members]);
 
+  const myRole = data?.myRole || 'MEMBER';
+  const myCommitteeId = data?.myCommitteeId || null;
+
+  const visibleCommittees = useMemo(() => {
+    if (myRole === 'CHAIRPERSON') return committees;
+    if (!myCommitteeId) return [];
+    return committees.filter((c) => String(c._id) === String(myCommitteeId));
+  }, [committees, myRole, myCommitteeId]);
+
   const visibleTasks = useMemo(() => {
-    const list = [...tasks].sort(byDeadline);
+    let list = [...tasks].sort(byDeadline);
+    if (myRole !== 'CHAIRPERSON') {
+      list = list.filter((t) => String(t.assignedTo?._id || t.assignedTo) === String(viewerId));
+    }
     if (taskFilter === "ALL") return list;
     return list.filter((t) => displayStatusOf(t) === taskFilter);
-  }, [tasks, taskFilter]);
+  }, [tasks, taskFilter, myRole, viewerId]);
 
   /** May the current viewer move this particular task's status? */
   const canEditTaskStatus = (task) => {
@@ -309,7 +321,7 @@ const ProjectDetails = () => {
             project={data.project}
             chairperson={data.chairperson}
             stats={data.stats}
-            canEdit={perms.canEditProject}
+            canEdit={myRole === 'CHAIRPERSON' && perms.canEditProject}
             onEdit={() => {
               setEditForm({
                 title: data.project.PName,
@@ -328,7 +340,7 @@ const ProjectDetails = () => {
             <section className="pm-panel">
               <header className="pm-panel-head">
                 <h2><FaSitemap aria-hidden="true" /> Committees</h2>
-                {perms.canManageCommittees && (
+                {myRole === 'CHAIRPERSON' && perms.canManageCommittees && (
                   <button
                     className="pm-btn pm-btn-ghost pm-btn-sm"
                     onClick={() => {
@@ -342,19 +354,20 @@ const ProjectDetails = () => {
                 )}
               </header>
 
-              {committees.length === 0 ? (
+              {visibleCommittees.length === 0 ? (
                 <p className="pm-empty-inline">
-                  No committees yet
-                  {perms.canManageCommittees ? " — add one to start grouping members." : "."}
+                  {myRole !== 'CHAIRPERSON' && !myCommitteeId 
+                    ? "You are not assigned to any committee in this project." 
+                    : "No committees yet."}
                 </p>
               ) : (
                 <div className="pm-committee-list">
-                  {committees.map((c) => (
+                  {visibleCommittees.map((c) => (
                     <CommitteeCard
                       key={c._id}
                       committee={c}
                       members={membersByCommittee[String(c._id)] || []}
-                      canManage={perms.canManageMembers}
+                      canManage={myRole === 'CHAIRPERSON' && perms.canManageMembers}
                       onEdit={(committee) => {
                         setCommitteeForm({
                           name: committee.name,
@@ -372,18 +385,18 @@ const ProjectDetails = () => {
                 </div>
               )}
 
-              {unassigned.length > 0 && (
+              {myRole === 'CHAIRPERSON' && unassigned.length > 0 && (
                 <div className="pm-unassigned">
                   <h4><FaUsers aria-hidden="true" /> Not on a committee</h4>
                   <CommitteeMemberList
                     members={unassigned}
-                    canManage={perms.canManageMembers}
+                    canManage={myRole === 'CHAIRPERSON' && perms.canManageMembers}
                     onRemove={removeMember}
                   />
                 </div>
               )}
 
-              {perms.canManageMembers && (
+              {myRole === 'CHAIRPERSON' && perms.canManageMembers && (
                 <button
                   className="pm-btn pm-btn-ghost pm-btn-sm pm-add-member-btn"
                   onClick={() => openMemberModal(null)}
@@ -397,7 +410,7 @@ const ProjectDetails = () => {
             <section className="pm-panel">
               <header className="pm-panel-head">
                 <h2><FaTasks aria-hidden="true" /> Tasks</h2>
-                {perms.canCreateTasks && (
+                {myRole === 'CHAIRPERSON' && perms.canCreateTasks && (
                   <button
                     className="pm-btn pm-btn-primary pm-btn-sm"
                     onClick={() => {
