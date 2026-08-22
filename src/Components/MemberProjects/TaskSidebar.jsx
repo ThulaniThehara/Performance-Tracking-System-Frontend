@@ -277,26 +277,25 @@ const TaskSidebar = () => {
         minWidth: 420,
         backgroundColor: "#ffffff",
         border: "1px solid rgba(234, 226, 248, 0.85)",
-        borderRadius: 24,
-        padding: "0 20px 24px",
+        borderRadius: 20,
+        padding: "22px 28px",
         overflowY: "auto",
         display: "flex",
         flexDirection: "column",
-        gap: 4,
+        gap: 16,
         boxShadow: "0 8px 24px rgba(107, 82, 209, 0.05)",
+        boxSizing: "border-box",
+        alignSelf: "stretch",
       }}
     >
-      {/* Sidebar Header (Aligned with My Projects Header) */}
+      {/* Pending Tasks Header - Integrated inside unified sidebar box */}
       <div
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "22px 4px",
-          marginBottom: 16,
+          paddingBottom: 16,
           borderBottom: "1px solid #f4effa",
-          minHeight: 88,
-          boxSizing: "border-box",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -387,7 +386,6 @@ const TaskSidebar = () => {
                 backgroundColor: "#faf9fc",
                 borderRadius: 20,
                 border: "1px solid #f0e9fa",
-                marginTop: 8,
               }}
             >
               <div
