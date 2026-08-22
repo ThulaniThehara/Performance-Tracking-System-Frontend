@@ -16,8 +16,8 @@ const Sidebar = ({ user }) => {
                 <div className="flex items-center gap-3 px-2">
                     <div className="bg-center bg-no-repeat bg-cover rounded-full h-10 w-10 shadow-sm bg-primary" style={{ backgroundImage: 'url("https://via.placeholder.com/40")' }}></div>
                     <div className="flex flex-col">
-                        <h1 className="text-text-main dark:text-white text-lg font-bold leading-tight">Rotaract Portal</h1>
-                        <p className="text-text-secondary dark:text-[#c48be3] text-xs font-medium">Member System</p>
+                        <h1 className="text-text-main dark:text-white text-lg font-bold leading-tight">PTS Portal</h1>
+                        <p className="text-text-secondary dark:text-[#c48be3] text-xs font-medium">Performance Tracker</p>
                     </div>
                 </div>
                 <nav className="flex flex-col gap-2">

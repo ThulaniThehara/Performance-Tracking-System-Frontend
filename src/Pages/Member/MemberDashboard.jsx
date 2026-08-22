@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import ProjectsDashboardView from "../../Components/MemberProjects/ProjectsDashboardView";
 
 import { apiFetch } from "../../utils/api";
-import { getUser } from "../../utils/auth";
+import { getUser, logout } from "../../utils/auth";
 
 import {
   FaHome,
@@ -21,6 +21,12 @@ import {
   FaUserCheck,
   FaBell,
   FaChevronDown,
+  FaChartLine,
+  FaSignOutAlt,
+  FaTachometerAlt,
+  FaUsers,
+  FaFileAlt,
+  FaCog,
 } from "react-icons/fa";
 
 const EVENT_TYPES = [
@@ -63,6 +69,14 @@ const MemberDashboard = () => {
   // Navigation tab state: 'home' | 'projects'
   const [activeTab, setActiveTab] = useState("home");
   const [projectFilter, setProjectFilter] = useState("all"); // 'all' | 'chaired' | 'contributed'
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
+
+  const handleLogout = (e) => {
+    e?.preventDefault();
+    e?.stopPropagation();
+    logout();
+    window.location.href = "/";
+  };
 
   const [ledProjects, setLedProjects] = useState([]);
   const [contributingProjects, setContributingProjects] = useState([]);
@@ -100,6 +114,13 @@ const MemberDashboard = () => {
   useEffect(() => {
     loadAllData();
   }, [loadAllData]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("tab") === "projects") {
+      setActiveTab("projects");
+    }
+  }, []);
 
   // Combine all projects user works on
   const allWorkedProjects = useMemo(() => {
@@ -178,57 +199,148 @@ const MemberDashboard = () => {
 
   return (
     <div className="member-dashboard-layout">
-      {/* Sleek Modern Top Navigation Bar (NO Sidebar) */}
-      <header className="member-top-navbar">
-        <div className="navbar-container">
-          <div className="nav-brand-section">
-            <Link to="/member/dashboard" className="brand-logo">
-              <span className="brand-badge">MPTS</span>
-              <span className="brand-title">Portal</span>
-            </Link>
+      {/* 1. LEFT VERTICAL SIDEBAR (Matching Layout & Alignment) */}
+      <aside className="member-vertical-sidebar">
+        {/* Top Logo */}
+        <div className="sidebar-top-logo">
+          <div className="logo-circle">P/T</div>
+        </div>
 
-            <nav className="nav-tabs-container">
-              <button
-                className={`nav-tab-link ${activeTab === "home" ? "active" : ""}`}
-                onClick={() => setActiveTab("home")}
-              >
-                <FaHome className="tab-icon" /> Home
-              </button>
-              <button
-                className={`nav-tab-link ${activeTab === "projects" ? "active" : ""}`}
-                onClick={() => setActiveTab("projects")}
-              >
-                <FaFolder className="tab-icon" /> Projects
-                <span className="tab-pill-count">{stats.totalWorked}</span>
-              </button>
-            </nav>
+        {/* Navigation Items (Stacked Vertically) */}
+        <nav className="sidebar-nav-menu">
+          <button
+            className={`sidebar-nav-btn ${activeTab === "home" ? "active" : ""}`}
+            onClick={() => setActiveTab("home")}
+          >
+            <FaTachometerAlt className="nav-btn-icon" />
+            <span className="nav-btn-label">Dashboard</span>
+          </button>
+
+          <button
+            className={`sidebar-nav-btn ${activeTab === "projects" ? "active" : ""}`}
+            onClick={() => {
+              setActiveTab("projects");
+              setProjectFilter("all");
+            }}
+          >
+            <FaFolder className="nav-btn-icon" />
+            <span className="nav-btn-label">My Projects</span>
+          </button>
+
+          <button className="sidebar-nav-btn">
+            <FaUsers className="nav-btn-icon" />
+            <span className="nav-btn-label">Teams</span>
+          </button>
+
+          <button className="sidebar-nav-btn">
+            <FaFileAlt className="nav-btn-icon" />
+            <span className="nav-btn-label">Reports</span>
+          </button>
+
+          <button className="sidebar-nav-btn">
+            <FaCalendarAlt className="nav-btn-icon" />
+            <span className="nav-btn-label">Calendar</span>
+          </button>
+        </nav>
+
+        {/* Bottom Actions */}
+        <div className="sidebar-bottom-menu">
+          <button className="sidebar-nav-btn">
+            <FaCog className="nav-btn-icon" />
+            <span className="nav-btn-label">Settings</span>
+          </button>
+        </div>
+      </aside>
+
+      {/* 2. RIGHT MAIN CONTAINER */}
+      <div className="member-main-container">
+        {/* TOP HEADER BAR */}
+        <header className="member-top-header">
+          <div className="top-header-left">
+            <div className="brand-badge">
+              <FaChartLine style={{ fontSize: "1.1rem" }} />
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.2 }}>
+              <span style={{ fontWeight: 800, fontSize: "1.05rem", color: "#1d1545", letterSpacing: "-0.01em" }}>
+                PTS
+              </span>
+              <span style={{ fontSize: "0.66rem", color: "#6b52d1", fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase" }}>
+                Performance Tracker
+              </span>
+            </div>
           </div>
 
-          <div className="nav-actions-section">
-            <div className="search-input-wrapper">
+          {/* Search bar in center */}
+          <div className="top-header-center">
+            <div className="header-search-wrapper">
               <FaSearch className="search-icon" />
-              <input type="text" placeholder="Search activities & projects..." />
+              <input type="text" placeholder="Search activities, projects, and members..." />
             </div>
+          </div>
 
+          {/* Right actions: notification + profile */}
+          <div className="top-header-right">
             <button className="notif-btn" aria-label="Notifications">
               <FaBell />
-              <span className="notif-dot" />
+              <span className="notif-count">3</span>
             </button>
 
-            <div className="user-profile-dropdown">
+            <div
+              className="user-profile-dropdown"
+              onClick={() => setShowUserDropdown(!showUserDropdown)}
+              style={{ position: "relative", cursor: "pointer" }}
+            >
               <div className="avatar-circle">
                 {firstName.substring(0, 2).toUpperCase()}
               </div>
               <span className="user-display-name">{user?.name || "Member"}</span>
               <FaChevronDown className="dropdown-chevron" />
+
+              {showUserDropdown && (
+                <div
+                  className="dropdown-menu-box"
+                  style={{
+                    position: "absolute",
+                    top: "calc(100% + 8px)",
+                    right: 0,
+                    backgroundColor: "#ffffff",
+                    borderRadius: 16,
+                    border: "1px solid #eae2f8",
+                    boxShadow: "0 10px 28px rgba(107, 82, 209, 0.15)",
+                    padding: "8px",
+                    zIndex: 1100,
+                    minWidth: 160,
+                  }}
+                >
+                  <button
+                    onClick={handleLogout}
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 10,
+                      padding: "10px 14px",
+                      borderRadius: 10,
+                      border: "none",
+                      backgroundColor: "#fff0f0",
+                      color: "#ef4444",
+                      fontWeight: 700,
+                      fontSize: "0.85rem",
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                    }}
+                  >
+                    <FaSignOutAlt /> Logout
+                  </button>
+                </div>
+              )}
             </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* Main Content Area */}
-      <main className="employee-home-content">
-        <div className="main-content-container">
+        {/* MAIN CONTENT AREA */}
+        <main className="member-page-body">
+          <div className="main-content-container">
 
           {/* =========================================================================
              TAB 1: HOME VIEW
@@ -496,12 +608,14 @@ const MemberDashboard = () => {
               allWorkedProjects={allWorkedProjects}
               ledProjects={ledProjects}
               contributingProjects={contributingProjects}
+              initialFilter={projectFilter}
             />
           )}
 
         </div>
       </main>
     </div>
+  </div>
   );
 };
 

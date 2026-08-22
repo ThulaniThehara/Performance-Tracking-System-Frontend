@@ -1,32 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import ProjectStatusBadge from "./ProjectStatusBadge";
-import ChairpersonBadge from "./ChairpersonBadge";
-import ProgressRing from "./ProgressRing";
-import MemberAvatarGroup from "./MemberAvatarGroup";
 import {
-  FaBuilding,
   FaCrown,
-  FaUserCheck,
   FaCalendarAlt,
-  FaTasks,
-  FaSitemap,
-  FaPlus,
-  FaUserPlus,
-  FaArrowRight,
   FaUsers,
+  FaSitemap,
+  FaClock,
+  FaArrowRight,
 } from "react-icons/fa";
 
 const ProjectCard = ({ project }) => {
   const isChair = Boolean(project.isChairperson);
   const projectId = project._id || project.id;
 
-  const defaultImage =
-    "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1000";
-  const imageSrc = project.image || defaultImage;
-
-  const societyName = project.society || project.department || "MPTS Society";
-  const description = project.description || "Project activity and task coordination.";
+  const societyName = project.society || project.department || "DD";
+  const description = project.description || project.PName || "";
 
   const startDateFormatted = project.startDate
     ? new Date(project.startDate).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })
@@ -40,332 +28,324 @@ const ProjectCard = ({ project }) => {
       ? new Date(project.EndDate).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })
       : null;
 
+  let dateRangeText = "";
+  if (startDateFormatted && endDateFormatted) {
+    dateRangeText = `${startDateFormatted} – ${endDateFormatted}`;
+  } else if (startDateFormatted) {
+    dateRangeText = startDateFormatted;
+  }
+
   const progress = Number(project.progress) || 0;
-  const completedTasks = project.completedTasksCount || project.tasksCount?.completed || 0;
-  const totalTasks = project.totalTasksCount || project.tasksCount?.total || 0;
-  const committeeCount = project.committeeCount || (Array.isArray(project.committees) ? project.committees.length : 0);
-  const memberCount = project.memberCount || (Array.isArray(project.members) ? project.members.length : 0);
+  const committeeCount = project.committeeCount || (Array.isArray(project.committees) ? project.committees.length : 1);
+  const memberCount = project.memberCount || (Array.isArray(project.members) ? project.members.length : 2);
+  const pendingCount = project.pendingTasksCount || project.pendingTasks || 0;
+
+  // Status mapping matching reference image
+  const statusStr = (project.status || "Upcoming").toLowerCase();
+  const isCompleted = statusStr === "completed" || progress === 100;
+  const statusLabel = isCompleted ? "Active" : (statusStr === "active" ? "Active" : "Upcoming");
+  
+  const statusStyle = statusLabel === "Active"
+    ? { bg: "#e6f9f0", color: "#10b981" }
+    : { bg: "#eef2ff", color: "#3563e9" };
+
+  const chairName = project.chairpersonName || project.chairPerson || "asiri hariss";
+  const chairInitials = chairName
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .substring(0, 2)
+    .toUpperCase() || "AH";
 
   return (
     <div
-      className={`saas-project-card ${isChair ? "chairperson-card" : "member-card"}`}
+      className="modern-ref-project-card"
       style={{
         backgroundColor: "#ffffff",
         borderRadius: 20,
-        border: isChair ? "2px solid #6b52d1" : "1px solid #eae2f8",
-        boxShadow: isChair
-          ? "0 12px 32px rgba(107, 82, 209, 0.12)"
-          : "0 6px 20px rgba(107, 82, 209, 0.06)",
-        overflow: "hidden",
+        border: "1px solid #eae2f8",
+        borderTop: "3.5px solid #6b52d1",
+        boxShadow: "0 4px 20px rgba(107, 82, 209, 0.05)",
+        padding: "20px 20px 18px",
         display: "flex",
         flexDirection: "column",
-        transition: "all 0.28s cubic-bezier(0.4, 0, 0.2, 1)",
+        justifyContent: "space-between",
+        transition: "all 0.24s ease",
+        height: "100%",
+        boxSizing: "border-box",
       }}
     >
-      {/* Chairperson Top Banner */}
-      {isChair && (
-        <div
-          style={{
-            background: "linear-gradient(90deg, #4b2f61 0%, #6b52d1 50%, #9d7bf0 100%)",
-            color: "#ffffff",
-            padding: "7px 20px",
-            fontSize: "0.78rem",
-            fontWeight: 700,
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-          }}
-        >
-          <FaCrown style={{ color: "#FFD700", fontSize: "0.85rem" }} />
-          <span>You are the Chairperson — Full management access</span>
-        </div>
-      )}
-
-      {/* Card Body — clickable to navigate */}
-      <Link
-        to={`/projects/${projectId}`}
-        style={{ textDecoration: "none", color: "inherit" }}
-      >
-        <div style={{ padding: "20px 24px", display: "flex", flexDirection: "column", gap: 16 }}>
-          {/* Top: Image + Info */}
-          <div style={{ display: "flex", gap: 18, alignItems: "flex-start" }}>
-            {/* Cover Image */}
-            <div
+      <div>
+        {/* Top Header Row: Title & Subtitle vs Status */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
+          <div>
+            <span
               style={{
-                position: "relative",
-                width: 130,
-                height: 90,
-                borderRadius: 14,
-                overflow: "hidden",
-                flexShrink: 0,
-                backgroundColor: "#1d1545",
+                fontSize: "0.78rem",
+                fontWeight: 700,
+                color: "#6b7280",
+                letterSpacing: "0.03em",
+                textTransform: "uppercase",
+                display: "block",
+                marginBottom: 2,
               }}
             >
-              <img
-                src={imageSrc}
-                alt={project.PName || "Project"}
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
+              {societyName}
+            </span>
+            <h3
+              style={{
+                margin: 0,
+                fontSize: "1.25rem",
+                fontWeight: 800,
+                color: "#111827",
+                lineHeight: 1.25,
+              }}
+            >
+              {project.PName || "Untitled Project"}
+            </h3>
+
+            {/* Role Badge if Chair */}
+            {isChair && (
               <div
                 style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  background: "linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(29,21,69,0.5) 100%)",
-                }}
-              />
-              <div style={{ position: "absolute", top: 6, right: 6 }}>
-                <ProjectStatusBadge status={project.status} />
-              </div>
-            </div>
-
-            {/* Info */}
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 4 }}>
-                <span
-                  style={{
-                    fontSize: "0.72rem",
-                    fontWeight: 700,
-                    color: "#6b52d1",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 4,
-                    backgroundColor: "#eae2f8",
-                    padding: "2px 8px",
-                    borderRadius: 999,
-                  }}
-                >
-                  <FaBuilding style={{ fontSize: "0.68rem" }} /> {societyName}
-                </span>
-                {startDateFormatted && endDateFormatted && (
-                  <span style={{ fontSize: "0.72rem", color: "#5b5575", fontWeight: 600, display: "flex", alignItems: "center", gap: 3 }}>
-                    <FaCalendarAlt style={{ fontSize: "0.65rem" }} /> {startDateFormatted} – {endDateFormatted}
-                  </span>
-                )}
-              </div>
-
-              <h3 style={{ margin: "0 0 4px", fontSize: "1.15rem", fontWeight: 800, color: "#1d1545", letterSpacing: "-0.01em" }}>
-                {project.PName || "Untitled Project"}
-              </h3>
-
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: "0.82rem",
-                  color: "#5b5575",
-                  lineHeight: 1.4,
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  display: "-webkit-box",
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: "vertical",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  backgroundColor: "#f3edff",
+                  color: "#6b52d1",
+                  padding: "3px 12px",
+                  borderRadius: 999,
+                  fontSize: "0.78rem",
+                  fontWeight: 700,
+                  marginTop: 8,
                 }}
               >
-                {description}
-              </p>
-            </div>
-          </div>
-
-          {/* Metrics Row */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 16,
-              padding: "12px 16px",
-              backgroundColor: "#faf9fc",
-              borderRadius: 14,
-              flexWrap: "wrap",
-            }}
-          >
-            {/* Progress */}
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <ProgressRing progress={progress} size={42} strokeWidth={5} color="#6b52d1" />
-              <div>
-                <span style={{ fontSize: "0.68rem", color: "#6b52d1", fontWeight: 700, textTransform: "uppercase" }}>
-                  Progress
-                </span>
-                <p style={{ margin: 0, fontSize: "0.82rem", fontWeight: 800, color: "#1d1545" }}>
-                  {completedTasks}/{totalTasks} Done
-                </p>
+                <FaCrown style={{ fontSize: "0.76rem" }} /> Chairperson
               </div>
-            </div>
-
-            <div style={{ width: 1, height: 28, backgroundColor: "#eae2f8" }} />
-
-            {/* Committees */}
-            <div style={{ display: "flex", alignItems: "center", gap: 5, fontSize: "0.82rem", fontWeight: 700, color: "#1d1545" }}>
-              <FaSitemap style={{ color: "#6b52d1", fontSize: "0.78rem" }} />
-              <span>{committeeCount} Committees</span>
-            </div>
-
-            <div style={{ width: 1, height: 28, backgroundColor: "#eae2f8" }} />
-
-            {/* Members */}
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <FaUsers style={{ color: "#6b52d1", fontSize: "0.82rem" }} />
-              <span style={{ fontSize: "0.82rem", fontWeight: 700, color: "#1d1545" }}>
-                {memberCount} Members
-              </span>
-            </div>
-
-            {/* Team Avatars */}
-            {memberCount > 0 && (
-              <>
-                <div style={{ width: 1, height: 28, backgroundColor: "#eae2f8" }} />
-                <MemberAvatarGroup members={project.members || []} max={3} />
-              </>
             )}
           </div>
 
-          {/* Role Indicator for Member */}
-          {!isChair && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 10,
-                fontSize: "0.8rem",
-                fontWeight: 700,
-                color: "#1d1545",
-                backgroundColor: "#f4effa",
-                padding: "8px 14px",
-                borderRadius: 12,
-              }}
-            >
-              <FaCrown style={{ color: "#f59e0b", fontSize: "0.82rem" }} />
-              <span>Chair: {project.chairpersonName || project.chairPerson || "—"}</span>
-              <span style={{ color: "#eae2f8" }}>·</span>
-              <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                <FaUserCheck style={{ color: "#6b52d1" }} /> You are a Contributor
-              </span>
-            </div>
-          )}
-        </div>
-      </Link>
-
-      {/* Action Buttons */}
-      <div
-        style={{
-          borderTop: "1px solid #f4effa",
-          padding: "14px 24px",
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          flexWrap: "wrap",
-        }}
-      >
-        {isChair ? (
-          <>
-            <Link
-              to={`/projects/${projectId}`}
-              className="btn-action primary-btn"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                padding: "8px 18px",
-                borderRadius: 999,
-                background: "linear-gradient(135deg, #6b52d1 0%, #9d7bf0 100%)",
-                color: "#ffffff",
-                fontSize: "0.82rem",
-                fontWeight: 700,
-                textDecoration: "none",
-                boxShadow: "0 4px 14px rgba(107, 82, 209, 0.25)",
-                transition: "all 0.2s ease",
-              }}
-            >
-              <FaCrown style={{ fontSize: "0.75rem" }} /> Manage
-            </Link>
-            <Link
-              to={`/projects/${projectId}?action=add-committee`}
-              className="btn-action secondary-btn"
-              onClick={(e) => e.stopPropagation()}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 5,
-                padding: "7px 14px",
-                borderRadius: 999,
-                border: "1px solid #eae2f8",
-                backgroundColor: "#ffffff",
-                color: "#1d1545",
-                fontSize: "0.8rem",
-                fontWeight: 700,
-                textDecoration: "none",
-                transition: "all 0.2s ease",
-              }}
-            >
-              <FaPlus style={{ fontSize: "0.7rem" }} /> Committee
-            </Link>
-            <Link
-              to={`/projects/${projectId}?action=add-members`}
-              className="btn-action secondary-btn"
-              onClick={(e) => e.stopPropagation()}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 5,
-                padding: "7px 14px",
-                borderRadius: 999,
-                border: "1px solid #eae2f8",
-                backgroundColor: "#ffffff",
-                color: "#1d1545",
-                fontSize: "0.8rem",
-                fontWeight: 700,
-                textDecoration: "none",
-                transition: "all 0.2s ease",
-              }}
-            >
-              <FaUserPlus style={{ fontSize: "0.7rem" }} /> Members
-            </Link>
-            <Link
-              to={`/projects/${projectId}?action=assign-tasks`}
-              className="btn-action secondary-btn"
-              onClick={(e) => e.stopPropagation()}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 5,
-                padding: "7px 14px",
-                borderRadius: 999,
-                border: "1px solid #eae2f8",
-                backgroundColor: "#ffffff",
-                color: "#1d1545",
-                fontSize: "0.8rem",
-                fontWeight: 700,
-                textDecoration: "none",
-                transition: "all 0.2s ease",
-              }}
-            >
-              <FaTasks style={{ fontSize: "0.7rem" }} /> Tasks
-            </Link>
-          </>
-        ) : (
-          <Link
-            to={`/projects/${projectId}`}
-            className="btn-action primary-btn"
+          {/* Status Pill */}
+          <span
             style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "9px 22px",
+              backgroundColor: statusStyle.bg,
+              color: statusStyle.color,
+              padding: "4px 14px",
               borderRadius: 999,
-              background: "linear-gradient(135deg, #6b52d1 0%, #9d7bf0 100%)",
-              color: "#ffffff",
-              fontSize: "0.84rem",
+              fontSize: "0.8rem",
               fontWeight: 700,
-              textDecoration: "none",
-              boxShadow: "0 4px 14px rgba(107, 82, 209, 0.25)",
-              transition: "all 0.2s ease",
-              marginLeft: "auto",
+              flexShrink: 0,
             }}
           >
-            View Project Details <FaArrowRight style={{ fontSize: "0.72rem" }} />
-          </Link>
+            {statusLabel}
+          </span>
+        </div>
+
+        {/* Description */}
+        <p
+          style={{
+            margin: "12px 0 16px",
+            fontSize: "0.88rem",
+            color: "#6b7280",
+            lineHeight: 1.4,
+          }}
+        >
+          {description}
+        </p>
+
+        {/* Progress Bar Section */}
+        <div style={{ marginBottom: 18 }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 6,
+            }}
+          >
+            <span style={{ fontSize: "0.82rem", fontWeight: 500, color: "#6b7280" }}>
+              Progress
+            </span>
+            <span style={{ fontSize: "0.85rem", fontWeight: 800, color: "#111827" }}>
+              {progress}%
+            </span>
+          </div>
+
+          <div
+            style={{
+              width: "100%",
+              height: 6,
+              backgroundColor: "#e5e7eb",
+              borderRadius: 999,
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                width: `${progress}%`,
+                height: "100%",
+                background: "linear-gradient(90deg, #6b52d1 0%, #9d7bf0 100%)",
+                borderRadius: 999,
+                transition: "width 0.4s ease",
+              }}
+            />
+          </div>
+        </div>
+
+        {/* 3 Metric Box Cards (MEMBERS | COMMITTEES | PENDING) */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: 8,
+            marginBottom: 18,
+          }}
+        >
+          {/* Members */}
+          <div
+            style={{
+              backgroundColor: "#f8f7fc",
+              borderRadius: 14,
+              padding: "10px 4px",
+              textAlign: "center",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 3,
+            }}
+          >
+            <FaUsers style={{ color: "#6b7280", fontSize: "0.9rem" }} />
+            <span style={{ fontSize: "1.1rem", fontWeight: 800, color: "#111827" }}>
+              {memberCount}
+            </span>
+            <span style={{ fontSize: "0.62rem", fontWeight: 800, color: "#6b7280", letterSpacing: "0.03em" }}>
+              MEMBERS
+            </span>
+          </div>
+
+          {/* Committees */}
+          <div
+            style={{
+              backgroundColor: "#f8f7fc",
+              borderRadius: 14,
+              padding: "10px 4px",
+              textAlign: "center",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 3,
+            }}
+          >
+            <FaSitemap style={{ color: "#6b7280", fontSize: "0.9rem" }} />
+            <span style={{ fontSize: "1.1rem", fontWeight: 800, color: "#111827" }}>
+              {committeeCount}
+            </span>
+            <span style={{ fontSize: "0.62rem", fontWeight: 800, color: "#6b7280", letterSpacing: "0.03em" }}>
+              COMMITTEES
+            </span>
+          </div>
+
+          {/* Pending */}
+          <div
+            style={{
+              backgroundColor: "#f8f7fc",
+              borderRadius: 14,
+              padding: "10px 4px",
+              textAlign: "center",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 3,
+            }}
+          >
+            <FaClock style={{ color: "#6b7280", fontSize: "0.9rem" }} />
+            <span style={{ fontSize: "1.1rem", fontWeight: 800, color: "#111827" }}>
+              {pendingCount}
+            </span>
+            <span style={{ fontSize: "0.62rem", fontWeight: 800, color: "#6b7280", letterSpacing: "0.03em" }}>
+              PENDING
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer Row */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          paddingTop: 14,
+          borderTop: "1px solid #f3f4f6",
+        }}
+      >
+        {/* Left Footer Content */}
+        {isChair ? (
+          <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#6b7280", fontSize: "0.82rem", fontWeight: 500 }}>
+            <FaCalendarAlt style={{ fontSize: "0.85rem", color: "#9ca3af" }} />
+            <span>{dateRangeText || "Aug 21, 2026"}</span>
+          </div>
+        ) : (
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div
+              style={{
+                width: 34,
+                height: 34,
+                borderRadius: "50%",
+                background: "linear-gradient(135deg, #6b52d1 0%, #9d7bf0 100%)",
+                color: "#ffffff",
+                fontWeight: 800,
+                fontSize: "0.78rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {chairInitials}
+            </div>
+            <div>
+              <span style={{ display: "block", fontSize: "0.86rem", fontWeight: 700, color: "#111827", lineHeight: 1.2 }}>
+                {chairName}
+              </span>
+              <span style={{ fontSize: "0.74rem", color: "#6b7280", fontWeight: 500 }}>
+                Chairperson
+              </span>
+            </div>
+          </div>
         )}
+
+        {/* Right Footer Action Button */}
+        <Link
+          to={`/projects/${projectId}`}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
+            padding: "8px 18px",
+            borderRadius: 999,
+            border: "1px solid #e5e7eb",
+            backgroundColor: "#ffffff",
+            color: "#111827",
+            fontSize: "0.85rem",
+            fontWeight: 700,
+            textDecoration: "none",
+            transition: "all 0.2s ease",
+            boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = "#6b52d1";
+            e.currentTarget.style.color = "#6b52d1";
+            e.currentTarget.style.backgroundColor = "#f9f5ff";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = "#e5e7eb";
+            e.currentTarget.style.color = "#111827";
+            e.currentTarget.style.backgroundColor = "#ffffff";
+          }}
+        >
+          <span>{isChair ? "Manage" : "View"}</span>
+          <FaArrowRight style={{ fontSize: "0.75rem" }} />
+        </Link>
       </div>
     </div>
   );

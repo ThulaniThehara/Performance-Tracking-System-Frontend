@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import TaskSidebar from "./TaskSidebar";
 import ProjectCard from "./ProjectCard";
 import EmptyProjectsState from "./EmptyProjectsState";
@@ -8,11 +8,23 @@ import {
   FaCrown,
   FaUserCheck,
   FaLayerGroup,
+  FaUsers,
 } from "react-icons/fa";
 
-const ProjectsDashboardView = ({ allWorkedProjects = [], ledProjects = [], contributingProjects = [] }) => {
-  const [activeFilter, setActiveFilter] = useState("all");
+const ProjectsDashboardView = ({
+  allWorkedProjects = [],
+  ledProjects = [],
+  contributingProjects = [],
+  initialFilter = "all",
+}) => {
+  const [activeFilter, setActiveFilter] = useState(initialFilter);
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    if (initialFilter) {
+      setActiveFilter(initialFilter);
+    }
+  }, [initialFilter]);
 
   const filters = [
     { key: "all", label: "All Projects", count: allWorkedProjects.length, icon: FaLayerGroup },
@@ -53,8 +65,7 @@ const ProjectsDashboardView = ({ allWorkedProjects = [], ledProjects = [], contr
       style={{
         display: "flex",
         gap: 24,
-        marginTop: 28,
-        minHeight: "calc(100vh - 160px)",
+        width: "100%",
         alignItems: "flex-start",
       }}
     >
@@ -210,16 +221,16 @@ const ProjectsDashboardView = ({ allWorkedProjects = [], ledProjects = [], contr
           })}
         </div>
 
-        {/* Project Cards Grid */}
+        {/* Project Cards Grid — 3 Cards Per Row */}
         {filteredProjects.length === 0 ? (
           <EmptyProjectsState onResetFilters={handleResetFilters} />
         ) : (
           <div
             className="saas-projects-grid"
             style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 20,
+              display: "grid",
+              gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+              gap: 16,
             }}
           >
             {filteredProjects.map((p) => (

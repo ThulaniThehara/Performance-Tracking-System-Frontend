@@ -7,14 +7,13 @@ import {
   FaCalendarDay,
   FaCalendarAlt,
   FaCheckCircle,
-  FaCircle,
-  FaArrowRight,
+  FaCheck,
 } from "react-icons/fa";
 
 /**
  * Left-side task sidebar for the Projects dashboard.
- * Fetches from /pm/my-tasks and groups tasks by deadline buckets:
- * Overdue → Today → This Week (upcoming) → Completed
+ * Displays ONLY pending tasks (Overdue → Due Today → Upcoming).
+ * Excludes completed tasks for a clean pending-focused workspace.
  */
 const TaskSidebar = () => {
   const [data, setData] = useState(null);
@@ -40,12 +39,12 @@ const TaskSidebar = () => {
     load();
   }, [load]);
 
-  const changeStatus = async (task, status) => {
+  const markCompleted = async (task) => {
     try {
       setBusyId(task._id);
       await apiFetch(`/pm/my-tasks/${task._id}/status`, {
         method: "PATCH",
-        body: JSON.stringify({ status }),
+        body: JSON.stringify({ status: "COMPLETED" }),
       });
       await load();
     } catch (e) {
@@ -61,87 +60,98 @@ const TaskSidebar = () => {
     return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
   };
 
-  const getPriorityColor = (p) => {
+  const getPriorityBadge = (p) => {
     const priority = (p || "").toUpperCase();
-    if (priority === "HIGH" || priority === "URGENT") return "#ef4444";
-    if (priority === "MEDIUM") return "#f59e0b";
-    return "#10b981";
+    if (priority === "HIGH" || priority === "URGENT") {
+      return { label: "High", color: "#ef4444", bg: "#fef2f2" };
+    }
+    if (priority === "MEDIUM") {
+      return { label: "Med", color: "#f59e0b", bg: "#fffbeb" };
+    }
+    return { label: "Low", color: "#10b981", bg: "#ecfdf5" };
   };
 
   const renderTaskItem = (task) => {
-    const isCompleted =
-      (task.status || "").toUpperCase() === "COMPLETED" ||
-      (task.status || "").toUpperCase() === "DONE";
     const isBusy = busyId === task._id;
+    const priority = getPriorityBadge(task.priority);
 
     return (
       <div
         key={task._id}
-        className="task-sidebar-item"
+        className="pending-task-card"
         style={{
           display: "flex",
           alignItems: "flex-start",
           gap: 12,
-          padding: "12px 16px",
-          borderRadius: 14,
+          padding: "14px 16px",
+          borderRadius: 16,
           backgroundColor: "#ffffff",
-          border: "1px solid #eae2f8",
-          transition: "all 0.2s ease",
+          border: "1px solid #f0e9fa",
+          boxShadow: "0 2px 8px rgba(107, 82, 209, 0.04)",
+          transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
           opacity: isBusy ? 0.6 : 1,
-          cursor: "pointer",
         }}
       >
-        {/* Status Toggle */}
+        {/* Checkbox action to mark complete */}
         <button
           onClick={(e) => {
             e.stopPropagation();
             if (!isBusy) {
-              changeStatus(task, isCompleted ? "TODO" : "COMPLETED");
+              markCompleted(task);
             }
           }}
+          title="Mark as completed"
           style={{
             marginTop: 2,
-            width: 20,
-            height: 20,
-            borderRadius: "50%",
-            border: isCompleted ? "none" : "2px solid #6b52d1",
-            backgroundColor: isCompleted ? "#6b52d1" : "transparent",
-            color: "#ffffff",
+            width: 22,
+            height: 22,
+            borderRadius: 7,
+            border: "2px solid #c9b9f3",
+            backgroundColor: "#fcfaff",
+            color: "#6b52d1",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             cursor: "pointer",
             flexShrink: 0,
-            fontSize: "0.65rem",
             transition: "all 0.2s ease",
           }}
         >
-          {isCompleted && <FaCheckCircle style={{ fontSize: "0.7rem" }} />}
+          {isBusy ? (
+            <div
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: "50%",
+                border: "2px solid #6b52d1",
+                borderTopColor: "transparent",
+                animation: "spin 0.8s linear infinite",
+              }}
+            />
+          ) : null}
         </button>
 
-        {/* Task Content */}
+        {/* Task Title and Context */}
         <div style={{ flex: 1, minWidth: 0 }}>
           <p
             style={{
               margin: 0,
-              fontSize: "0.84rem",
+              fontSize: "0.85rem",
               fontWeight: 700,
-              color: isCompleted ? "#9b93b0" : "#1d1545",
-              textDecoration: isCompleted ? "line-through" : "none",
-              lineHeight: 1.3,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
+              color: "#1d1545",
+              lineHeight: 1.35,
+              wordBreak: "break-word",
             }}
           >
             {task.title}
           </p>
+
           <div
             style={{
               display: "flex",
               alignItems: "center",
               gap: 8,
-              marginTop: 4,
+              marginTop: 6,
               flexWrap: "wrap",
             }}
           >
@@ -153,39 +163,53 @@ const TaskSidebar = () => {
                   color: "#5b5575",
                   display: "flex",
                   alignItems: "center",
-                  gap: 3,
+                  gap: 4,
+                  backgroundColor: "#f4effa",
+                  padding: "2px 8px",
+                  borderRadius: 6,
                 }}
               >
-                <FaClock style={{ fontSize: "0.65rem" }} />
+                <FaClock style={{ fontSize: "0.68rem", color: "#6b52d1" }} />
                 {formatDate(task.dueDate)}
               </span>
             )}
+
             {task.projectName && (
               <span
                 style={{
-                  fontSize: "0.7rem",
+                  fontSize: "0.71rem",
                   fontWeight: 700,
                   color: "#6b52d1",
-                  backgroundColor: "#eae2f8",
-                  padding: "1px 8px",
-                  borderRadius: 999,
+                  backgroundColor: "rgba(107, 82, 209, 0.1)",
+                  padding: "2px 8px",
+                  borderRadius: 6,
+                  maxWidth: 130,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
                 }}
               >
                 {task.projectName}
               </span>
             )}
+
+            <span
+              style={{
+                fontSize: "0.68rem",
+                fontWeight: 800,
+                color: priority.color,
+                backgroundColor: priority.bg,
+                padding: "2px 7px",
+                borderRadius: 6,
+                textTransform: "uppercase",
+                letterSpacing: "0.03em",
+                marginLeft: "auto",
+              }}
+            >
+              {priority.label}
+            </span>
           </div>
         </div>
-
-        {/* Priority Dot */}
-        <FaCircle
-          style={{
-            fontSize: "0.45rem",
-            color: getPriorityColor(task.priority),
-            marginTop: 6,
-            flexShrink: 0,
-          }}
-        />
       </div>
     );
   };
@@ -205,7 +229,7 @@ const TaskSidebar = () => {
           }}
         >
           {React.cloneElement(icon, {
-            style: { fontSize: "0.82rem", color: accentColor },
+            style: { fontSize: "0.85rem", color: accentColor },
           })}
           <span
             style={{
@@ -224,7 +248,7 @@ const TaskSidebar = () => {
               fontWeight: 800,
               color: accentColor,
               backgroundColor: `${accentColor}15`,
-              padding: "2px 8px",
+              padding: "2px 9px",
               borderRadius: 999,
               marginLeft: "auto",
             }}
@@ -232,68 +256,85 @@ const TaskSidebar = () => {
             {tasks.length}
           </span>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {tasks.map(renderTaskItem)}
         </div>
       </div>
     );
   };
 
-  const totalTasks =
-    (data?.counts?.overdue || 0) +
-    (data?.counts?.today || 0) +
-    (data?.counts?.upcoming || 0) +
-    (data?.counts?.completed || 0);
+  // Compute ONLY pending tasks count
+  const pendingTasksCount =
+    (data?.overdue?.length || 0) +
+    (data?.today?.length || 0) +
+    (data?.upcoming?.length || 0);
 
   return (
     <aside
       className="task-sidebar"
       style={{
-        width: 320,
-        minWidth: 320,
-        backgroundColor: "#faf9fc",
-        borderRight: "1px solid #eae2f8",
+        width: 420,
+        minWidth: 420,
+        backgroundColor: "#ffffff",
+        border: "1px solid rgba(234, 226, 248, 0.85)",
         borderRadius: 24,
-        padding: "24px 16px",
+        padding: "0 20px 24px",
         overflowY: "auto",
         display: "flex",
         flexDirection: "column",
         gap: 4,
-        boxShadow: "0 8px 24px rgba(107, 82, 209, 0.06)",
+        boxShadow: "0 8px 24px rgba(107, 82, 209, 0.05)",
       }}
     >
-      {/* Sidebar Header */}
+      {/* Sidebar Header (Aligned with My Projects Header) */}
       <div
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "0 4px",
-          marginBottom: 20,
+          padding: "22px 4px",
+          marginBottom: 16,
+          borderBottom: "1px solid #f4effa",
+          minHeight: 88,
+          boxSizing: "border-box",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div
             style={{
-              width: 36,
-              height: 36,
+              width: 40,
+              height: 40,
               borderRadius: 12,
               backgroundColor: "#eae2f8",
               color: "#6b52d1",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: "1rem",
+              fontSize: "1.1rem",
             }}
           >
             <FaRegCalendarCheck />
           </div>
           <div>
-            <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 800, color: "#1d1545" }}>
-              My Tasks
-            </h3>
-            <p style={{ margin: 0, fontSize: "0.75rem", color: "#5b5575" }}>
-              {totalTasks} total tasks
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <h3 style={{ margin: 0, fontSize: "1.3rem", fontWeight: 800, color: "#1d1545" }}>
+                Pending Tasks
+              </h3>
+              <span
+                style={{
+                  background: "linear-gradient(135deg, #6b52d1 0%, #9d7bf0 100%)",
+                  color: "#ffffff",
+                  fontSize: "0.78rem",
+                  fontWeight: 800,
+                  padding: "2px 10px",
+                  borderRadius: 999,
+                }}
+              >
+                {pendingTasksCount}
+              </span>
+            </div>
+            <p style={{ margin: "2px 0 0", fontSize: "0.82rem", color: "#5b5575" }}>
+              {pendingTasksCount} task{pendingTasksCount === 1 ? "" : "s"} to complete
             </p>
           </div>
         </div>
@@ -304,16 +345,15 @@ const TaskSidebar = () => {
       )}
 
       {loading ? (
-        <div style={{ padding: "20px 4px" }}>
+        <div style={{ padding: "16px 4px" }}>
           {[1, 2, 3].map((i) => (
             <div
               key={i}
               style={{
-                height: 60,
-                borderRadius: 12,
-                backgroundColor: "#eae2f8",
-                marginBottom: 10,
-                animation: "pulse 1.5s infinite",
+                height: 64,
+                borderRadius: 16,
+                backgroundColor: "#f4effa",
+                marginBottom: 12,
               }}
             />
           ))}
@@ -338,29 +378,39 @@ const TaskSidebar = () => {
             data?.upcoming,
             "#6b52d1"
           )}
-          {renderSection(
-            <FaCheckCircle />,
-            "Completed",
-            data?.completed?.slice(0, 5),
-            "#10b981"
-          )}
 
-          {totalTasks === 0 && (
+          {pendingTasksCount === 0 && (
             <div
               style={{
                 textAlign: "center",
-                padding: "40px 20px",
-                color: "#5b5575",
+                padding: "44px 20px",
+                backgroundColor: "#faf9fc",
+                borderRadius: 20,
+                border: "1px solid #f0e9fa",
+                marginTop: 8,
               }}
             >
-              <FaRegCalendarCheck
-                style={{ fontSize: "2rem", color: "#eae2f8", marginBottom: 12 }}
-              />
-              <p style={{ margin: 0, fontSize: "0.9rem", fontWeight: 700, color: "#1d1545" }}>
-                All clear!
+              <div
+                style={{
+                  width: 52,
+                  height: 52,
+                  borderRadius: 16,
+                  backgroundColor: "#eae2f8",
+                  color: "#6b52d1",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "1.4rem",
+                  margin: "0 auto 14px",
+                }}
+              >
+                <FaCheckCircle />
+              </div>
+              <p style={{ margin: 0, fontSize: "0.95rem", fontWeight: 800, color: "#1d1545" }}>
+                All caught up! 🎉
               </p>
-              <p style={{ margin: "4px 0 0", fontSize: "0.82rem" }}>
-                No tasks assigned to you yet.
+              <p style={{ margin: "6px 0 0", fontSize: "0.82rem", color: "#5b5575" }}>
+                No pending tasks assigned to you right now.
               </p>
             </div>
           )}
