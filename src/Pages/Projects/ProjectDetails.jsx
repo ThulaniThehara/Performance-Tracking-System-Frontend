@@ -361,7 +361,6 @@ const ProjectDetails = () => {
             onEdit={() => {
               setEditForm({
                 title: data.project.PName,
-                societyName: data.project.societyName || "",
                 description: data.project.description || "",
                 status: data.project.status,
                 startDate: data.project.StartDate?.slice(0, 10) || "",
@@ -694,13 +693,6 @@ const ProjectDetails = () => {
               <input
                 value={editForm.title}
                 onChange={(e) => setEditForm((p) => ({ ...p, title: e.target.value }))}
-              />
-            </label>
-            <label>
-              Society
-              <input
-                value={editForm.societyName}
-                onChange={(e) => setEditForm((p) => ({ ...p, societyName: e.target.value }))}
               />
             </label>
             <label>
