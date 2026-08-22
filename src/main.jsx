@@ -42,6 +42,11 @@ const router = createBrowserRouter([
     element: <LoginPage />,
     errorElement: <div>Page Not Found</div>,
   },
+  {
+    path: "/login",
+    element: <LoginPage />,
+    errorElement: <div>Page Not Found</div>,
+  },
 
   // ✅ password setup link page
   {

@@ -1,9 +1,26 @@
-
-import React from 'react'
-import { FaSearch, FaBell, FaChevronDown } from 'react-icons/fa'
+import React, { useState } from 'react'
+import { FaSearch, FaBell, FaChevronDown, FaSignOutAlt } from 'react-icons/fa'
+import { useNavigate } from 'react-router-dom'
+import { getUser, logout } from '../../utils/auth'
 import '../../SCSS/Header.scss'
 
 function Header() {
+  const navigate = useNavigate();
+  const user = getUser();
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const userName = user?.name || user?.username || user?.userRole || "User";
+  const userAvatar =
+    user?.image ||
+    `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=6b52d1&color=fff`;
+
+  const handleLogout = (e) => {
+    e?.preventDefault();
+    e?.stopPropagation();
+    logout();
+    window.location.href = '/';
+  };
+
   return (
     <header className="app-header">
       <div className="header-search">
@@ -25,14 +42,55 @@ function Header() {
 
         <div className="header-divider" />
 
-        <div className="user-profile-menu">
+        <div
+          className="user-profile-menu"
+          onClick={() => setShowDropdown(!showDropdown)}
+          style={{ position: 'relative', cursor: 'pointer' }}
+        >
           <img
-            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150"
-            alt="Thulani M."
+            src={userAvatar}
+            alt={userName}
             className="user-avatar"
           />
-          <span className="user-name">Thulani M.</span>
+          <span className="user-name">{userName}</span>
           <FaChevronDown className="dropdown-arrow" />
+
+          {showDropdown && (
+            <div
+              style={{
+                position: 'absolute',
+                top: '100%',
+                right: 0,
+                marginTop: 8,
+                backgroundColor: '#ffffff',
+                border: '1px solid #eae2f8',
+                borderRadius: 12,
+                boxShadow: '0 8px 24px rgba(107, 82, 209, 0.15)',
+                padding: '8px 0',
+                minWidth: 140,
+                zIndex: 1000,
+              }}
+            >
+              <button
+                onClick={handleLogout}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '8px 16px',
+                  border: 'none',
+                  background: 'none',
+                  color: '#ef4444',
+                  fontWeight: 600,
+                  fontSize: '0.85rem',
+                  cursor: 'pointer',
+                }}
+              >
+                <FaSignOutAlt /> Logout
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </header>
