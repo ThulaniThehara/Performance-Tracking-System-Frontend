@@ -136,7 +136,15 @@ const LoginPage = () => {
       // ✅ Redirect by role (backend returns user.role)
       goDashboardByRole(data?.user?.role);
     } catch (err) {
-      setError("Server error. Please try again.");
+      // Reaching here means fetch() rejected, so no HTTP response came back at
+      // all — the server being down, or the browser blocking the response
+      // because this page's origin is not in the API's CORS allow-list. A real
+      // server-side failure returns a status and is handled by !res.ok above,
+      // so calling this one a "server error" points debugging the wrong way.
+      console.error("Login request could not reach the API:", err);
+      setError(
+        `Could not reach the server at ${baseURL}. Check that the backend is running and that this page's address is allowed by it.`
+      );
     } finally {
       setLoading(false);
     }
