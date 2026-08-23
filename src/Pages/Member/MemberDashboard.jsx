@@ -5,6 +5,8 @@ import "react-calendar/dist/Calendar.css";
 import "../../SCSS/MemberStyles/MemberDashboard.scss";
 import { Link } from "react-router-dom";
 import ProjectsDashboardView from "../../Components/MemberProjects/ProjectsDashboardView";
+import SettingComponent from "../../Components/SettingsComponent/SettingComponent";
+import MemberFeedback from "../../Components/MemberFeedback/MemberFeedback";
 
 import { apiFetch } from "../../utils/api";
 import { getUser, logout } from "../../utils/auth";
@@ -30,6 +32,7 @@ import {
   FaUsers,
   FaFileAlt,
   FaCog,
+  FaCommentDots,
 } from "react-icons/fa";
 
 const EVENT_TYPE_VALUES = ["EVENT", "SPECIAL_TASK", "MEETING", "DEADLINE"];
@@ -115,8 +118,9 @@ const MemberDashboard = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.get("tab") === "projects") {
-      setActiveTab("projects");
+    const tab = params.get("tab");
+    if (tab === "projects" || tab === "settings" || tab === "home" || tab === "feedback") {
+      setActiveTab(tab);
     }
   }, []);
 
@@ -265,29 +269,22 @@ const MemberDashboard = () => {
             <span className="nav-btn-label">{t('shell.nav.myProjects')}</span>
           </button>
 
-          <button className="sidebar-nav-btn">
-            <FaUsers className="nav-btn-icon" />
-            <span className="nav-btn-label">{t('member.dashboard.sidebarTeams')}</span>
+          <button
+            className={`sidebar-nav-btn ${activeTab === "feedback" ? "active" : ""}`}
+            onClick={() => setActiveTab("feedback")}
+          >
+            <FaCommentDots className="nav-btn-icon" />
+            <span className="nav-btn-label">Feedback / Issues</span>
           </button>
 
-          <button className="sidebar-nav-btn">
-            <FaFileAlt className="nav-btn-icon" />
-            <span className="nav-btn-label">{t('shell.nav.reports')}</span>
-          </button>
-
-          <button className="sidebar-nav-btn">
-            <FaCalendarAlt className="nav-btn-icon" />
-            <span className="nav-btn-label">{t('member.dashboard.sidebarCalendar')}</span>
-          </button>
-        </nav>
-
-        {/* Bottom Actions */}
-        <div className="sidebar-bottom-menu">
-          <button className="sidebar-nav-btn">
+          <button
+            className={`sidebar-nav-btn ${activeTab === "settings" ? "active" : ""}`}
+            onClick={() => setActiveTab("settings")}
+          >
             <FaCog className="nav-btn-icon" />
             <span className="nav-btn-label">{t('shell.nav.settings')}</span>
           </button>
-        </div>
+        </nav>
       </aside>
 
       {/* 2. RIGHT MAIN CONTAINER */}
@@ -666,6 +663,24 @@ const MemberDashboard = () => {
               contributingProjects={contributingProjects}
               initialFilter={projectFilter}
             />
+          )}
+
+          {/* =========================================================================
+             TAB 3: SETTINGS VIEW
+             ========================================================================= */}
+          {activeTab === "settings" && (
+            <div className="member-settings-view" style={{ width: '100%', marginTop: '8px' }}>
+              <SettingComponent isEmbedded={true} />
+            </div>
+          )}
+
+          {/* =========================================================================
+             TAB 4: FEEDBACK & COMPLAINTS VIEW
+             ========================================================================= */}
+          {activeTab === "feedback" && (
+            <div className="member-feedback-view" style={{ width: '100%', marginTop: '8px' }}>
+              <MemberFeedback allWorkedProjects={allWorkedProjects} />
+            </div>
           )}
 
         </div>

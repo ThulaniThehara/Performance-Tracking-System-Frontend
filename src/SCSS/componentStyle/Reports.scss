@@ -19,9 +19,13 @@
     margin: 0 auto;
   }
 
-  @media (max-width: 980px) {
+  @media (max-width: 1024px) {
     margin-left: 0;
     padding: 24px 20px 56px;
+  }
+
+  @media (max-width: 640px) {
+    padding: 16px 14px 48px;
   }
 }
 

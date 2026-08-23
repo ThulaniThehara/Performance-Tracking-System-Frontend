@@ -17,6 +17,7 @@ import AdminCommittees from "./Pages/Admin/AdminCommitees.jsx";
 import AdminAddProject from "./Pages/Admin/AdminAddProject.jsx";
 import AdminAddMember from "./Pages/Admin/AdminAddMember.jsx";
 import AdminViewAccount from "./Pages/Admin/AdminViewAccount.jsx";
+import AdminFeedbackPage from "./Pages/Admin/AdminFeedbackPage.jsx";
 
 // Projects module (society project management)
 import ProjectsHome from "./Pages/Projects/ProjectsHome.jsx";
@@ -135,6 +136,7 @@ const router = createBrowserRouter([
   { path: "/AdminAddMember", element: <AdminAddMember />, errorElement: <div>Page Not Found</div> },
   { path: "/AdminCommittees", element: <AdminCommittees />, errorElement: <div>Page Not Found</div> },
   { path: "/AdminViewAccount", element: <AdminViewAccount />, errorElement: <div>Page Not Found</div> },
+  { path: "/AdminFeedback", element: <AdminFeedbackPage />, errorElement: <div>Page Not Found</div> },
 
   { path: "/MemberDashboard", element: <MemberDashboard />, errorElement: <div>Page Not Found</div> },
 

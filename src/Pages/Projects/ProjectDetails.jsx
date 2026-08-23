@@ -1,6 +1,19 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { FaArrowLeft, FaPlus, FaSitemap, FaTasks, FaUsers } from "react-icons/fa";
+import {
+  FaArrowLeft,
+  FaPlus,
+  FaSitemap,
+  FaTasks,
+  FaUsers,
+  FaCommentDots,
+  FaExclamationTriangle,
+  FaStar,
+  FaProjectDiagram,
+  FaTrashAlt,
+  FaSpinner,
+  FaUser,
+} from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 
 import Header from "../../Components/Header/Header";
@@ -75,6 +88,51 @@ const ProjectDetails = () => {
   const [saving, setSaving] = useState(false);
   const [modalError, setModalError] = useState("");
 
+  // Project Tabs (Image 2 style: Project Details, Feedbacks, Issues/Complaints)
+  const [projectDetailTab, setProjectDetailTab] = useState("details"); // 'details' | 'feedbacks' | 'complaints'
+  const [projectFeedbacks, setProjectFeedbacks] = useState([]);
+  const [projectComplaints, setProjectComplaints] = useState([]);
+  const [loadingSubmissions, setLoadingSubmissions] = useState(false);
+
+  const fetchProjectSubmissions = useCallback(async (projName) => {
+    try {
+      setLoadingSubmissions(true);
+      const token = localStorage.getItem("token");
+      const url = `http://localhost:5000/api/feedback/project/${projectId}${projName ? `?projectName=${encodeURIComponent(projName)}` : ""}`;
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const result = await res.json();
+      if (res.ok) {
+        setProjectFeedbacks(result.feedbacks || []);
+        setProjectComplaints(result.complaints || []);
+      }
+    } catch (e) {
+      console.warn("Error loading project submissions:", e);
+    } finally {
+      setLoadingSubmissions(false);
+    }
+  }, [projectId]);
+
+  const handleUpdateComplaintStatus = async (id, newStatus) => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`http://localhost:5000/api/feedback/admin/complaint/${id}/status`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (res.ok) {
+        fetchProjectSubmissions(data?.project?.PName);
+      }
+    } catch (e) {
+      console.warn("Error updating complaint status:", e);
+    }
+  };
+
   const load = useCallback(async () => {
     try {
       setLoading(true);
@@ -82,12 +140,15 @@ const ProjectDetails = () => {
       const res = await apiFetch(`/pm/projects/${projectId}`);
       if (!res) return;
       setData(res.data);
+      if (res.data?.project?.PName) {
+        fetchProjectSubmissions(res.data.project.PName);
+      }
     } catch (e) {
       setError(e.message || t('projects.details.loadError'));
     } finally {
       setLoading(false);
     }
-  }, [projectId, t]);
+  }, [projectId, t, fetchProjectSubmissions]);
 
   useEffect(() => {
     load();
@@ -346,25 +407,60 @@ const ProjectDetails = () => {
             <h1 className="pm-page-heading">Project Details</h1>
           </div>
 
-          <ProjectOverviewCard
-            project={data.project}
-            chairperson={data.chairperson}
-            stats={data.stats}
-            canEdit={myRole === 'CHAIRPERSON' && perms.canEditProject}
-            onEdit={() => {
-              setEditForm({
-                title: data.project.PName,
-                description: data.project.description || "",
-                status: data.project.status,
-                startDate: data.project.StartDate?.slice(0, 10) || "",
-                endDate: data.project.EndDate?.slice(0, 10) || "",
-              });
-              setModalError("");
-              setEditModal(true);
-            }}
-          />
+          {/* 3 Horizontal Tabs (Matching Image 2 Reference) */}
+          <div className="project-detail-tabs-bar">
+            <button
+              className={`project-tab-btn ${projectDetailTab === 'details' ? 'active' : ''}`}
+              onClick={() => setProjectDetailTab('details')}
+            >
+              <FaProjectDiagram /> Project Details
+            </button>
 
-          <div className="pm-detail-grid">
+            <button
+              className={`project-tab-btn ${projectDetailTab === 'feedbacks' ? 'active' : ''}`}
+              onClick={() => setProjectDetailTab('feedbacks')}
+            >
+              <FaCommentDots /> Feedbacks
+              {projectFeedbacks.length > 0 && (
+                <span className="tab-badge-pill">{projectFeedbacks.length}</span>
+              )}
+            </button>
+
+            <button
+              className={`project-tab-btn ${projectDetailTab === 'complaints' ? 'active' : ''}`}
+              onClick={() => setProjectDetailTab('complaints')}
+            >
+              <FaExclamationTriangle /> Issues & Complaints
+              {projectComplaints.length > 0 && (
+                <span className="tab-badge-pill">{projectComplaints.length}</span>
+              )}
+            </button>
+          </div>
+
+          {/* =========================================================================
+             TAB 1: PROJECT DETAILS VIEW (Overview Card + Committees & Tasks Grid)
+             ========================================================================= */}
+          {projectDetailTab === 'details' && (
+            <>
+              <ProjectOverviewCard
+                project={data.project}
+                chairperson={data.chairperson}
+                stats={data.stats}
+                canEdit={myRole === 'CHAIRPERSON' && perms.canEditProject}
+                onEdit={() => {
+                  setEditForm({
+                    title: data.project.PName,
+                    description: data.project.description || "",
+                    status: data.project.status,
+                    startDate: data.project.StartDate?.slice(0, 10) || "",
+                    endDate: data.project.EndDate?.slice(0, 10) || "",
+                  });
+                  setModalError("");
+                  setEditModal(true);
+                }}
+              />
+
+              <div className="pm-detail-grid">
             {/* ---------------- committees ---------------- */}
             <section className="pm-panel">
               <header className="pm-panel-head">
@@ -485,6 +581,111 @@ const ProjectDetails = () => {
               )}
             </section>
           </div>
+            </>
+          )}
+
+          {/* =========================================================================
+             TAB 2: PROJECT FEEDBACKS VIEW
+             ========================================================================= */}
+          {projectDetailTab === 'feedbacks' && (
+            <div className="project-submissions-panel">
+              <div className="panel-header-row">
+                <h3>Member Feedbacks for {data.project?.PName}</h3>
+                <p>Review thoughts, evaluations, and suggestions submitted by project members.</p>
+              </div>
+
+              {loadingSubmissions ? (
+                <div style={{ padding: '30px', textAlign: 'center', color: '#6b52d1' }}>
+                  <FaSpinner className="fa-spin" style={{ fontSize: '1.5rem' }} />
+                  <p style={{ marginTop: '8px', color: '#64748b', fontSize: '0.88rem' }}>Loading feedbacks...</p>
+                </div>
+              ) : projectFeedbacks.length === 0 ? (
+                <div className="pm-empty-inline" style={{ padding: '32px', textAlign: 'center', background: '#f8fafc', borderRadius: '14px', border: '1px dashed #cbd5e1' }}>
+                  No feedback has been submitted for this project yet.
+                </div>
+              ) : (
+                <div className="project-feedbacks-stack">
+                  {projectFeedbacks.map((fb) => (
+                    <div key={fb._id} className="proj-sub-card">
+                      <div className="sub-meta-top">
+                        <span className="sub-author">👤 {fb.userId?.name || fb.author || 'Member'}</span>
+                        {fb.targetMember && (
+                          <span className="sub-target">Target: {fb.targetMember}</span>
+                        )}
+                        <span className="sub-cat">{fb.type}</span>
+                        <span className="sub-stars">⭐ {fb.rating}/5</span>
+                        <span className="sub-date">{new Date(fb.createdAt).toLocaleDateString()}</span>
+                      </div>
+                      <p className="sub-body">{fb.message}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* =========================================================================
+             TAB 3: PROJECT ISSUES & COMPLAINTS VIEW
+             ========================================================================= */}
+          {projectDetailTab === 'complaints' && (
+            <div className="project-submissions-panel">
+              <div className="panel-header-row">
+                <h3>Reported Issues & Complaints for {data.project?.PName}</h3>
+                <p>Manage and resolve issues submitted by members regarding tasks, assignments, or conflicts.</p>
+              </div>
+
+              {loadingSubmissions ? (
+                <div style={{ padding: '30px', textAlign: 'center', color: '#6b52d1' }}>
+                  <FaSpinner className="fa-spin" style={{ fontSize: '1.5rem' }} />
+                  <p style={{ marginTop: '8px', color: '#64748b', fontSize: '0.88rem' }}>Loading complaints...</p>
+                </div>
+              ) : projectComplaints.length === 0 ? (
+                <div className="pm-empty-inline" style={{ padding: '32px', textAlign: 'center', background: '#f8fafc', borderRadius: '14px', border: '1px dashed #cbd5e1' }}>
+                  No issues or complaints reported for this project.
+                </div>
+              ) : (
+                <div className="project-complaints-stack">
+                  {projectComplaints.map((c) => (
+                    <div key={c._id} className="proj-sub-card">
+                      <div className="sub-meta-top">
+                        <span className="sub-author">👤 {c.userId?.name || c.from || 'Member'}</span>
+                        {c.targetMember && (
+                          <span className="sub-target">Target: {c.targetMember}</span>
+                        )}
+                        <span className="sub-cat">{c.category}</span>
+                        <span className={`sub-priority ${(c.priority || 'medium').toLowerCase()}`}>
+                          {c.priority} Priority
+                        </span>
+                        <span className={`sub-status status-${(c.status || 'open').toLowerCase().replace(' ', '-')}`}>
+                          {c.status || 'Open'}
+                        </span>
+                        <span className="sub-date">{new Date(c.createdAt).toLocaleDateString()}</span>
+                      </div>
+
+                      <h4 className="sub-head">{c.title}</h4>
+                      <p className="sub-body">{c.description}</p>
+
+                      {(isAdmin || myRole === 'CHAIRPERSON') && (
+                        <div className="sub-action-row">
+                          <span className="status-lbl">Change Status:</span>
+                          <select
+                            value={c.status || 'Open'}
+                            onChange={(e) => handleUpdateComplaintStatus(c._id, e.target.value)}
+                            className={`status-select status-${(c.status || 'open').toLowerCase().replace(' ', '-')}`}
+                          >
+                            <option value="Open">🟡 Open (Pending)</option>
+                            <option value="In Progress">🔵 In Progress</option>
+                            <option value="Resolved">🟢 Resolved</option>
+                          </select>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
         </div>
       </div>
 

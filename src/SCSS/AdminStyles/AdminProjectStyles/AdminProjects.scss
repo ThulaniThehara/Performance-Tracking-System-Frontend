@@ -448,13 +448,9 @@ $danger-color: #ef4444;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .admin-projects-container {
     margin-left: 0;
-  }
-
-  .LeftNavigationBar {
-    transform: translateX(-100%);
   }
 
   .search_bar,

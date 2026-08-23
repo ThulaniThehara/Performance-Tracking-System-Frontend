@@ -247,6 +247,16 @@
   }
 }
 
+@media (max-width: 1024px) {
+  .my-project-page {
+    margin-left: 0;
+
+    .project-hero .hero-background {
+      left: 0;
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .my-project-page {
     margin-left: 0;

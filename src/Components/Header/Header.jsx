@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { FaSearch, FaBell, FaChevronDown, FaSignOutAlt } from 'react-icons/fa'
+import { FaSearch, FaBell, FaChevronDown, FaSignOutAlt, FaBars } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { getUser, logout } from '../../utils/auth'
@@ -23,8 +23,20 @@ function Header() {
     window.location.href = '/';
   };
 
+  const toggleMobileNav = () => {
+    window.dispatchEvent(new CustomEvent('toggle-sidebar'));
+  };
+
   return (
     <header className="app-header">
+      <button
+        className="mobile-menu-toggle"
+        onClick={toggleMobileNav}
+        aria-label="Toggle navigation menu"
+      >
+        <FaBars />
+      </button>
+
       <div className="header-search">
         <div className="search-input-box">
           <FaSearch className="search-icon" />

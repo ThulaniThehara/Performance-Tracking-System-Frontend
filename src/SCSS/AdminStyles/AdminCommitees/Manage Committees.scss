@@ -3,11 +3,10 @@
 .commitee {
     display: flex;
     flex-direction: column;
-    /* center the table horizontally and vertically inside the frame */
-    justify-content: center;    /* vertical centering of the table inside the frame */
-    align-items: center;        /* center horizontally */
+    justify-content: center;
+    align-items: center;
     margin-top: 32px;
-    background: #e4d4f6; // Light purple background for the frame
+    background: #e4d4f6;
     border-radius: 32px;
     box-shadow: 0 2px 12px rgba(124, 91, 189, 0.08);
     padding: 32px 24px;
@@ -17,6 +16,19 @@
     margin-left: auto;
     margin-right: auto;
     min-height: 360px;
+    overflow-x: auto;
+
+    @media (max-width: 1024px) {
+      width: 95%;
+      padding: 24px 16px;
+    }
+
+    @media (max-width: 768px) {
+      width: 100%;
+      border-radius: 20px;
+      margin-top: 16px;
+      padding: 16px 12px;
+    }
 }
 
 /* make the table centered inside the frame */
