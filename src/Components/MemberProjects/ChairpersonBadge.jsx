@@ -1,7 +1,9 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { FaCrown } from "react-icons/fa";
 
 const ChairpersonBadge = () => {
+  const { t } = useTranslation();
   return (
     <div
       className="chairperson-badge"
@@ -21,7 +23,7 @@ const ChairpersonBadge = () => {
       }}
     >
       <FaCrown style={{ fontSize: "0.88rem", color: "#1d1545" }} />
-      CHAIR PERSON
+      {t('enums.role.CHAIRPERSON')}
     </div>
   );
 };

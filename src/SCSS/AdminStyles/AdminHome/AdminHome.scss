@@ -759,16 +759,19 @@
     }
 
     .react-calendar__month-view__weekdays {
-      margin-bottom: 2px;
-      text-transform: uppercase;
-      font-size: 0.63rem;
-      font-weight: 650;
-      letter-spacing: 0.06em;
-      color: var(--label-2);
+      background: #f4effa;
+      border-radius: 999px;
+      padding: 8px 12px;
+      margin-bottom: 10px;
 
       abbr {
         text-decoration: none;
         cursor: default;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #6b52d1;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
       }
     }
 
@@ -788,53 +791,69 @@
       justify-content: center;
       aspect-ratio: 1 / 1;
       padding: 0;
-      border-radius: var(--r-sm);
+      border-radius: 12px;
       background: none;
       font-family: inherit;
-      font-size: 0.82rem;
-      font-weight: 500;
+      font-size: 0.84rem;
+      font-weight: 600;
       color: var(--label);
       font-variant-numeric: tabular-nums;
-      transition: background 0.16s ease, color 0.16s ease;
+      transition: all 0.2s ease;
 
       &:enabled:hover,
       &:enabled:focus {
-        background: var(--fill);
+        background: #f4effa;
+        color: #6b52d1;
+        border-radius: 12px;
+      }
+
+      /* Red circle outline for dates with deadlines */
+      &.has-deadline {
+        border: 2px solid #ef4444 !important;
+        border-radius: 50% !important;
+        color: #ef4444 !important;
+        font-weight: 800 !important;
+
+        &:enabled:hover,
+        &:enabled:focus {
+          background: #fef2f2 !important;
+          border-color: #dc2626 !important;
+          color: #dc2626 !important;
+        }
+
+        &.react-calendar__tile--active,
+        &.react-calendar__tile--active:enabled:hover,
+        &.react-calendar__tile--active:enabled:focus {
+          background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+          color: #ffffff !important;
+          border-color: #ef4444 !important;
+          box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4) !important;
+        }
       }
     }
 
-    /* Today: a neutral ring plus bold weight, so it never competes with the
-       accent and stays visible underneath the selected fill. */
     .react-calendar__tile--now {
-      font-weight: 700;
-      box-shadow: inset 0 0 0 1.5px var(--label-3);
+      font-weight: 800;
+      border: 2px solid #6b52d1;
+      border-radius: 12px;
 
       &:enabled:hover,
       &:enabled:focus {
-        background: var(--fill);
+        background: #f4effa;
       }
     }
 
-    /* The selected day — the accent's second job on this page. */
     .react-calendar__tile--active,
     .react-calendar__tile--active:enabled:hover,
     .react-calendar__tile--active:enabled:focus {
-      background: var(--accent);
-      color: var(--on-accent);
-      font-weight: 600;
-      box-shadow: none;
-
-      &.react-calendar__tile--now {
-        box-shadow: inset 0 0 0 1.5px var(--on-accent);
-      }
+      background: linear-gradient(135deg, #6b52d1 0%, #9d7bf0 100%) !important;
+      color: #ffffff !important;
+      border-radius: 12px !important;
+      font-weight: 800 !important;
+      box-shadow: 0 4px 14px rgba(107, 82, 209, 0.35) !important;
 
       .dot {
-        background: var(--on-accent);
-
-        &.deadline {
-          background: transparent;
-          border-bottom-color: var(--on-accent);
-        }
+        background: #ffffff !important;
       }
     }
   }

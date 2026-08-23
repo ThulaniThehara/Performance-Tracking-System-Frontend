@@ -1,5 +1,6 @@
 import React from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import {
   FaHome,
   FaUser,
@@ -17,6 +18,7 @@ import { logout } from '../../utils/auth'
 import '../../SCSS/componentStyle/LeftNavigationBar.scss'
 
 function LeftNavigationBar() {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -41,13 +43,13 @@ function LeftNavigationBar() {
       </div>
 
       <nav className="nav-menu">
-        <div className="nav-group-label">OVERVIEW</div>
+        <div className="nav-group-label">{t('shell.nav.overview')}</div>
 
         <NavLink to="/admin/dashboard" className={({ isActive }) => (isActive ? 'row active' : 'row')}>
           <div className="icon-wrapper">
             <FaHome className="row-icon" />
           </div>
-          <span>Dashboard</span>
+          <span>{t('shell.nav.dashboard')}</span>
           <FaChevronRight className="nav-arrow" />
         </NavLink>
 
@@ -56,7 +58,7 @@ function LeftNavigationBar() {
           <div className="icon-wrapper">
             <FaProjectDiagram className="row-icon" />
           </div>
-          <span>My Projects</span>
+          <span>{t('shell.nav.myProjects')}</span>
           <FaChevronRight className="nav-arrow" />
         </NavLink>
 
@@ -64,11 +66,11 @@ function LeftNavigationBar() {
           <div className="icon-wrapper">
             <FaUser className="row-icon" />
           </div>
-          <span>Profile</span>
+          <span>{t('shell.nav.profile')}</span>
           <FaChevronRight className="nav-arrow" />
         </NavLink>
 
-        <div className="nav-group-label">MANAGEMENT</div>
+        <div className="nav-group-label">{t('shell.nav.management')}</div>
 
         <NavLink
           to="/AdminProjects"
@@ -77,7 +79,7 @@ function LeftNavigationBar() {
           <div className="icon-wrapper">
             <FaFolder className="row-icon" />
           </div>
-          <span>Projects</span>
+          <span>{t('shell.nav.projects')}</span>
           <FaChevronRight className="nav-arrow" />
         </NavLink>
 
@@ -85,7 +87,7 @@ function LeftNavigationBar() {
           <div className="icon-wrapper">
             <FaSitemap className="row-icon" />
           </div>
-          <span>Committees</span>
+          <span>{t('shell.nav.committees')}</span>
           <FaChevronRight className="nav-arrow" />
         </NavLink>
 
@@ -93,7 +95,7 @@ function LeftNavigationBar() {
           <div className="icon-wrapper">
             <FaUsers className="row-icon" />
           </div>
-          <span>Members</span>
+          <span>{t('shell.nav.members')}</span>
           <FaChevronRight className="nav-arrow" />
         </NavLink>
 
@@ -101,7 +103,7 @@ function LeftNavigationBar() {
           <div className="icon-wrapper">
             <FaChartPie className="row-icon" />
           </div>
-          <span>Reports</span>
+          <span>{t('shell.nav.reports')}</span>
           <FaChevronRight className="nav-arrow" />
         </NavLink>
 
@@ -109,7 +111,7 @@ function LeftNavigationBar() {
           <div className="icon-wrapper">
             <FaCog className="row-icon" />
           </div>
-          <span>Settings</span>
+          <span>{t('shell.nav.settings')}</span>
           <FaChevronRight className="nav-arrow" />
         </NavLink>
       </nav>
@@ -137,7 +139,7 @@ function LeftNavigationBar() {
         }}
       >
         <FaSignOutAlt style={{ fontSize: '1rem' }} />
-        <span>Logout</span>
+        <span>{t('shell.logout')}</span>
       </button>
     </aside>
   )

@@ -7,6 +7,7 @@ import {
   FaChevronDown,
   FaUserPlus,
 } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import Avatar from "./Avatar";
 import CommitteeMemberList from "./CommitteeMemberList";
 
@@ -25,6 +26,7 @@ const CommitteeCard = ({
   onMakeLead,
   defaultOpen = false,
 }) => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(defaultOpen);
   const lead = committee.lead;
 
@@ -40,27 +42,27 @@ const CommitteeCard = ({
           <p className="committee-sub">
             {lead ? (
               <>
-                Led by <strong>{lead.name}</strong>
+                {t('projects.committeeCard.ledByPrefix')} <strong>{lead.name}</strong>
               </>
             ) : (
-              <em>No lead assigned</em>
+              <em>{t('projects.committeeCard.noLead')}</em>
             )}
           </p>
         </div>
 
-        <span className="committee-count" title="Members">
+        <span className="committee-count" title={t('shell.nav.members')}>
           <FaUsers aria-hidden="true" /> {committee.memberCount ?? members.length}
         </span>
 
         {canManage && (
           <div className="committee-actions">
-            <button className="pm-icon-btn" onClick={() => onEdit?.(committee)} aria-label="Edit committee">
+            <button className="pm-icon-btn" onClick={() => onEdit?.(committee)} aria-label={t('projects.details.aria.editCommittee')}>
               <FaPen />
             </button>
             <button
               className="pm-icon-btn is-danger"
               onClick={() => onDelete?.(committee)}
-              aria-label="Delete committee"
+              aria-label={t('projects.details.aria.deleteCommittee')}
             >
               <FaTrashAlt />
             </button>
@@ -71,7 +73,7 @@ const CommitteeCard = ({
           className={`pm-icon-btn toggle ${open ? "is-open" : ""}`}
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
-          aria-label={open ? "Hide members" : "Show members"}
+          aria-label={open ? t('projects.details.aria.hideMembers') : t('projects.details.aria.showMembers')}
         >
           <FaChevronDown />
         </button>
@@ -92,7 +94,7 @@ const CommitteeCard = ({
             canManage={canManage}
             onRemove={onRemoveMember}
             onMakeLead={onMakeLead}
-            emptyText="Nobody has been added to this committee yet."
+            emptyText={t('projects.committeeCard.emptyMembers')}
           />
 
           {canManage && (
@@ -100,7 +102,7 @@ const CommitteeCard = ({
               className="pm-btn pm-btn-ghost pm-btn-sm add-to-committee"
               onClick={() => onAddMember?.(committee)}
             >
-              <FaUserPlus aria-hidden="true" /> Add member
+              <FaUserPlus aria-hidden="true" /> {t('projects.committeeCard.addMember')}
             </button>
           )}
         </div>

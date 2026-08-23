@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { humanise } from "../../utils/projectUtils";
 
 /**
@@ -9,20 +10,22 @@ import { humanise } from "../../utils/projectUtils";
 const LEVELS = { LOW: 1, MEDIUM: 2, HIGH: 3 };
 
 const PriorityBadge = ({ priority, compact = false }) => {
+  const { t } = useTranslation();
   const key = String(priority || "MEDIUM").toUpperCase();
   const level = LEVELS[key] || 2;
+  const label = t(`enums.priority.${key}`, { defaultValue: humanise(key) });
 
   return (
     <span
       className={`pm-priority-badge level-${level} ${compact ? "is-compact" : ""}`}
-      title={`${humanise(key)} priority`}
+      title={t('projects.details.priorityTitle', { priority: label })}
     >
       <span className="bars" aria-hidden="true">
         {[1, 2, 3].map((i) => (
           <i key={i} className={i <= level ? "on" : ""} />
         ))}
       </span>
-      {humanise(key)}
+      {label}
     </span>
   );
 };

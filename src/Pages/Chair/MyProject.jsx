@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Header from '../../Components/Header/Header';
 import LeftNavChair from '../../Components/chair Component/LeftNavChair';
 import axios from 'axios';
@@ -6,6 +7,7 @@ import '../../SCSS/ChairStyle/MyProject.scss';
 import { useNavigate } from 'react-router-dom';
 
 const MyProject = () => {
+  const { t } = useTranslation();
   const projectId = '68d799d39f75e374f4e80aef'; // hardcoded for now
   const navigate = useNavigate();
 
@@ -29,7 +31,7 @@ const MyProject = () => {
       const projectData = projectRes.data.data || projectRes.data;
 
       if (!projectData) {
-        setError('Project not found');
+        setError(t('chair.myProject.notFound'));
         setLoading(false);
         return;
       }
@@ -63,7 +65,7 @@ const MyProject = () => {
       }
     } catch (err) {
       console.error('Error fetching project:', err);
-      setError(err.response?.data?.message || 'Failed to load project');
+      setError(err.response?.data?.message || t('chair.myProject.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -75,7 +77,7 @@ const MyProject = () => {
         <Header />
         <LeftNavChair />
         <div className="my-project-page">
-          <div className="loading-state">Loading project...</div>
+          <div className="loading-state">{t('chair.myProject.loading')}</div>
         </div>
       </>
     );
@@ -89,7 +91,7 @@ const MyProject = () => {
         <div className="my-project-page">
           <div className="error-state">
             <p>{error}</p>
-            <button onClick={fetchProjectData}>Retry</button>
+            <button onClick={fetchProjectData}>{t('chair.myProject.retry')}</button>
           </div>
         </div>
       </>
@@ -107,7 +109,7 @@ const MyProject = () => {
 
           <div className="project-content">
             {/* Project Title */}
-            <h1 className="project-title">{project?.PName || 'Project'}</h1>
+            <h1 className="project-title">{project?.PName || t('chair.myProject.defaultTitle')}</h1>
 
             {/* Project Overview Section */}
             <div className="project-overview">
@@ -124,21 +126,21 @@ const MyProject = () => {
               {/* Right: Project Description */}
               <div className="project-description-section">
                 <p className="project-description">
-                  {project?.description || 'No description available'}
+                  {project?.description || t('chair.myProject.noDescription')}
                 </p>
                 <div className="project-meta">
                   <div className="meta-item">
-                    <strong>Status:</strong>
+                    <strong>{t('chair.myProject.statusLabel')}</strong>
                     <span className={`status-badge status-${(project?.status || '').toLowerCase()}`}>
-                      {project?.status || 'Unknown'}
+                      {project?.status || t('chair.myProject.unknownStatus')}
                     </span>
                   </div>
                   <div className="meta-item">
-                    <strong>Start Date:</strong>
+                    <strong>{t('chair.myProject.startDateLabel')}</strong>
                     <span>{project?.StartDate ? new Date(project.StartDate).toLocaleDateString() : '—'}</span>
                   </div>
                   <div className="meta-item">
-                    <strong>End Date:</strong>
+                    <strong>{t('chair.myProject.endDateLabel')}</strong>
                     <span>{project?.EndDate ? new Date(project.EndDate).toLocaleDateString() : '—'}</span>
                   </div>
                 </div>
@@ -147,7 +149,7 @@ const MyProject = () => {
 
             {/* Chair Persons Section */}
             <div className="chair-persons-section">
-              <h2>Chair Persons</h2>
+              <h2>{t('chair.myProject.chairPersons')}</h2>
               <div className="chair-persons-grid">
                 {chairPersons.length > 0 ? (
                   chairPersons.map((person, idx) => (
@@ -164,11 +166,11 @@ const MyProject = () => {
                         </span>
                       </div>
                       <p className="chair-name">{person.name}</p>
-                      <p className="chair-role">{person.role || 'Chair Person'}</p>
+                      <p className="chair-role">{person.role || t('chair.myProject.chairPersonRole')}</p>
                     </div>
                   ))
                 ) : (
-                  <p>No chair persons assigned</p>
+                  <p>{t('chair.myProject.noChairPersons')}</p>
                 )}
               </div>
             </div>

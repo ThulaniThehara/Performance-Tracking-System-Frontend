@@ -1,5 +1,6 @@
 import React from "react";
 import { FaRegCalendarAlt, FaRegClock, FaTrashAlt, FaSitemap, FaFolder } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import TaskStatusBadge from "./TaskStatusBadge";
 import PriorityBadge from "./PriorityBadge";
 import Avatar from "./Avatar";
@@ -27,6 +28,7 @@ const TaskCard = ({
   showContext = false,
   busy = false,
 }) => {
+  const { t } = useTranslation();
   const status = displayStatusOf(task);
   const remaining = daysUntil(task.dueDate);
   const urgent = status !== "COMPLETED" && remaining !== null && remaining <= 1;
@@ -40,7 +42,7 @@ const TaskCard = ({
             <button
               className="pm-icon-btn is-danger"
               onClick={() => onDelete(task)}
-              aria-label={`Delete ${task.title}`}
+              aria-label={t('projects.details.aria.deleteTask', { title: task.title })}
               disabled={busy}
             >
               <FaTrashAlt />
@@ -71,7 +73,7 @@ const TaskCard = ({
             </span>
           )}
           <span className={`countdown ${status === "OVERDUE" ? "is-late" : ""}`}>
-            {countdownLabel(task.dueDate, task.status)}
+            {countdownLabel(t, task.dueDate, task.status)}
           </span>
         </div>
 
@@ -93,11 +95,11 @@ const TaskCard = ({
             value={task.status}
             onChange={(e) => onStatusChange(task, e.target.value)}
             disabled={busy}
-            aria-label={`Change status of ${task.title}`}
+            aria-label={t('projects.details.aria.changeStatusOf', { title: task.title })}
           >
-            <option value="TODO">To Do</option>
-            <option value="IN_PROGRESS">In Progress</option>
-            <option value="COMPLETED">Completed</option>
+            <option value="TODO">{t('enums.taskStatus.TODO')}</option>
+            <option value="IN_PROGRESS">{t('enums.taskStatus.IN_PROGRESS')}</option>
+            <option value="COMPLETED">{t('enums.taskStatus.COMPLETED')}</option>
           </select>
         )}
       </div>

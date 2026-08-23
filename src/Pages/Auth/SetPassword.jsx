@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const SetPassword = () => {
+  const { t } = useTranslation();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
@@ -16,17 +18,17 @@ const SetPassword = () => {
     e.preventDefault();
 
     if (!token) {
-      setError("Invalid or missing token.");
+      setError(t('auth.setPassword.invalidToken'));
       return;
     }
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
+      setError(t('auth.setPassword.passwordTooShort'));
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError(t('auth.setPassword.passwordMismatch'));
       return;
     }
 
@@ -48,14 +50,14 @@ const SetPassword = () => {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || "Failed to set password.");
+        setError(data.message || t('auth.setPassword.setFailed'));
         return;
       }
 
-      alert("Password set successfully. You can now login.");
+      alert(t('auth.setPassword.successAlert'));
       navigate("/"); // redirect to login
     } catch (err) {
-      setError("Server error. Please try again.");
+      setError(t('auth.setPassword.serverError'));
     } finally {
       setLoading(false);
     }
@@ -64,12 +66,12 @@ const SetPassword = () => {
   return (
     <div style={styles.wrapper}>
       <form onSubmit={handleSubmit} style={styles.card}>
-        <h2>Set Your Password</h2>
-        <p>Create a password to activate your account.</p>
+        <h2>{t('auth.setPassword.heading')}</h2>
+        <p>{t('auth.setPassword.subtitle')}</p>
 
         <input
           type="password"
-          placeholder="New Password"
+          placeholder={t('auth.setPassword.newPasswordPlaceholder')}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
@@ -77,7 +79,7 @@ const SetPassword = () => {
 
         <input
           type="password"
-          placeholder="Confirm Password"
+          placeholder={t('auth.setPassword.confirmPasswordPlaceholder')}
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
@@ -86,7 +88,7 @@ const SetPassword = () => {
         {error && <p style={styles.error}>{error}</p>}
 
         <button type="submit" disabled={loading}>
-          {loading ? "Setting..." : "Set Password"}
+          {loading ? t('auth.setPassword.settingButton') : t('auth.setPassword.setPasswordButton')}
         </button>
       </form>
     </div>

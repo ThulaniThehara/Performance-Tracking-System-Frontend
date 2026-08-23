@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { FaCrown, FaUsers, FaFolderOpen } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 import Header from "../../Components/Header/Header";
 import LeftNavigationBar from "../../Components/LeftNavigationBar/LeftNavigationBar";
@@ -22,6 +23,7 @@ import "../../SCSS/Projects/Projects.scss";
  * management rights to whoever the server says is the chairperson.
  */
 const ProjectsHome = () => {
+  const { t } = useTranslation();
   const user = getUser();
   const role = getRole();
 
@@ -45,11 +47,11 @@ const ProjectsHome = () => {
       setLed(res.data.led || []);
       setContributing(res.data.contributing || []);
     } catch (e) {
-      setError(e.message || "Could not load your projects.");
+      setError(e.message || t('projects.home.loadError'));
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     load();
@@ -66,10 +68,10 @@ const ProjectsHome = () => {
         <div className="pm-wrapper">
           <header className="pm-hero">
             <div>
-              <p className="pm-eyebrow">Projects</p>
-              <h1>Hello, {firstName}</h1>
+              <p className="pm-eyebrow">{t('projects.home.eyebrow')}</p>
+              <h1>{t('projects.home.greeting', { name: firstName })}</h1>
               <p className="pm-hero-sub">
-                Everything you lead and contribute to across your societies
+                {t('projects.home.subtitle')}
               </p>
             </div>
           </header>
@@ -92,7 +94,7 @@ const ProjectsHome = () => {
                         <span className="section-icon is-chair" aria-hidden="true">
                           <FaCrown />
                         </span>
-                        Projects You Lead
+                        {t('projects.home.led')}
                       </h2>
                       <span className="pm-count-pill">{led.length}</span>
                     </div>
@@ -112,7 +114,7 @@ const ProjectsHome = () => {
                         <span className="section-icon" aria-hidden="true">
                           <FaUsers />
                         </span>
-                        Projects You Contribute To
+                        {t('projects.home.contributing')}
                       </h2>
                       <span className="pm-count-pill">{contributing.length}</span>
                     </div>
@@ -128,10 +130,9 @@ const ProjectsHome = () => {
                 {nothingAtAll && (
                   <div className="pm-empty-state">
                     <span className="empty-icon" aria-hidden="true"><FaFolderOpen /></span>
-                    <h3>No projects yet</h3>
+                    <h3>{t('projects.home.emptyTitle')}</h3>
                     <p>
-                      You'll see a project here as soon as an admin adds you to
-                      one, or names you its chairperson.
+                      {t('projects.home.emptyBody')}
                     </p>
                   </div>
                 )}

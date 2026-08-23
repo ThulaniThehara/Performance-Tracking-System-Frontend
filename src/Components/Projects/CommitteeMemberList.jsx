@@ -1,5 +1,6 @@
 import React from "react";
 import { FaEnvelope, FaTimes, FaTasks, FaStar } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import Avatar from "./Avatar";
 import { humanise } from "../../utils/projectUtils";
 
@@ -13,10 +14,12 @@ const CommitteeMemberList = ({
   canManage = false,
   onRemove,
   onMakeLead,
-  emptyText = "No members yet.",
+  emptyText,
 }) => {
+  const { t } = useTranslation();
+  const resolvedEmptyText = emptyText ?? t('projects.memberList.noMembersYet');
   if (!members.length) {
-    return <p className="pm-empty-inline">{emptyText}</p>;
+    return <p className="pm-empty-inline">{resolvedEmptyText}</p>;
   }
 
   return (
@@ -35,12 +38,12 @@ const CommitteeMemberList = ({
                 {user.name}
                 {isLead && (
                   <span className="lead-tag">
-                    <FaStar aria-hidden="true" /> Lead
+                    <FaStar aria-hidden="true" /> {t('projects.memberList.lead')}
                   </span>
                 )}
               </p>
               <p className="member-sub">
-                {m.position || humanise(m.role)}
+                {m.position || t(`enums.role.${String(m.role || '').toUpperCase()}`, { defaultValue: humanise(m.role) })}
                 {user.email && (
                   <>
                     {" · "}
@@ -50,7 +53,7 @@ const CommitteeMemberList = ({
               </p>
             </div>
 
-            <span className="member-tasks" title={`${m.taskCount || 0} assigned tasks`}>
+            <span className="member-tasks" title={t('projects.memberList.assignedTasksTitle', { count: m.taskCount || 0 })}>
               <FaTasks aria-hidden="true" /> {m.taskCount || 0}
             </span>
 
@@ -61,14 +64,14 @@ const CommitteeMemberList = ({
                     className="pm-btn pm-btn-ghost pm-btn-xs"
                     onClick={() => onMakeLead(user._id)}
                   >
-                    Make lead
+                    {t('projects.memberList.makeLead')}
                   </button>
                 )}
                 {onRemove && (
                   <button
                     className="pm-icon-btn is-danger"
                     onClick={() => onRemove(m)}
-                    aria-label={`Remove ${user.name}`}
+                    aria-label={t('projects.details.aria.removeMember', { name: user.name })}
                   >
                     <FaTimes />
                   </button>

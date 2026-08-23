@@ -17,11 +17,13 @@ import {
   FaSitemap,
   FaSpinner,
 } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 import { apiFetch } from '../../utils/api';
 import { getUser } from '../../utils/auth';
 import '../../SCSS/componentStyle/Reports.scss';
 
 const ReportsComponents = () => {
+  const { t } = useTranslation();
   const currentUser = getUser();
 
   const [activeTab, setActiveTab] = useState('performance');
@@ -83,11 +85,11 @@ const ReportsComponents = () => {
       setFeedbackList(res.data.feedback || []);
       setComplaintList(res.data.complaints || []);
     } catch (e) {
-      setError(e.message || 'Could not load reports data.');
+      setError(e.message || t('reports.loadError'));
     } finally {
       setLoading(false);
     }
-  }, [dateRange]);
+  }, [dateRange, t]);
 
   useEffect(() => {
     loadReports();
@@ -157,7 +159,7 @@ const ReportsComponents = () => {
       const res = await apiFetch('/pm/reports/feedback', {
         method: 'POST',
         body: JSON.stringify({
-          author: feedback.author.trim() || currentUser?.name || 'Anonymous Member',
+          author: feedback.author.trim() || currentUser?.name || t('reports.anonymous'),
           type: feedback.type,
           message: feedback.message.trim(),
           rating: feedback.rating,
@@ -186,7 +188,7 @@ const ReportsComponents = () => {
         setFeedback({ type: 'Suggestion', author: currentUser?.name || '', message: '', rating: 5 });
       }, 1200);
     } catch (err) {
-      alert(err.message || 'Could not submit feedback.');
+      alert(err.message || t('reports.feedbackSubmitError'));
     } finally {
       setSubmitting(false);
     }
@@ -202,7 +204,7 @@ const ReportsComponents = () => {
       const res = await apiFetch('/pm/reports/complaint', {
         method: 'POST',
         body: JSON.stringify({
-          from: complaint.from.trim() || currentUser?.name || 'Anonymous Member',
+          from: complaint.from.trim() || currentUser?.name || t('reports.anonymous'),
           category: complaint.category,
           title: complaint.title.trim(),
           description: complaint.description.trim(),
@@ -233,7 +235,7 @@ const ReportsComponents = () => {
         setComplaint({ category: 'Technical Issue', title: '', description: '', priority: 'Medium', from: currentUser?.name || '' });
       }, 1200);
     } catch (err) {
-      alert(err.message || 'Could not submit complaint.');
+      alert(err.message || t('reports.complaintSubmitError'));
     } finally {
       setSubmitting(false);
     }
@@ -314,19 +316,19 @@ const ReportsComponents = () => {
         {/* Page Hero Header */}
         <header className="reports-hero">
           <div className="hero-left">
-            <span className="hero-eyebrow">Analytics & Governance</span>
-            <h1>Reports & Feedback</h1>
+            <span className="hero-eyebrow">{t('reports.hero.eyebrow')}</span>
+            <h1>{t('reports.hero.title')}</h1>
             <p className="hero-sub">
-              Track organizational performance, project delivery metrics, and member feedback in real time.
+              {t('reports.hero.subtitle')}
             </p>
           </div>
 
           <div className="hero-actions">
             <button className="rpt-btn rpt-btn-secondary" onClick={() => setShowComplaintsModal(true)}>
-              <FaExclamationCircle aria-hidden="true" /> Report Issue
+              <FaExclamationCircle aria-hidden="true" /> {t('reports.hero.reportIssue')}
             </button>
             <button className="rpt-btn rpt-btn-primary" onClick={downloadReportCSV}>
-              <FaDownload aria-hidden="true" /> Export CSV
+              <FaDownload aria-hidden="true" /> {t('reports.hero.exportCsv')}
             </button>
           </div>
         </header>
@@ -340,14 +342,14 @@ const ReportsComponents = () => {
               <FaChartBar aria-hidden="true" />
             </div>
             <div className="kpi-content">
-              <span className="kpi-label">Average Performance</span>
+              <span className="kpi-label">{t('reports.kpi.avgPerformance')}</span>
               <div className="kpi-val-row">
                 <span className="kpi-value">{loading ? '...' : `${kpi.avgPerformance}%`}</span>
                 <span className="kpi-trend is-positive">
-                  <FaArrowUp aria-hidden="true" /> Live Score
+                  <FaArrowUp aria-hidden="true" /> {t('reports.kpi.liveScore')}
                 </span>
               </div>
-              <span className="kpi-caption">Calculated from task deadline adherence</span>
+              <span className="kpi-caption">{t('reports.kpi.avgPerformanceCaption')}</span>
             </div>
           </div>
 
@@ -356,12 +358,12 @@ const ReportsComponents = () => {
               <FaUsers aria-hidden="true" />
             </div>
             <div className="kpi-content">
-              <span className="kpi-label">Active Members</span>
+              <span className="kpi-label">{t('reports.kpi.activeMembers')}</span>
               <div className="kpi-val-row">
                 <span className="kpi-value">{loading ? '...' : kpi.activeMembers}</span>
-                <span className="kpi-tag">Active Roster</span>
+                <span className="kpi-tag">{t('reports.kpi.activeRoster')}</span>
               </div>
-              <span className="kpi-caption">Active chairpersons and committee members</span>
+              <span className="kpi-caption">{t('reports.kpi.activeMembersCaption')}</span>
             </div>
           </div>
 
@@ -370,14 +372,14 @@ const ReportsComponents = () => {
               <FaCheckCircle aria-hidden="true" />
             </div>
             <div className="kpi-content">
-              <span className="kpi-label">Project Health</span>
+              <span className="kpi-label">{t('reports.kpi.projectHealth')}</span>
               <div className="kpi-val-row">
                 <span className="kpi-value">{loading ? '...' : `${kpi.projectHealth}%`}</span>
                 <span className="kpi-trend is-positive">
-                  <FaArrowUp aria-hidden="true" /> On Track
+                  <FaArrowUp aria-hidden="true" /> {t('reports.kpi.onTrack')}
                 </span>
               </div>
-              <span className="kpi-caption">{kpi.totalProjects || 0} project(s) in scope</span>
+              <span className="kpi-caption">{t('reports.kpi.projectHealthCaption', { count: kpi.totalProjects || 0 })}</span>
             </div>
           </div>
 
@@ -386,12 +388,12 @@ const ReportsComponents = () => {
               <FaTasks aria-hidden="true" />
             </div>
             <div className="kpi-content">
-              <span className="kpi-label">Task Velocity</span>
+              <span className="kpi-label">{t('reports.kpi.taskVelocity')}</span>
               <div className="kpi-val-row">
                 <span className="kpi-value">{loading ? '...' : `${kpi.taskVelocity}%`}</span>
-                <span className="kpi-tag">Completion</span>
+                <span className="kpi-tag">{t('reports.kpi.completion')}</span>
               </div>
-              <span className="kpi-caption">{kpi.completedTasks || 0} of {kpi.totalTasks || 0} tasks finished</span>
+              <span className="kpi-caption">{t('reports.kpi.taskVelocityCaption', { completed: kpi.completedTasks || 0, total: kpi.totalTasks || 0 })}</span>
             </div>
           </div>
         </section>
@@ -403,28 +405,28 @@ const ReportsComponents = () => {
               className={`nav-tab-btn ${activeTab === 'performance' ? 'is-active' : ''}`}
               onClick={() => setActiveTab('performance')}
             >
-              <FaChartBar aria-hidden="true" /> Performance Scorecard
+              <FaChartBar aria-hidden="true" /> {t('reports.tabs.performance')}
               <span className="tab-badge">{filteredPerformance.length}</span>
             </button>
             <button
               className={`nav-tab-btn ${activeTab === 'projects' ? 'is-active' : ''}`}
               onClick={() => setActiveTab('projects')}
             >
-              <FaFileAlt aria-hidden="true" /> Project Summaries
+              <FaFileAlt aria-hidden="true" /> {t('reports.tabs.projects')}
               <span className="tab-badge">{filteredProjects.length}</span>
             </button>
             <button
               className={`nav-tab-btn ${activeTab === 'feedback' ? 'is-active' : ''}`}
               onClick={() => setActiveTab('feedback')}
             >
-              <FaComments aria-hidden="true" /> Feedback Hub
+              <FaComments aria-hidden="true" /> {t('reports.tabs.feedback')}
               <span className="tab-badge">{filteredFeedback.length}</span>
             </button>
             <button
               className={`nav-tab-btn ${activeTab === 'complaints' ? 'is-active' : ''}`}
               onClick={() => setActiveTab('complaints')}
             >
-              <FaShieldAlt aria-hidden="true" /> Issue Tracker
+              <FaShieldAlt aria-hidden="true" /> {t('reports.tabs.complaints')}
               <span className="tab-badge">{filteredComplaints.length}</span>
             </button>
           </div>
@@ -436,12 +438,12 @@ const ReportsComponents = () => {
             <FaSearch aria-hidden="true" className="search-icon" />
             <input
               type="text"
-              placeholder={`Search in ${activeTab}...`}
+              placeholder={t('reports.searchPlaceholder', { tab: t(`reports.tabs.${activeTab}`) })}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
             {searchQuery && (
-              <button className="clear-search-btn" onClick={() => setSearchQuery('')} title="Clear search">
+              <button className="clear-search-btn" onClick={() => setSearchQuery('')} title={t('reports.clearSearch')}>
                 <FaTimes />
               </button>
             )}
@@ -449,40 +451,40 @@ const ReportsComponents = () => {
 
           <div className="toolbar-filters">
             <div className="filter-item">
-              <label>Status:</label>
+              <label>{t('reports.filters.statusLabel')}</label>
               <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-                <option value="all">All Statuses</option>
+                <option value="all">{t('reports.filters.allStatuses')}</option>
                 {activeTab === 'performance' && (
                   <>
-                    <option value="excellent">Excellent</option>
-                    <option value="good">Good</option>
-                    <option value="needs attention">Needs Attention</option>
+                    <option value="excellent">{t('reports.filters.excellent')}</option>
+                    <option value="good">{t('reports.filters.good')}</option>
+                    <option value="needs attention">{t('reports.filters.needsAttention')}</option>
                   </>
                 )}
                 {activeTab === 'projects' && (
                   <>
-                    <option value="active">Active</option>
-                    <option value="completed">Completed</option>
-                    <option value="upcoming">Upcoming</option>
+                    <option value="active">{t('reports.filters.active')}</option>
+                    <option value="completed">{t('reports.filters.completed')}</option>
+                    <option value="upcoming">{t('reports.filters.upcoming')}</option>
                   </>
                 )}
                 {activeTab === 'complaints' && (
                   <>
-                    <option value="resolved">Resolved</option>
-                    <option value="inprogress">In Progress</option>
-                    <option value="open">Open</option>
+                    <option value="resolved">{t('reports.filters.resolved')}</option>
+                    <option value="inprogress">{t('reports.filters.inProgress')}</option>
+                    <option value="open">{t('reports.filters.open')}</option>
                   </>
                 )}
               </select>
             </div>
 
             <div className="filter-item">
-              <label>Period:</label>
+              <label>{t('reports.filters.periodLabel')}</label>
               <select value={dateRange} onChange={(e) => setDateRange(e.target.value)}>
-                <option value="all">All Time (Joined to Date)</option>
-                <option value="month">This Month</option>
-                <option value="quarter">This Quarter</option>
-                <option value="year">Current Year</option>
+                <option value="all">{t('reports.filters.allTime')}</option>
+                <option value="month">{t('reports.filters.thisMonth')}</option>
+                <option value="quarter">{t('reports.filters.thisQuarter')}</option>
+                <option value="year">{t('reports.filters.currentYear')}</option>
               </select>
             </div>
 
@@ -495,7 +497,7 @@ const ReportsComponents = () => {
                   setDateRange('all');
                 }}
               >
-                <FaSyncAlt aria-hidden="true" /> Reset
+                <FaSyncAlt aria-hidden="true" /> {t('reports.filters.reset')}
               </button>
             )}
           </div>
@@ -508,11 +510,11 @@ const ReportsComponents = () => {
             <div className="reports-pane">
               <div className="pane-header">
                 <div>
-                  <h2>Member Performance Scorecard</h2>
-                  <p>Individual task execution, deadline adherence, and delivery metrics</p>
+                  <h2>{t('reports.performancePane.title')}</h2>
+                  <p>{t('reports.performancePane.subtitle')}</p>
                 </div>
                 <button className="rpt-btn rpt-btn-sm" onClick={downloadReportCSV}>
-                  <FaDownload aria-hidden="true" /> Export Scorecard
+                  <FaDownload aria-hidden="true" /> {t('reports.performancePane.exportScorecard')}
                 </button>
               </div>
 
@@ -520,26 +522,26 @@ const ReportsComponents = () => {
                 <div className="pm-skeleton-list" style={{ padding: '24px', textAlign: 'center' }}>
                   <FaSpinner className="spin" style={{ fontSize: '1.8rem', color: 'var(--accent)' }} />
                   <p style={{ marginTop: '10px', color: 'var(--label-muted)', fontSize: '0.86rem' }}>
-                    Fetching live member scores from database...
+                    {t('reports.performancePane.loadingText')}
                   </p>
                 </div>
               ) : filteredPerformance.length === 0 ? (
                 <div className="reports-empty-state">
                   <FaFileAlt className="empty-icon" />
-                  <h3>No performance records found</h3>
-                  <p>Try adjusting your search criteria or clear active filters.</p>
+                  <h3>{t('reports.performancePane.emptyTitle')}</h3>
+                  <p>{t('reports.performancePane.emptyBody')}</p>
                 </div>
               ) : (
                 <div className="rpt-table-wrap">
                   <table className="rpt-table">
                     <thead>
                       <tr>
-                        <th>Member Details</th>
-                        <th>Assigned Project(s)</th>
-                        <th>Tasks Completed</th>
-                        <th>Performance Score</th>
-                        <th>Rating</th>
-                        <th>Deadline Adherence</th>
+                        <th>{t('reports.performancePane.columns.memberDetails')}</th>
+                        <th>{t('reports.performancePane.columns.assignedProjects')}</th>
+                        <th>{t('reports.performancePane.columns.tasksCompleted')}</th>
+                        <th>{t('reports.performancePane.columns.performanceScore')}</th>
+                        <th>{t('reports.performancePane.columns.rating')}</th>
+                        <th>{t('reports.performancePane.columns.deadlineAdherence')}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -564,7 +566,7 @@ const ReportsComponents = () => {
                           </td>
                           <td>
                             <div className="task-count-cell">
-                              <strong>{item.tasksDone}</strong> / {item.totalTasks} Done
+                              {t('reports.performancePane.tasksDoneRatio', { done: item.tasksDone, total: item.totalTasks })}
                             </div>
                           </td>
                           <td>
@@ -595,11 +597,11 @@ const ReportsComponents = () => {
                           </td>
                           <td className="rpt-date-cell">
                             <span style={{ color: '#059669', fontWeight: 600 }}>
-                              {item.completedOnTime || 0} on-time
+                              {t('reports.performancePane.onTimeCount', { count: item.completedOnTime || 0 })}
                             </span>
                             {item.overdueTasks > 0 && (
                               <span style={{ color: '#dc2626', marginLeft: '6px', fontWeight: 600 }}>
-                                • {item.overdueTasks} overdue
+                                • {t('reports.performancePane.overdueCount', { count: item.overdueTasks })}
                               </span>
                             )}
                           </td>
@@ -617,11 +619,11 @@ const ReportsComponents = () => {
             <div className="reports-pane">
               <div className="pane-header">
                 <div>
-                  <h2>Project Delivery & Health</h2>
-                  <p>Milestone tracking, committee allocations, and task progression</p>
+                  <h2>{t('reports.projectsPane.title')}</h2>
+                  <p>{t('reports.projectsPane.subtitle')}</p>
                 </div>
                 <button className="rpt-btn rpt-btn-sm" onClick={downloadReportCSV}>
-                  <FaDownload aria-hidden="true" /> Export Summary
+                  <FaDownload aria-hidden="true" /> {t('reports.projectsPane.exportSummary')}
                 </button>
               </div>
 
@@ -629,14 +631,14 @@ const ReportsComponents = () => {
                 <div className="pm-skeleton-list" style={{ padding: '24px', textAlign: 'center' }}>
                   <FaSpinner className="spin" style={{ fontSize: '1.8rem', color: 'var(--accent)' }} />
                   <p style={{ marginTop: '10px', color: 'var(--label-muted)', fontSize: '0.86rem' }}>
-                    Fetching live project summaries from database...
+                    {t('reports.projectsPane.loadingText')}
                   </p>
                 </div>
               ) : filteredProjects.length === 0 ? (
                 <div className="reports-empty-state">
                   <FaFileAlt className="empty-icon" />
-                  <h3>No project records match your filter</h3>
-                  <p>Try resetting the search terms or status filters.</p>
+                  <h3>{t('reports.projectsPane.emptyTitle')}</h3>
+                  <p>{t('reports.projectsPane.emptyBody')}</p>
                 </div>
               ) : (
                 <div className="rpt-project-grid">
@@ -644,7 +646,7 @@ const ReportsComponents = () => {
                     <article key={p.id} className="rpt-project-card">
                       <div className="p-card-top">
                         <div>
-                          <span className="p-lead-name">Led by {p.lead}</span>
+                          <span className="p-lead-name">{t('reports.projectsPane.ledBy', { name: p.lead })}</span>
                           <h3>{p.name}</h3>
                         </div>
                         <span
@@ -662,7 +664,7 @@ const ReportsComponents = () => {
 
                       <div className="p-progress-block">
                         <div className="p-prog-head">
-                          <span>Overall Progress</span>
+                          <span>{t('reports.projectsPane.overallProgress')}</span>
                           <strong>{p.progress}%</strong>
                         </div>
                         <div className="p-prog-bar">
@@ -675,14 +677,14 @@ const ReportsComponents = () => {
                           <FaUsers aria-hidden="true" />
                           <div>
                             <strong>{p.members}</strong>
-                            <span>Members</span>
+                            <span>{t('shell.nav.members')}</span>
                           </div>
                         </div>
                         <div className="p-metric-item">
                           <FaSitemap aria-hidden="true" />
                           <div>
                             <strong>{p.committees}</strong>
-                            <span>Committees</span>
+                            <span>{t('shell.nav.committees')}</span>
                           </div>
                         </div>
                         <div className="p-metric-item">
@@ -691,15 +693,15 @@ const ReportsComponents = () => {
                             <strong>
                               {p.tasksDone}/{p.totalTasks}
                             </strong>
-                            <span>Tasks</span>
+                            <span>{t('reports.projectsPane.tasksMetric')}</span>
                           </div>
                         </div>
                       </div>
 
                       <div className="p-card-foot">
-                        <span className="budget-tag">Health: {p.budgetHealth}</span>
+                        <span className="budget-tag">{t('reports.projectsPane.health', { value: p.budgetHealth })}</span>
                         <span className="p-completion-rate">
-                          {p.totalTasks > 0 ? Math.round((p.tasksDone / p.totalTasks) * 100) : 0}% Tasks Done
+                          {t('reports.projectsPane.tasksDonePercent', { pct: p.totalTasks > 0 ? Math.round((p.tasksDone / p.totalTasks) * 100) : 0 })}
                         </span>
                       </div>
                     </article>
@@ -714,11 +716,11 @@ const ReportsComponents = () => {
             <div className="reports-pane">
               <div className="pane-header">
                 <div>
-                  <h2>Member Feedback & Sentiment</h2>
-                  <p>Direct impressions, feature ideas, and suggestions from active users</p>
+                  <h2>{t('reports.feedbackPane.title')}</h2>
+                  <p>{t('reports.feedbackPane.subtitle')}</p>
                 </div>
                 <button className="rpt-btn rpt-btn-primary" onClick={() => setShowFeedbackModal(true)}>
-                  <FaComments aria-hidden="true" /> Submit New Feedback
+                  <FaComments aria-hidden="true" /> {t('reports.feedbackPane.submitNew')}
                 </button>
               </div>
 
@@ -729,8 +731,8 @@ const ReportsComponents = () => {
               ) : filteredFeedback.length === 0 ? (
                 <div className="reports-empty-state">
                   <FaComments className="empty-icon" />
-                  <h3>No feedback found</h3>
-                  <p>Submit feedback or adjust your search filter.</p>
+                  <h3>{t('reports.feedbackPane.emptyTitle')}</h3>
+                  <p>{t('reports.feedbackPane.emptyBody')}</p>
                 </div>
               ) : (
                 <div className="rpt-feedback-list">
@@ -746,13 +748,13 @@ const ReportsComponents = () => {
                           </div>
                           <div>
                             <h4>{item.author}</h4>
-                            <span className="f-role-badge">{item.role || 'Member'}</span>
+                            <span className="f-role-badge">{item.role || t('enums.role.MEMBER')}</span>
                           </div>
                         </div>
 
                         <div className="f-meta-right">
                           <span className="f-type-tag">{item.type}</span>
-                          <div className="f-stars-row" title={`Rated ${item.rating} of 5`}>
+                          <div className="f-stars-row" title={t('reports.feedbackPane.ratedOf5', { rating: item.rating })}>
                             {[1, 2, 3, 4, 5].map((star) => (
                               <span key={star} className={star <= item.rating ? 'star-filled' : 'star-empty'}>
                                 ★
@@ -765,7 +767,7 @@ const ReportsComponents = () => {
                       <p className="f-message">"{item.message}"</p>
 
                       <div className="f-card-footer">
-                        <span className="f-date">Submitted on {item.date}</span>
+                        <span className="f-date">{t('reports.feedbackPane.submittedOn', { date: item.date })}</span>
                       </div>
                     </article>
                   ))}
@@ -779,11 +781,11 @@ const ReportsComponents = () => {
             <div className="reports-pane">
               <div className="pane-header">
                 <div>
-                  <h2>Reported Issues & Inquiries</h2>
-                  <p>Track technical tickets, operational concerns, and resolution progress</p>
+                  <h2>{t('reports.complaintsPane.title')}</h2>
+                  <p>{t('reports.complaintsPane.subtitle')}</p>
                 </div>
                 <button className="rpt-btn rpt-btn-primary" onClick={() => setShowComplaintsModal(true)}>
-                  <FaExclamationCircle aria-hidden="true" /> File An Issue
+                  <FaExclamationCircle aria-hidden="true" /> {t('reports.complaintsPane.fileIssue')}
                 </button>
               </div>
 
@@ -794,8 +796,8 @@ const ReportsComponents = () => {
               ) : filteredComplaints.length === 0 ? (
                 <div className="reports-empty-state">
                   <FaShieldAlt className="empty-icon" />
-                  <h3>No reported issues match your criteria</h3>
-                  <p>All operational tickets are currently in order.</p>
+                  <h3>{t('reports.complaintsPane.emptyTitle')}</h3>
+                  <p>{t('reports.complaintsPane.emptyBody')}</p>
                 </div>
               ) : (
                 <div className="rpt-issues-list">
@@ -832,9 +834,9 @@ const ReportsComponents = () => {
                                 : ''
                             }`}
                           >
-                            Priority: {issue.priority}
+                            {t('reports.complaintsPane.priority', { value: issue.priority })}
                           </span>
-                          <span className="meta-badge from">Reported by: {issue.from}</span>
+                          <span className="meta-badge from">{t('reports.complaintsPane.reportedBy', { name: issue.from })}</span>
                           <span className="meta-badge date">{issue.date}</span>
                         </div>
                       </div>
@@ -852,7 +854,7 @@ const ReportsComponents = () => {
         <div className="rpt-modal-overlay" onClick={() => setShowFeedbackModal(false)}>
           <div className="rpt-modal-box" onClick={(e) => e.stopPropagation()}>
             <div className="rpt-modal-header">
-              <h2>Send User Feedback</h2>
+              <h2>{t('reports.feedbackModal.title')}</h2>
               <button className="rpt-modal-close" onClick={() => setShowFeedbackModal(false)}>
                 <FaTimes />
               </button>
@@ -861,36 +863,36 @@ const ReportsComponents = () => {
             {feedbackSubmitted ? (
               <div className="rpt-modal-success">
                 <div className="success-icon">✓</div>
-                <h3>Thank You!</h3>
-                <p>Your feedback has been saved and shared with administration.</p>
+                <h3>{t('reports.feedbackModal.successTitle')}</h3>
+                <p>{t('reports.feedbackModal.successBody')}</p>
               </div>
             ) : (
               <form onSubmit={handleFeedbackSubmit} className="rpt-form">
                 <div className="rpt-form-group">
-                  <label>Your Name / Role</label>
+                  <label>{t('reports.feedbackModal.nameLabel')}</label>
                   <input
                     type="text"
-                    placeholder="e.g. Alex Johnson (optional)"
+                    placeholder={t('reports.feedbackModal.namePlaceholder')}
                     value={feedback.author}
                     onChange={(e) => setFeedback({ ...feedback, author: e.target.value })}
                   />
                 </div>
 
                 <div className="rpt-form-group">
-                  <label>Feedback Category</label>
+                  <label>{t('reports.feedbackModal.categoryLabel')}</label>
                   <select
                     value={feedback.type}
                     onChange={(e) => setFeedback({ ...feedback, type: e.target.value })}
                   >
-                    <option value="Suggestion">Suggestion / Improvement</option>
-                    <option value="Feature Request">Feature Request</option>
-                    <option value="General">General Experience</option>
-                    <option value="Bug Report">UI / Usability Bug</option>
+                    <option value="Suggestion">{t('reports.feedbackModal.categories.suggestion')}</option>
+                    <option value="Feature Request">{t('reports.feedbackModal.categories.featureRequest')}</option>
+                    <option value="General">{t('reports.feedbackModal.categories.general')}</option>
+                    <option value="Bug Report">{t('reports.feedbackModal.categories.bugReport')}</option>
                   </select>
                 </div>
 
                 <div className="rpt-form-group">
-                  <label>Overall Experience Rating</label>
+                  <label>{t('reports.feedbackModal.ratingLabel')}</label>
                   <div className="interactive-stars">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <button
@@ -902,15 +904,15 @@ const ReportsComponents = () => {
                         ★
                       </button>
                     ))}
-                    <span className="rating-num-label">{feedback.rating} of 5 Stars</span>
+                    <span className="rating-num-label">{t('reports.feedbackModal.starsOf5', { n: feedback.rating })}</span>
                   </div>
                 </div>
 
                 <div className="rpt-form-group">
-                  <label>Feedback Message *</label>
+                  <label>{t('reports.feedbackModal.messageLabel')}</label>
                   <textarea
                     rows={4}
-                    placeholder="Describe your feedback or thoughts in detail..."
+                    placeholder={t('reports.feedbackModal.messagePlaceholder')}
                     value={feedback.message}
                     onChange={(e) => setFeedback({ ...feedback, message: e.target.value })}
                     required
@@ -924,10 +926,10 @@ const ReportsComponents = () => {
                     onClick={() => setShowFeedbackModal(false)}
                     disabled={submitting}
                   >
-                    Cancel
+                    {t('common.cancel')}
                   </button>
                   <button type="submit" className="rpt-btn rpt-btn-primary" disabled={submitting}>
-                    {submitting ? <FaSpinner className="spin" /> : <FaPaperPlane aria-hidden="true" />} Submit Feedback
+                    {submitting ? <FaSpinner className="spin" /> : <FaPaperPlane aria-hidden="true" />} {t('reports.feedbackModal.submit')}
                   </button>
                 </div>
               </form>
@@ -941,7 +943,7 @@ const ReportsComponents = () => {
         <div className="rpt-modal-overlay" onClick={() => setShowComplaintsModal(false)}>
           <div className="rpt-modal-box" onClick={(e) => e.stopPropagation()}>
             <div className="rpt-modal-header">
-              <h2>Report An Issue or Ticket</h2>
+              <h2>{t('reports.complaintModal.title')}</h2>
               <button className="rpt-modal-close" onClick={() => setShowComplaintsModal(false)}>
                 <FaTimes />
               </button>
@@ -950,66 +952,66 @@ const ReportsComponents = () => {
             {complaintSubmitted ? (
               <div className="rpt-modal-success">
                 <div className="success-icon">✓</div>
-                <h3>Ticket Created</h3>
-                <p>Your issue ticket has been registered and assigned for review.</p>
+                <h3>{t('reports.complaintModal.successTitle')}</h3>
+                <p>{t('reports.complaintModal.successBody')}</p>
               </div>
             ) : (
               <form onSubmit={handleComplaintSubmit} className="rpt-form">
                 <div className="rpt-form-row">
                   <div className="rpt-form-group">
-                    <label>Reporter Name</label>
+                    <label>{t('reports.complaintModal.reporterLabel')}</label>
                     <input
                       type="text"
-                      placeholder="e.g. John Doe"
+                      placeholder={t('reports.complaintModal.reporterPlaceholder')}
                       value={complaint.from}
                       onChange={(e) => setComplaint({ ...complaint, from: e.target.value })}
                     />
                   </div>
                   <div className="rpt-form-group">
-                    <label>Category</label>
+                    <label>{t('reports.complaintModal.categoryLabel')}</label>
                     <select
                       value={complaint.category}
                       onChange={(e) => setComplaint({ ...complaint, category: e.target.value })}
                     >
-                      <option value="Technical Issue">Technical Issue</option>
-                      <option value="Data Entry">Data Entry Correction</option>
-                      <option value="Access Permissions">Access & Permissions</option>
-                      <option value="System Performance">System Performance</option>
-                      <option value="Other">Other Inquiry</option>
+                      <option value="Technical Issue">{t('reports.complaintModal.categories.technical')}</option>
+                      <option value="Data Entry">{t('reports.complaintModal.categories.dataEntry')}</option>
+                      <option value="Access Permissions">{t('reports.complaintModal.categories.access')}</option>
+                      <option value="System Performance">{t('reports.complaintModal.categories.performance')}</option>
+                      <option value="Other">{t('reports.complaintModal.categories.other')}</option>
                     </select>
                   </div>
                 </div>
 
                 <div className="rpt-form-row">
                   <div className="rpt-form-group">
-                    <label>Issue Title *</label>
+                    <label>{t('reports.complaintModal.titleLabel')}</label>
                     <input
                       type="text"
-                      placeholder="Short summary of the issue"
+                      placeholder={t('reports.complaintModal.titlePlaceholder')}
                       value={complaint.title}
                       onChange={(e) => setComplaint({ ...complaint, title: e.target.value })}
                       required
                     />
                   </div>
                   <div className="rpt-form-group">
-                    <label>Priority Level</label>
+                    <label>{t('reports.complaintModal.priorityLabel')}</label>
                     <select
                       value={complaint.priority}
                       onChange={(e) => setComplaint({ ...complaint, priority: e.target.value })}
                     >
-                      <option value="Low">Low</option>
-                      <option value="Medium">Medium</option>
-                      <option value="High">High</option>
-                      <option value="Critical">Critical</option>
+                      <option value="Low">{t('reports.complaintModal.priorities.low')}</option>
+                      <option value="Medium">{t('reports.complaintModal.priorities.medium')}</option>
+                      <option value="High">{t('reports.complaintModal.priorities.high')}</option>
+                      <option value="Critical">{t('reports.complaintModal.priorities.critical')}</option>
                     </select>
                   </div>
                 </div>
 
                 <div className="rpt-form-group">
-                  <label>Detailed Description *</label>
+                  <label>{t('reports.complaintModal.descriptionLabel')}</label>
                   <textarea
                     rows={4}
-                    placeholder="Provide details or steps to reproduce the issue..."
+                    placeholder={t('reports.complaintModal.descriptionPlaceholder')}
                     value={complaint.description}
                     onChange={(e) => setComplaint({ ...complaint, description: e.target.value })}
                     required
@@ -1023,10 +1025,10 @@ const ReportsComponents = () => {
                     onClick={() => setShowComplaintsModal(false)}
                     disabled={submitting}
                   >
-                    Cancel
+                    {t('common.cancel')}
                   </button>
                   <button type="submit" className="rpt-btn rpt-btn-primary" disabled={submitting}>
-                    {submitting ? <FaSpinner className="spin" /> : <FaPaperPlane aria-hidden="true" />} Submit Issue Ticket
+                    {submitting ? <FaSpinner className="spin" /> : <FaPaperPlane aria-hidden="true" />} {t('reports.complaintModal.submit')}
                   </button>
                 </div>
               </form>

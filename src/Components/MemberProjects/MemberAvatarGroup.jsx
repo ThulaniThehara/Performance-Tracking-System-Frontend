@@ -1,6 +1,8 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const MemberAvatarGroup = ({ members = [], max = 4 }) => {
+  const { t } = useTranslation();
   const defaultList = [
     { name: "Asiri Hariss", bg: "#6b52d1" },
     { name: "Kasun Perera", bg: "#9d7bf0" },
@@ -28,7 +30,7 @@ const MemberAvatarGroup = ({ members = [], max = 4 }) => {
         <div
           key={m._id || m.id || idx}
           className="avatar-circle"
-          title={m.name || m.username || "Team Member"}
+          title={m.name || m.username || t('memberProjects.avatarGroup.teamMember')}
           style={{
             width: 32,
             height: 32,
@@ -48,7 +50,7 @@ const MemberAvatarGroup = ({ members = [], max = 4 }) => {
           {m.avatar ? (
             <img
               src={m.avatar}
-              alt={m.name || "Member"}
+              alt={m.name || t('memberProjects.avatarGroup.member')}
               style={{ width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover" }}
             />
           ) : (

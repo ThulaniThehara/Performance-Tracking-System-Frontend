@@ -7,6 +7,7 @@ import {
   FaArrowRight,
   FaRegCalendarAlt,
 } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import ChairpersonBadge from "./ChairpersonBadge";
 import Avatar from "./Avatar";
 import { formatDate, formatDateRange, humanise } from "../../utils/projectUtils";
@@ -16,8 +17,10 @@ import { formatDate, formatDateRange, humanise } from "../../utils/projectUtils"
  * used in "Projects You Lead"; "contributing" is the quieter one.
  */
 const ProjectCard = ({ project, variant = "contributing" }) => {
+  const { t } = useTranslation();
   const led = variant === "led";
   const chair = project.chairpersonId;
+  const statusKey = String(project.status || "").toUpperCase();
 
   return (
     <article className={`pm-project-card ${led ? "is-led" : ""}`}>
@@ -29,8 +32,8 @@ const ProjectCard = ({ project, variant = "contributing" }) => {
           <h3>{project.PName}</h3>
         </div>
 
-        <span className={`pm-project-status is-${String(project.status || "").toLowerCase()}`}>
-          {humanise(project.status)}
+        <span className={`pm-project-status is-${statusKey.toLowerCase()}`}>
+          {t(`enums.projectStatus.${statusKey}`, { defaultValue: humanise(project.status) })}
         </span>
       </header>
 
@@ -45,7 +48,7 @@ const ProjectCard = ({ project, variant = "contributing" }) => {
       {/* Progress is derived from completed vs total tasks on the server. */}
       <div className="card-progress">
         <div className="progress-meta">
-          <span>Progress</span>
+          <span>{t('projects.card.progress')}</span>
           <strong>{project.progress ?? 0}%</strong>
         </div>
         <div className="progress-track">
@@ -54,17 +57,17 @@ const ProjectCard = ({ project, variant = "contributing" }) => {
       </div>
 
       <div className="card-stats">
-        <span title="Members">
+        <span title={t('shell.nav.members')}>
           <FaUsers aria-hidden="true" /> {project.memberCount ?? 0}
-          <em>Members</em>
+          <em>{t('shell.nav.members')}</em>
         </span>
-        <span title="Committees">
+        <span title={t('shell.nav.committees')}>
           <FaSitemap aria-hidden="true" /> {project.committeeCount ?? 0}
-          <em>Committees</em>
+          <em>{t('shell.nav.committees')}</em>
         </span>
-        <span title="Pending tasks" className={project.pendingTasks > 0 ? "is-flagged" : ""}>
+        <span title={t('projects.card.pendingTasks')} className={project.pendingTasks > 0 ? "is-flagged" : ""}>
           <FaRegClock aria-hidden="true" /> {project.pendingTasks ?? 0}
-          <em>Pending</em>
+          <em>{t('projects.card.pending')}</em>
         </span>
       </div>
 
@@ -74,7 +77,7 @@ const ProjectCard = ({ project, variant = "contributing" }) => {
             <Avatar name={chair.name} size="xs" highlight />
             <div>
               <span className="chair-name">{chair.name}</span>
-              <span className="chair-role">Chairperson</span>
+              <span className="chair-role">{t('enums.role.CHAIRPERSON')}</span>
             </div>
           </div>
         ) : (
@@ -87,7 +90,7 @@ const ProjectCard = ({ project, variant = "contributing" }) => {
         )}
 
         <Link to={`/projects/${project._id}`} className="pm-btn pm-btn-ghost pm-btn-sm">
-          {led ? "Manage" : "View"} <FaArrowRight aria-hidden="true" />
+          {led ? t('projects.card.manage') : t('projects.card.view')} <FaArrowRight aria-hidden="true" />
         </Link>
       </footer>
     </article>

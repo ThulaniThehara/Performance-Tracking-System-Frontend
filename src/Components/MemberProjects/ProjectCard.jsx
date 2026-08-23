@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   FaCrown,
   FaCalendarAlt,
@@ -10,6 +11,7 @@ import {
 } from "react-icons/fa";
 
 const ProjectCard = ({ project }) => {
+  const { t } = useTranslation();
   const isChair = Boolean(project.isChairperson);
   const projectId = project._id || project.id;
 
@@ -43,9 +45,10 @@ const ProjectCard = ({ project }) => {
   // Status mapping matching reference image
   const statusStr = (project.status || "Upcoming").toLowerCase();
   const isCompleted = statusStr === "completed" || progress === 100;
-  const statusLabel = isCompleted ? "Active" : (statusStr === "active" ? "Active" : "Upcoming");
-  
-  const statusStyle = statusLabel === "Active"
+  const isActiveStatus = isCompleted || statusStr === "active";
+  const statusLabel = t(isActiveStatus ? 'enums.projectStatus.ACTIVE' : 'enums.projectStatus.UPCOMING');
+
+  const statusStyle = isActiveStatus
     ? { bg: "#e6f9f0", color: "#10b981" }
     : { bg: "#eef2ff", color: "#3563e9" };
 
@@ -101,7 +104,7 @@ const ProjectCard = ({ project }) => {
                 lineHeight: 1.25,
               }}
             >
-              {project.PName || "Untitled Project"}
+              {project.PName || t('memberProjects.card.untitled')}
             </h3>
 
             {/* Role Badge if Chair */}
@@ -120,7 +123,7 @@ const ProjectCard = ({ project }) => {
                   marginTop: 8,
                 }}
               >
-                <FaCrown style={{ fontSize: "0.76rem" }} /> Chairperson
+                <FaCrown style={{ fontSize: "0.76rem" }} /> {t('enums.role.CHAIRPERSON')}
               </div>
             )}
           </div>
@@ -164,7 +167,7 @@ const ProjectCard = ({ project }) => {
             }}
           >
             <span style={{ fontSize: "0.82rem", fontWeight: 500, color: "#6b7280" }}>
-              Progress
+              {t('projects.card.progress')}
             </span>
             <span style={{ fontSize: "0.85rem", fontWeight: 800, color: "#111827" }}>
               {progress}%
@@ -219,7 +222,7 @@ const ProjectCard = ({ project }) => {
               {memberCount}
             </span>
             <span style={{ fontSize: "0.62rem", fontWeight: 800, color: "#6b7280", letterSpacing: "0.03em" }}>
-              MEMBERS
+              {t('memberProjects.card.members')}
             </span>
           </div>
 
@@ -241,7 +244,7 @@ const ProjectCard = ({ project }) => {
               {committeeCount}
             </span>
             <span style={{ fontSize: "0.62rem", fontWeight: 800, color: "#6b7280", letterSpacing: "0.03em" }}>
-              COMMITTEES
+              {t('memberProjects.card.committees')}
             </span>
           </div>
 
@@ -263,7 +266,7 @@ const ProjectCard = ({ project }) => {
               {pendingCount}
             </span>
             <span style={{ fontSize: "0.62rem", fontWeight: 800, color: "#6b7280", letterSpacing: "0.03em" }}>
-              PENDING
+              {t('memberProjects.card.pending')}
             </span>
           </div>
         </div>
@@ -308,7 +311,7 @@ const ProjectCard = ({ project }) => {
                 {chairName}
               </span>
               <span style={{ fontSize: "0.74rem", color: "#6b7280", fontWeight: 500 }}>
-                Chairperson
+                {t('enums.role.CHAIRPERSON')}
               </span>
             </div>
           </div>
@@ -343,7 +346,7 @@ const ProjectCard = ({ project }) => {
             e.currentTarget.style.backgroundColor = "#ffffff";
           }}
         >
-          <span>{isChair ? "Manage" : "View"}</span>
+          <span>{isChair ? t('projects.card.manage') : t('projects.card.view')}</span>
           <FaArrowRight style={{ fontSize: "0.75rem" }} />
         </Link>
       </div>

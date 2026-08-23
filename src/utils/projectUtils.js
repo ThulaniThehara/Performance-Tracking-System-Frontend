@@ -91,15 +91,14 @@ export const daysUntil = (due) => {
 };
 
 /** Human deadline countdown for task cards. */
-export const countdownLabel = (due, status) => {
-  if (status === "COMPLETED") return "Completed";
+export const countdownLabel = (t, due, status) => {
+  if (status === "COMPLETED") return t("taskCountdown.completed");
   const d = daysUntil(due);
   if (d === null) return "";
-  if (d === 0) return "Due today";
-  if (d === 1) return "Due tomorrow";
-  if (d === -1) return "1 day overdue";
-  if (d < 0) return `${Math.abs(d)} days overdue`;
-  return `${d} days left`;
+  if (d === 0) return t("taskCountdown.dueToday");
+  if (d === 1) return t("taskCountdown.dueTomorrow");
+  if (d < 0) return t("taskCountdown.overdue", { count: Math.abs(d) });
+  return t("taskCountdown.daysLeft", { count: d });
 };
 
 /** The value badges switch on — folds the derived OVERDUE state in. */

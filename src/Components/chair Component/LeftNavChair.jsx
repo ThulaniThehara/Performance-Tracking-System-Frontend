@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { FaHome, FaUser, FaProjectDiagram, FaHandsHelping } from 'react-icons/fa';
 import { FaCodeCommit, FaPersonRifle } from 'react-icons/fa6';
 
 function LeftNavigationBar() {
+  const { t } = useTranslation();
 
   const [active, setActive] = React.useState(() =>
     localStorage.getItem('activeNav') || 'home'
@@ -57,17 +59,17 @@ function LeftNavigationBar() {
 
         <div className={`row ${active === 'home' ? 'active' : ''}`} onClick={() => handleNav('home')}>
           <FaHome />
-          <Link to="/" className={active === 'home' ? 'active' : ''} onClick={() => handleNav('home')}>Home</Link>
+          <Link to="/" className={active === 'home' ? 'active' : ''} onClick={() => handleNav('home')}>{t('chairNav.home')}</Link>
         </div>
 
         <div className={`row ${active === 'projects' ? 'active' : ''}`} onClick={() => handleNav('projects')}>
           <FaProjectDiagram />
-          <Link to="/MyProject" className={active === 'projects' ? 'active' : ''} onClick={() => handleNav('projects')}>My Projects</Link>
+          <Link to="/MyProject" className={active === 'projects' ? 'active' : ''} onClick={() => handleNav('projects')}>{t('shell.nav.myProjects')}</Link>
         </div>
 
         <div className={`row ${active === 'profile' ? 'active' : ''}`} onClick={() => handleNav('profile')}>
           <FaUser />
-          <Link to="/ChairDashboard" className={active === 'profile' ? 'active' : ''} onClick={() => handleNav('profile')}>Profile</Link>
+          <Link to="/ChairDashboard" className={active === 'profile' ? 'active' : ''} onClick={() => handleNav('profile')}>{t('shell.nav.profile')}</Link>
         </div>
 
         <div className={`row ${active === 'rotaract' ? 'active' : ''}`} onClick={() => handleNav('rotaract')}>
@@ -75,39 +77,39 @@ function LeftNavigationBar() {
         </div>
 
         <div className={`row manage-row ${active.startsWith('manage_') ? "active" : ''}`}>
-          <span className="manage-label">Manage</span>
+          <span className="manage-label">{t('chairNav.manage')}</span>
           <div className="row1">
             <Link
               className={active === 'manage_projects' ? 'active' : ''}
               to="/Projects"
               onClick={() => handleNav('manage_projects')}
             >
-              Projects
+              {t('shell.nav.projects')}
             </Link>
             <Link
               className={active === 'manage_committees' ? 'active' : ''}
               to="/ManageCommittees"
               onClick={() => handleNav('manage_committees')}
             >
-              Committees
+              {t('shell.nav.committees')}
             </Link>
             <Link
               className={active === 'manage_tasks' ? 'active' : ''}
               to="/ManageTasks"
               onClick={() => handleNav('manage_tasks')}
             >
-              Tasks
+              {t('chairNav.tasks')}
             </Link>
           </div>
         </div>
 
         <div className={`row ${active === 'reports' ? 'active' : ''}`} onClick={() => handleNav('reports')}>
           <FaCodeCommit />
-          <Link to="/Reports" className={active === 'reports' ? 'active' : ''} onClick={() => handleNav('reports')}>Reports</Link>
+          <Link to="/Reports" className={active === 'reports' ? 'active' : ''} onClick={() => handleNav('reports')}>{t('shell.nav.reports')}</Link>
         </div>
 
         <div className={`row ${active === 'settings' ? 'active' : ''}`} onClick={() => handleNav('settings')}>
-          <Link to="/Settings" className={active === 'settings' ? 'active' : ''} onClick={() => handleNav('settings')}>Settings</Link>
+          <Link to="/Settings" className={active === 'settings' ? 'active' : ''} onClick={() => handleNav('settings')}>{t('shell.nav.settings')}</Link>
         </div>
       </div>
     </div>

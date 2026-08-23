@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import '../../SCSS/AdminStyles/AdminProjectStyles/ProjectAddForm.scss'
 
 const ProjectAddForm = ({ onProjectAdded }) => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     projectName: '',
     description: '',
@@ -23,7 +25,7 @@ const ProjectAddForm = ({ onProjectAdded }) => {
     e.preventDefault()
     
     if (!formData.projectName || !formData.description || !formData.startDate || !formData.endDate) {
-      alert('Please fill in all required fields')
+      alert(t('projectAddForm.fillRequired'))
       return
     }
     
@@ -46,38 +48,38 @@ const ProjectAddForm = ({ onProjectAdded }) => {
     <div className='project-form-container'>
       <div className='form-card'>
         <div className='form-header'>
-          <h2>Add New Project</h2>
-          <p>Create a new project with detailed information</p>
+          <h2>{t('projectAddForm.heading')}</h2>
+          <p>{t('projectAddForm.subtitle')}</p>
         </div>
 
         <form onSubmit={handleSubmit} className='modern-form'>
           <div className='form-group'>
             <label htmlFor="projectName" className='form-label'>
-              Project Name
+              {t('projectAddForm.nameLabel')}
               <span className='required'>*</span>
             </label>
-            <input 
-              type="text" 
-              id="projectName" 
-              name="projectName" 
+            <input
+              type="text"
+              id="projectName"
+              name="projectName"
               className='form-input'
-              placeholder='Enter project name'
+              placeholder={t('projectAddForm.namePlaceholder')}
               value={formData.projectName}
               onChange={handleChange}
-              required 
+              required
             />
           </div>
 
           <div className='form-group'>
             <label htmlFor="description" className='form-label'>
-              Description
+              {t('projectAddForm.descriptionLabel')}
               <span className='required'>*</span>
             </label>
-            <textarea 
-              id="description" 
-              name="description" 
+            <textarea
+              id="description"
+              name="description"
               className='form-textarea'
-              placeholder='Enter project description...'
+              placeholder={t('projectAddForm.descriptionPlaceholder')}
               rows='4'
               value={formData.description}
               onChange={handleChange}
@@ -88,33 +90,33 @@ const ProjectAddForm = ({ onProjectAdded }) => {
           <div className='form-row'>
             <div className='form-group'>
               <label htmlFor="startDate" className='form-label'>
-                Start Date
+                {t('projectAddForm.startDateLabel')}
                 <span className='required'>*</span>
               </label>
-              <input 
-                type="date" 
-                id="startDate" 
-                name="startDate" 
+              <input
+                type="date"
+                id="startDate"
+                name="startDate"
                 className='form-input'
                 value={formData.startDate}
                 onChange={handleChange}
-                required 
+                required
               />
             </div>
 
             <div className='form-group'>
               <label htmlFor="endDate" className='form-label'>
-                End Date
+                {t('projectAddForm.endDateLabel')}
                 <span className='required'>*</span>
               </label>
-              <input 
-                type="date" 
-                id="endDate" 
-                name="endDate" 
+              <input
+                type="date"
+                id="endDate"
+                name="endDate"
                 className='form-input'
                 value={formData.endDate}
                 onChange={handleChange}
-                required 
+                required
               />
             </div>
           </div>
@@ -122,32 +124,32 @@ const ProjectAddForm = ({ onProjectAdded }) => {
           <div className='form-row'>
             <div className='form-group'>
               <label htmlFor="department" className='form-label'>
-                Department
+                {t('projectAddForm.departmentLabel')}
               </label>
-              <select 
-                id="department" 
-                name="department" 
+              <select
+                id="department"
+                name="department"
                 className='form-input'
                 value={formData.department}
                 onChange={handleChange}
               >
-                <option value="General">General</option>
-                <option value="Engineering">Engineering</option>
-                <option value="Science">Science</option>
-                <option value="Arts">Arts</option>
+                <option value="General">{t('projectAddForm.departments.general')}</option>
+                <option value="Engineering">{t('projectAddForm.departments.engineering')}</option>
+                <option value="Science">{t('projectAddForm.departments.science')}</option>
+                <option value="Arts">{t('projectAddForm.departments.arts')}</option>
               </select>
             </div>
 
             <div className='form-group'>
               <label htmlFor="chairPerson" className='form-label'>
-                Chair Person
+                {t('projectAddForm.chairPersonLabel')}
               </label>
-              <input 
-                type="text" 
-                id="chairPerson" 
-                name="chairPerson" 
+              <input
+                type="text"
+                id="chairPerson"
+                name="chairPerson"
                 className='form-input'
-                placeholder='Chair person name'
+                placeholder={t('projectAddForm.chairPersonPlaceholder')}
                 value={formData.chairPerson}
                 onChange={handleChange}
               />
@@ -156,10 +158,10 @@ const ProjectAddForm = ({ onProjectAdded }) => {
 
           <div className='form-actions'>
             <button type='submit' className='btn-primary'>
-              Create Project
+              {t('admin.projects.createProject')}
             </button>
             <button type='reset' className='btn-secondary'>
-              Clear
+              {t('projectAddForm.clear')}
             </button>
           </div>
         </form>

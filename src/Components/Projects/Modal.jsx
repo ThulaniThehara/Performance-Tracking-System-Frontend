@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 /**
  * Reusable dialog for every create/edit flow in the module.
@@ -7,6 +8,7 @@ import { FaTimes } from "react-icons/fa";
  * so the page behind does not drift.
  */
 const Modal = ({ open, title, onClose, children, footer, width = 480 }) => {
+  const { t } = useTranslation();
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => e.key === "Escape" && onClose?.();
@@ -33,7 +35,7 @@ const Modal = ({ open, title, onClose, children, footer, width = 480 }) => {
       >
         <div className="pm-modal-head">
           <h3>{title}</h3>
-          <button className="pm-icon-btn" onClick={onClose} aria-label="Close">
+          <button className="pm-icon-btn" onClick={onClose} aria-label={t('projects.details.aria.close')}>
             <FaTimes />
           </button>
         </div>

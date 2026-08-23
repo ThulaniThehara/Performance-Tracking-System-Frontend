@@ -1,6 +1,7 @@
 // import React from 'react'
 import React, { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import LeftNavigationBar from '../../Components/LeftNavigationBar/LeftNavigationBar'
 import Header from '../../Components/Header/Header'
 import TaskBar from '../../Components/SerachAnd/SearchAndButton'
@@ -12,6 +13,7 @@ import AdminAddMember from './AdminAddMember'
 import MemberAddFormComponent from '../../Components/AdminComponents/MemberAddFormComponent'
 
 const AdminViewAccount = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate()
 
   const [activeView, setActiveView] = useState('add');
@@ -63,11 +65,11 @@ const AdminViewAccount = () => {
     <div className="admin-view-account">
       <Header />
       <LeftNavigationBar />
-      <Toast message="Account created successfully!" isVisible={showToast} duration={2000} />
+      <Toast message={t('admin.addMember.toastAccountCreated')} isVisible={showToast} duration={2000} />
       <div className='taskbar-wrapper'>
         <TaskBar
-          title1="Add New Member"
-          title2="View Members"
+          title1={t('admin.addMember.addNewMember')}
+          title2={t('admin.addMember.viewMembers')}
           onAddClick={() => handleViewChange('add')}
           onViewClick={() => handleViewChange('view')}
           activeView={activeView}

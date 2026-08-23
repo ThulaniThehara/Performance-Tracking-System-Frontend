@@ -2,6 +2,9 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
+// Language support (English / Sinhala / Tamil) — must load before any component renders.
+import "./i18n";
+
 import Test from "./Pages/Test.jsx";
 import LoginPage from "./Pages/LoginPage/LoginPage.jsx";
 import SetPassword from "./Pages/Auth/SetPassword";

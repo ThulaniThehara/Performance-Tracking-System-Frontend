@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { FaSearch, FaBell, FaChevronDown, FaSignOutAlt } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { getUser, logout } from '../../utils/auth'
 import '../../SCSS/Header.scss'
 
 function Header() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const user = getUser();
   const [showDropdown, setShowDropdown] = useState(false);
@@ -28,14 +30,14 @@ function Header() {
           <FaSearch className="search-icon" />
           <input
             type="text"
-            placeholder="Search projects, members..."
-            aria-label="Search projects, members"
+            placeholder={t('shell.header.searchPlaceholder')}
+            aria-label={t('shell.header.searchPlaceholder')}
           />
         </div>
       </div>
 
       <div className="header-right">
-        <button className="notif-btn" aria-label="Notifications">
+        <button className="notif-btn" aria-label={t('shell.header.notifications')}>
           <FaBell />
           <span className="notif-badge" />
         </button>
@@ -87,7 +89,7 @@ function Header() {
                   cursor: 'pointer',
                 }}
               >
-                <FaSignOutAlt /> Logout
+                <FaSignOutAlt /> {t('shell.logout')}
               </button>
             </div>
           )}

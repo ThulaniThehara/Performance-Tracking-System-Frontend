@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import ConfirmDialog from "../ConfirmationComponent/ConfirmDialog";
 import "../../SCSS/AdminStyles/AdminViewAccount/AdminViewAccount.scss";
 import "../../SCSS/componentStyle/MemberViewModal.scss";
@@ -27,6 +28,7 @@ const MemberViewAccountComponent = ({
   onMemberUpdated,
   onAddMemberClick,
 }) => {
+  const { t } = useTranslation();
   const [selectedMember, setSelectedMember] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
@@ -172,18 +174,18 @@ const MemberViewAccountComponent = ({
     <div className="members-dashboard-view">
       <ConfirmDialog
         isOpen={showConfirmDelete}
-        title="Delete Member Account"
-        message={`Are you sure you want to remove ${memberToDelete?.name}? This action will permanently remove their access.`}
+        title={t('memberView.deleteDialog.title')}
+        message={t('memberView.deleteDialog.message', { name: memberToDelete?.name })}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
-        confirmText="Delete Member"
-        cancelText="Cancel"
+        confirmText={t('memberView.deleteDialog.confirm')}
+        cancelText={t('common.cancel')}
       />
 
       {/* 1. Header Row */}
       <div className="view-page-header">
         <div className="header-left-title">
-          <h1>Members list</h1>
+          <h1>{t('memberView.listTitle')}</h1>
         </div>
         <div className="header-right-action">
         </div>
@@ -198,21 +200,21 @@ const MemberViewAccountComponent = ({
             className={`filter-tab ${activeTab === "all" ? "active" : ""}`}
             onClick={() => setActiveTab("all")}
           >
-            All members
+            {t('memberView.tabs.all')}
           </button>
           <button
             type="button"
             className={`filter-tab ${activeTab === "chairperson" ? "active" : ""}`}
             onClick={() => setActiveTab("chairperson")}
           >
-            Chairpersons
+            {t('memberView.tabs.chairpersons')}
           </button>
           <button
             type="button"
             className={`filter-tab ${activeTab === "member" ? "active" : ""}`}
             onClick={() => setActiveTab("member")}
           >
-            Members
+            {t('memberView.tabs.members')}
           </button>
         </div>
 
@@ -221,7 +223,7 @@ const MemberViewAccountComponent = ({
             <FaSearch className="search-icon" />
             <input
               type="text"
-              placeholder="Search members..."
+              placeholder={t('memberView.searchPlaceholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="search-input"
@@ -239,7 +241,7 @@ const MemberViewAccountComponent = ({
       {loading && (
         <div className="view-loading-box">
           <div className="view-spinner" />
-          <p>Loading member directory...</p>
+          <p>{t('memberView.loadingDirectory')}</p>
         </div>
       )}
 
@@ -256,13 +258,13 @@ const MemberViewAccountComponent = ({
             <table className="reference-styled-table" role="table">
               <thead>
                 <tr>
-                  <th style={{ width: 110 }}>Index ID</th>
-                  <th style={{ width: 125 }}>Joined Date</th>
-                  <th style={{ minWidth: 210 }}>Member Name</th>
-                  <th style={{ minWidth: 150 }}>Faculty</th>
-                  <th style={{ width: 95 }}>Batch</th>
-                  <th style={{ width: 115 }} className="text-center">Role</th>
-                  <th style={{ width: 110 }} className="text-center">Actions</th>
+                  <th style={{ width: 110 }}>{t('memberView.table.indexId')}</th>
+                  <th style={{ width: 125 }}>{t('memberView.table.joinedDate')}</th>
+                  <th style={{ minWidth: 210 }}>{t('memberView.table.memberName')}</th>
+                  <th style={{ minWidth: 150 }}>{t('memberView.table.faculty')}</th>
+                  <th style={{ width: 95 }}>{t('memberView.table.batch')}</th>
+                  <th style={{ width: 115 }} className="text-center">{t('memberView.table.role')}</th>
+                  <th style={{ width: 110 }} className="text-center">{t('memberView.table.actions')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -273,7 +275,7 @@ const MemberViewAccountComponent = ({
                       <tr key={rowId} className="card-table-row">
                         {/* Index ID */}
                         <td>
-                          <span className="index-id-text">{m.indexNo || "N/A"}</span>
+                          <span className="index-id-text">{m.indexNo || t('memberView.table.notApplicable')}</span>
                         </td>
 
                         {/* Joined Date */}
@@ -299,19 +301,19 @@ const MemberViewAccountComponent = ({
 
                         {/* Faculty */}
                         <td>
-                          <span className="faculty-badge">{m.faculy || m.faculty || "General"}</span>
+                          <span className="faculty-badge">{m.faculy || m.faculty || t('memberView.table.generalFaculty')}</span>
                         </td>
 
                         {/* Batch */}
                         <td>
-                          <span className="batch-badge">{m.batch ? `Batch ${m.batch}` : "—"}</span>
+                          <span className="batch-badge">{m.batch ? t('memberView.table.batchValue', { n: m.batch }) : "—"}</span>
                         </td>
 
                         {/* Role Dropdown / Pill */}
                         <td className="text-center">
                           <span className={`role-pill-badge ${(m.userRole || "MEMBER").toLowerCase()}`}>
                             {m.userRole === "ADMIN" || m.userRole === "CHAIRPERSON" ? <FaUserShield /> : <FaUserGraduate />}
-                            <span>{m.userRole || "MEMBER"}</span>
+                            <span>{t(`enums.role.${(m.userRole || 'MEMBER').toUpperCase()}`, { defaultValue: m.userRole || 'MEMBER' })}</span>
                           </span>
                         </td>
 
@@ -322,7 +324,7 @@ const MemberViewAccountComponent = ({
                               type="button"
                               className="row-action-btn view"
                               onClick={() => handleViewClick(m)}
-                              title="View details"
+                              title={t('memberView.actions.viewDetails')}
                             >
                               <FaEye />
                             </button>
@@ -330,7 +332,7 @@ const MemberViewAccountComponent = ({
                               type="button"
                               className="row-action-btn edit"
                               onClick={() => handleEditClick(m)}
-                              title="Edit member"
+                              title={t('memberView.actions.editMember')}
                             >
                               <FaEdit />
                             </button>
@@ -338,7 +340,7 @@ const MemberViewAccountComponent = ({
                               type="button"
                               className="row-action-btn delete"
                               onClick={() => handleDeleteClick(m)}
-                              title="Delete member"
+                              title={t('memberView.actions.deleteMember')}
                             >
                               <FaTrashAlt />
                             </button>
@@ -352,8 +354,8 @@ const MemberViewAccountComponent = ({
                     <td colSpan="8" className="empty-table-row">
                       <div className="empty-results-box">
                         <FaSearch className="empty-icon" />
-                        <h3>No members found</h3>
-                        <p>There are no members matching your current filter selection.</p>
+                        <h3>{t('memberView.emptyResults.title')}</h3>
+                        <p>{t('memberView.emptyResults.body')}</p>
                       </div>
                     </td>
                   </tr>
@@ -378,7 +380,7 @@ const MemberViewAccountComponent = ({
                 </div>
                 <div>
                   <h2 className="modal-member-name">{selectedMember.name}</h2>
-                  <span className="modal-role-tag">{selectedMember.userRole || "MEMBER"}</span>
+                  <span className="modal-role-tag">{t(`enums.role.${(selectedMember.userRole || 'MEMBER').toUpperCase()}`, { defaultValue: selectedMember.userRole || 'MEMBER' })}</span>
                 </div>
               </div>
               <button type="button" className="modal-close" onClick={handleCloseModal}>
@@ -392,7 +394,7 @@ const MemberViewAccountComponent = ({
                   <div className="detail-card">
                     <div className="detail-icon-wrap"><FaIdCard /></div>
                     <div className="detail-info">
-                      <span className="detail-label">Index / Student ID</span>
+                      <span className="detail-label">{t('memberView.detail.indexId')}</span>
                       <span className="detail-value">{selectedMember.indexNo || "—"}</span>
                     </div>
                   </div>
@@ -400,7 +402,7 @@ const MemberViewAccountComponent = ({
                   <div className="detail-card">
                     <div className="detail-icon-wrap"><FaEnvelope /></div>
                     <div className="detail-info">
-                      <span className="detail-label">Email Address</span>
+                      <span className="detail-label">{t('memberView.detail.email')}</span>
                       <span className="detail-value email-value">{selectedMember.email}</span>
                     </div>
                   </div>
@@ -408,7 +410,7 @@ const MemberViewAccountComponent = ({
                   <div className="detail-card">
                     <div className="detail-icon-wrap"><FaPhoneAlt /></div>
                     <div className="detail-info">
-                      <span className="detail-label">Contact Number</span>
+                      <span className="detail-label">{t('memberView.detail.contact')}</span>
                       <span className="detail-value">{selectedMember.contactNO || "—"}</span>
                     </div>
                   </div>
@@ -416,7 +418,7 @@ const MemberViewAccountComponent = ({
                   <div className="detail-card">
                     <div className="detail-icon-wrap"><FaBuilding /></div>
                     <div className="detail-info">
-                      <span className="detail-label">Faculty / Department</span>
+                      <span className="detail-label">{t('memberView.detail.faculty')}</span>
                       <span className="detail-value">{selectedMember.faculy || selectedMember.faculty || "—"}</span>
                     </div>
                   </div>
@@ -424,15 +426,15 @@ const MemberViewAccountComponent = ({
                   <div className="detail-card">
                     <div className="detail-icon-wrap"><FaUserGraduate /></div>
                     <div className="detail-info">
-                      <span className="detail-label">Academic Batch</span>
-                      <span className="detail-value">Batch {selectedMember.batch || "—"}</span>
+                      <span className="detail-label">{t('memberView.detail.batch')}</span>
+                      <span className="detail-value">{t('memberView.detail.batchValue', { n: selectedMember.batch || "—" })}</span>
                     </div>
                   </div>
 
                   <div className="detail-card">
                     <div className="detail-icon-wrap"><FaCalendarAlt /></div>
                     <div className="detail-info">
-                      <span className="detail-label">Registration Date</span>
+                      <span className="detail-label">{t('memberView.detail.registrationDate')}</span>
                       <span className="detail-value">{formatDate(selectedMember.createdAt)}</span>
                     </div>
                   </div>
@@ -441,7 +443,7 @@ const MemberViewAccountComponent = ({
                 <form className="modern-modal-edit-form" onSubmit={(e) => { e.preventDefault(); handleSaveChanges(); }}>
                   <div className="modal-form-grid">
                     <div className="modal-field">
-                      <label>Full Name</label>
+                      <label>{t('memberView.editForm.fullName')}</label>
                       <input
                         name="name"
                         value={editFormData?.name || ""}
@@ -452,7 +454,7 @@ const MemberViewAccountComponent = ({
                     </div>
 
                     <div className="modal-field">
-                      <label>Email Address</label>
+                      <label>{t('memberView.editForm.email')}</label>
                       <input
                         type="email"
                         name="email"
@@ -464,7 +466,7 @@ const MemberViewAccountComponent = ({
                     </div>
 
                     <div className="modal-field">
-                      <label>Contact Number</label>
+                      <label>{t('memberView.editForm.contact')}</label>
                       <input
                         name="contactNO"
                         value={editFormData?.contactNO || ""}
@@ -474,7 +476,7 @@ const MemberViewAccountComponent = ({
                     </div>
 
                     <div className="modal-field">
-                      <label>Faculty</label>
+                      <label>{t('memberView.editForm.faculty')}</label>
                       <input
                         name="faculy"
                         value={editFormData?.faculy || editFormData?.faculty || ""}
@@ -484,7 +486,7 @@ const MemberViewAccountComponent = ({
                     </div>
 
                     <div className="modal-field">
-                      <label>Batch</label>
+                      <label>{t('memberView.editForm.batch')}</label>
                       <input
                         name="batch"
                         value={editFormData?.batch || ""}
@@ -494,15 +496,15 @@ const MemberViewAccountComponent = ({
                     </div>
 
                     <div className="modal-field">
-                      <label>System Role</label>
+                      <label>{t('memberView.editForm.role')}</label>
                       <select
                         name="userRole"
                         value={editFormData?.userRole || "MEMBER"}
                         onChange={handleEditInputChange}
                         className="modern-select"
                       >
-                        <option value="MEMBER">MEMBER</option>
-                        <option value="ADMIN">ADMIN</option>
+                        <option value="MEMBER">{t('enums.role.MEMBER')}</option>
+                        <option value="ADMIN">{t('enums.role.ADMIN')}</option>
                       </select>
                     </div>
                   </div>
@@ -514,19 +516,19 @@ const MemberViewAccountComponent = ({
               {!isEditMode ? (
                 <>
                   <button type="button" className="btn-modal secondary" onClick={handleCloseModal}>
-                    Close
+                    {t('projects.details.aria.close')}
                   </button>
                   <button type="button" className="btn-modal primary" onClick={() => setIsEditMode(true)}>
-                    <FaEdit /> Edit Member
+                    <FaEdit /> {t('memberView.editMemberButton')}
                   </button>
                 </>
               ) : (
                 <>
                   <button type="button" className="btn-modal secondary" onClick={() => setIsEditMode(false)}>
-                    Cancel
+                    {t('common.cancel')}
                   </button>
                   <button type="button" className="btn-modal primary" onClick={handleSaveChanges}>
-                    <FaCheck /> Save Changes
+                    <FaCheck /> {t('admin.dashboard.editModal.saveChanges')}
                   </button>
                 </>
               )}
