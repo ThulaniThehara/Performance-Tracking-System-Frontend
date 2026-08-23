@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -219,12 +219,60 @@ const MemberDashboard = () => {
     [allCalendarEntries, selectedDate]
   );
 
-  const upcoming = useMemo(() => {
+  const [activeScheduleTab, setActiveScheduleTab] = useState("ongoing");
+
+  const ONGOING_STATUSES = useMemo(() => ["ongoing", "active", "inprogress", "progress", "started"], []);
+  const normaliseStatus = (s) => String(s || "").toLowerCase().replace(/[\s_-]/g, "");
+
+  const formatDateStr = (dateVal) => {
+    if (!dateVal) return "N/A";
+    const d = new Date(dateVal);
+    if (isNaN(d.getTime())) return "N/A";
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  };
+
+  const ongoingProjectsList = useMemo(() => {
+    return (allWorkedProjects || []).filter((p) =>
+      ONGOING_STATUSES.includes(normaliseStatus(p.status))
+    );
+  }, [allWorkedProjects, ONGOING_STATUSES]);
+
+  const upcomingItemsList = useMemo(() => {
     const today = startOfDay(new Date()).getTime();
-    return allCalendarEntries
-      .filter((e) => startOfDay(e.endDate || e.startDate).getTime() >= today)
-      .slice(0, 5);
-  }, [allCalendarEntries]);
+
+    // 1. Projects with UPCOMING status or future start date (not yet active)
+    const upcomingProjects = (allWorkedProjects || [])
+      .filter((p) => {
+        const norm = normaliseStatus(p.status);
+        if (norm === "upcoming" || norm === "pending" || norm === "planning") return true;
+        if (!ONGOING_STATUSES.includes(norm) && p.status !== "COMPLETED") {
+          const sDate = p.StartDate || p.startDate;
+          return sDate && startOfDay(new Date(sDate)).getTime() > today;
+        }
+        return false;
+      })
+      .map((p) => ({
+        _id: `proj-up-${p._id || p.id}`,
+        title: p.PName,
+        type: "PROJECT",
+        startDate: p.StartDate || p.startDate,
+        endDate: p.EndDate || p.endDate,
+        location: p.societyName || p.society || t('admin.home.organizationProject'),
+        status: "UPCOMING",
+        isProject: true,
+      }));
+
+    // 2. Scheduled calendar events
+    const upcomingEvents = (events || []).filter(
+      (e) => startOfDay(e.endDate || e.startDate).getTime() >= today
+    );
+
+    return [...upcomingProjects, ...upcomingEvents].sort(
+      (a, b) => new Date(a.startDate || 0) - new Date(b.startDate || 0)
+    );
+  }, [allWorkedProjects, events, ONGOING_STATUSES, t]);
+
+  const upcoming = upcomingItemsList.slice(0, 5);
 
   const tileContent = ({ date, view }) => {
     if (view !== "month") return null;
@@ -252,10 +300,24 @@ const MemberDashboard = () => {
     return classes.join(" ");
   };
 
-  const ongoingPct =
-    stats.totalWorked > 0
-      ? Math.round((stats.ongoingCount / stats.totalWorked) * 100)
-      : 0;
+  const overallProgress = useMemo(() => {
+    if (!allWorkedProjects || !allWorkedProjects.length) return 0;
+
+    let totalTasks = 0;
+    let completedTasks = 0;
+    let sumProgress = 0;
+
+    allWorkedProjects.forEach((p) => {
+      totalTasks += p.totalTasks || 0;
+      completedTasks += p.completedTasks || 0;
+      sumProgress += Number(p.progress) || (p.status === "COMPLETED" ? 100 : 0);
+    });
+
+    if (totalTasks > 0) {
+      return Math.round((completedTasks / totalTasks) * 100);
+    }
+    return Math.round(sumProgress / allWorkedProjects.length);
+  }, [allWorkedProjects]);
 
   return (
     <div className="member-dashboard-layout">
@@ -569,14 +631,14 @@ const MemberDashboard = () => {
                         <h2>{t('member.dashboard.progressPanel.title')}</h2>
                         <p className="panel-sub">{t('member.dashboard.progressPanel.subtitle')}</p>
                       </div>
-                      <span className="percentage-display">{ongoingPct}%</span>
+                      <span className="percentage-display">{overallProgress}%</span>
                     </div>
 
                     <div className="progress-block">
                       <div className="progress-track">
                         <div
                           className="progress-fill"
-                          style={{ width: `${ongoingPct}%` }}
+                          style={{ width: `${overallProgress}%` }}
                         />
                       </div>
                       <div className="progress-legend">
@@ -592,59 +654,115 @@ const MemberDashboard = () => {
                     </div>
                   </article>
 
-                  {/* Upcoming Events & Deadlines */}
+                  {/* Upcoming & Ongoing Projects & Events */}
                   <article className="glass-panel upcoming-panel-card">
-                    <div className="panel-header">
-                      <div className="header-title-wrapper">
-                        <div className="widget-icon-circle purple">
-                          <FaCalendarAlt />
-                        </div>
-                        <div>
-                          <h2>{t('member.dashboard.upcomingPanel.title')}</h2>
-                          <p className="panel-sub">{t('member.dashboard.upcomingPanel.subtitle')}</p>
-                        </div>
+                    <div className="panel-header schedule-panel-head">
+                      <div className="schedule-tabs-bar">
+                        <button
+                          type="button"
+                          className={`schedule-tab-btn ${activeScheduleTab === "ongoing" ? "active" : ""}`}
+                          onClick={() => setActiveScheduleTab("ongoing")}
+                        >
+                          <span className="tab-dot active-dot" />
+                          <span>Ongoing (Active)</span>
+                          <span className="schedule-pill">{ongoingProjectsList.length}</span>
+                        </button>
+                        <button
+                          type="button"
+                          className={`schedule-tab-btn ${activeScheduleTab === "upcoming" ? "active" : ""}`}
+                          onClick={() => setActiveScheduleTab("upcoming")}
+                        >
+                          <span className="tab-dot upcoming-dot" />
+                          <span>Upcoming</span>
+                          <span className="schedule-pill">{upcomingItemsList.length}</span>
+                        </button>
                       </div>
-                      <span className="badge-count">{upcoming.length}</span>
                     </div>
 
-                    {upcoming.length === 0 ? (
-                      <div className="modern-empty-state">
-                        <div className="empty-icon-badge">
-                          <FaCalendarCheck />
+                    {activeScheduleTab === "ongoing" ? (
+                      ongoingProjectsList.length === 0 ? (
+                        <div className="modern-empty-state">
+                          <div className="empty-icon-badge">
+                            <FaCalendarCheck />
+                          </div>
+                          <h4>No Active Projects</h4>
+                          <p>You have no active projects currently in progress.</p>
                         </div>
-                        <h4>{t('member.dashboard.upcomingPanel.emptyTitle')}</h4>
-                        <p>{t('member.dashboard.upcomingPanel.emptyBody')}</p>
-                      </div>
-                    ) : (
-                      <div className="upcoming-events-grid">
-                        {upcoming.map((ev) => {
-                          const evDate = new Date(ev.startDate);
-                          const dayNum = evDate.getDate();
-                          const monthShort = evDate.toLocaleDateString(undefined, { month: "short" }).toUpperCase();
-                          return (
-                            <div key={ev._id} className="modern-event-card">
-                              <div className="event-date-pill">
-                                <span className="date-num">{dayNum}</span>
-                                <span className="date-month">{monthShort}</span>
+                      ) : (
+                        <ul className="ongoing-projects-list">
+                          {ongoingProjectsList.map((p) => (
+                            <li key={p._id || p.id} className="ongoing-project-item">
+                              <div className="ongoing-proj-header">
+                                <div className="ongoing-proj-info">
+                                  <h4 className="ongoing-proj-title">{p.PName}</h4>
+                                  <span className="ongoing-proj-society">{p.societyName || p.society || p.department || t('admin.home.organizationProject')}</span>
+                                </div>
+                                <span className="ongoing-status-badge">Active</span>
                               </div>
-                              <div className="event-info">
-                                <h4 className="event-name">{ev.title}</h4>
-                                <div className="event-tags-row">
-                                  <span className={`event-type-pill ${(ev.type || "event").toLowerCase()}`}>
-                                    <i className={`dot ${(ev.type || "event").toLowerCase()}`} />
-                                    {typeLabel(ev.type)}
-                                  </span>
-                                  {ev.location && (
-                                    <span className="event-location-pill">
-                                      <FaMapMarkerAlt /> {ev.location}
-                                    </span>
-                                  )}
+
+                              <div className="ongoing-dates-row">
+                                <div className="date-block started-date">
+                                  <span className="date-label">📅 Started Date</span>
+                                  <span className="date-value">{formatDateStr(p.StartDate || p.startDate)}</span>
+                                </div>
+                                <div className="date-block end-date">
+                                  <span className="date-label">🎯 End Date</span>
+                                  <span className="date-value">{p.EndDate || p.endDate ? formatDateStr(p.EndDate || p.endDate) : 'No Deadline'}</span>
                                 </div>
                               </div>
-                            </div>
-                          );
-                        })}
-                      </div>
+
+                              {p.progress !== undefined && (
+                                <div className="ongoing-proj-progress">
+                                  <div className="progress-bar-sm">
+                                    <div className="progress-fill-sm" style={{ width: `${p.progress || 0}%` }} />
+                                  </div>
+                                  <span className="progress-text-sm">{p.progress || 0}%</span>
+                                </div>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      )
+                    ) : (
+                      upcomingItemsList.length === 0 ? (
+                        <div className="modern-empty-state">
+                          <div className="empty-icon-badge">
+                            <FaCalendarCheck />
+                          </div>
+                          <h4>{t('member.dashboard.upcomingPanel.emptyTitle')}</h4>
+                          <p>{t('member.dashboard.upcomingPanel.emptyBody')}</p>
+                        </div>
+                      ) : (
+                        <div className="upcoming-events-grid">
+                          {upcomingItemsList.map((ev) => {
+                            const evDate = new Date(ev.startDate);
+                            const dayNum = isNaN(evDate.getTime()) ? "-" : evDate.getDate();
+                            const monthShort = isNaN(evDate.getTime()) ? "-" : evDate.toLocaleDateString(undefined, { month: "short" }).toUpperCase();
+                            return (
+                              <div key={ev._id} className="modern-event-card">
+                                <div className="event-date-pill">
+                                  <span className="date-num">{dayNum}</span>
+                                  <span className="date-month">{monthShort}</span>
+                                </div>
+                                <div className="event-info">
+                                  <h4 className="event-name">{ev.title}</h4>
+                                  <div className="event-tags-row">
+                                    <span className={`event-type-pill ${(ev.type || "event").toLowerCase()}`}>
+                                      <i className={`dot ${(ev.type || "event").toLowerCase()}`} />
+                                      {typeLabel(ev.type)}
+                                    </span>
+                                    {ev.location && (
+                                      <span className="event-location-pill">
+                                        <FaMapMarkerAlt /> {ev.location}
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )
                     )}
                   </article>
                 </div>

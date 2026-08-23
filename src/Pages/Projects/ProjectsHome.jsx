@@ -26,10 +26,7 @@ const ProjectsHome = () => {
   const { t } = useTranslation();
   const user = getUser();
   const role = getRole();
-
-  if (role === "MEMBER") {
-    return <Navigate to="/member/dashboard?tab=projects" replace />;
-  }
+  const isMember = role === "MEMBER";
 
   const firstName = (user?.name || "there").split(" ")[0];
 
@@ -54,8 +51,14 @@ const ProjectsHome = () => {
   }, [t]);
 
   useEffect(() => {
-    load();
-  }, [load]);
+    // A member is about to be redirected below and never sees this page, so
+    // there's no reason to spend a request loading data for it.
+    if (!isMember) load();
+  }, [isMember, load]);
+
+  if (isMember) {
+    return <Navigate to="/member/dashboard?tab=projects" replace />;
+  }
 
   const nothingAtAll = !loading && led.length === 0 && contributing.length === 0;
 

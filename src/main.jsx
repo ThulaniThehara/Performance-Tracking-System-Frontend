@@ -35,6 +35,8 @@ import MemberDashboard from "./Pages/Member/MemberDashboard.jsx";
 import Settings from "./Pages/Settings.jsx";
 import Reports from "./Pages/Reports.jsx";
 
+import RouteErrorBoundary from "./Components/RouteErrorBoundary";
+
 // ✅ TEMP: If you don’t have a separate page yet, use ChairDashboard as placeholder
 // Later you can create: ./Pages/CommitteeHead/CommitteeHeadDashboard.jsx
 const CommitteeHeadDashboard = ChairDashboard;
@@ -43,19 +45,19 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <LoginPage />,
-    errorElement: <div>Page Not Found</div>,
+    errorElement: <RouteErrorBoundary />,
   },
   {
     path: "/login",
     element: <LoginPage />,
-    errorElement: <div>Page Not Found</div>,
+    errorElement: <RouteErrorBoundary />,
   },
 
   // ✅ password setup link page
   {
     path: "/set-password",
     element: <SetPassword />,
-    errorElement: <div>Page Not Found</div>,
+    errorElement: <RouteErrorBoundary />,
   },
 
   // ✅ NEW role-based dashboard routes (used by Login redirect)
@@ -67,6 +69,7 @@ const router = createBrowserRouter([
         <AdminHome />
       </ProtectedRoute>
     ),
+    errorElement: <RouteErrorBoundary />,
   },
   {
     path: "/admin/home",
@@ -75,6 +78,7 @@ const router = createBrowserRouter([
         <AdminHome />
       </ProtectedRoute>
     ),
+    errorElement: <RouteErrorBoundary />,
   },
   // Projects module — any signed-in role; the page itself shows "Projects You
   // Lead" only to chairpersons, and the API enforces the same split.
@@ -85,7 +89,16 @@ const router = createBrowserRouter([
         <ProjectsHome />
       </ProtectedRoute>
     ),
-    errorElement: <div>Page Not Found</div>,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/projects/:projectId/*",
+    element: (
+      <ProtectedRoute>
+        <ProjectDetails />
+      </ProtectedRoute>
+    ),
+    errorElement: <RouteErrorBoundary />,
   },
   {
     path: "/projects/:projectId",
@@ -94,33 +107,33 @@ const router = createBrowserRouter([
         <ProjectDetails />
       </ProtectedRoute>
     ),
-    errorElement: <div>Page Not Found</div>,
+    errorElement: <RouteErrorBoundary />,
   },
 
   {
     path: "/chairperson/dashboard",
     element: <ChairDashboard />,
-    errorElement: <div>Page Not Found</div>,
+    errorElement: <RouteErrorBoundary />,
   },
   {
     path: "/committee-head/dashboard",
     element: <CommitteeHeadDashboard />,
-    errorElement: <div>Page Not Found</div>,
+    errorElement: <RouteErrorBoundary />,
   },
   {
     path: "/member/dashboard",
     element: <MemberDashboard />,
-    errorElement: <div>Page Not Found</div>,
+    errorElement: <RouteErrorBoundary />,
   },
 
   // ✅ KEEP your old routes (so nothing breaks)
-  { path: "/ChairDashboard", element: <ChairDashboard />, errorElement: <div>Page Not Found</div> },
-  { path: "/MyProject", element: <MyProject />, errorElement: <div>Page Not Found</div> },
-  { path: "/ManageCommittees", element: <ManageCommitees />, errorElement: <div>Page Not Found</div> },
-  { path: "/ManageTasks", element: <ManageTask />, errorElement: <div>Page Not Found</div> },
+  { path: "/ChairDashboard", element: <ChairDashboard />, errorElement: <RouteErrorBoundary /> },
+  { path: "/MyProject", element: <MyProject />, errorElement: <RouteErrorBoundary /> },
+  { path: "/ManageCommittees", element: <ManageCommitees />, errorElement: <RouteErrorBoundary /> },
+  { path: "/ManageTasks", element: <ManageTask />, errorElement: <RouteErrorBoundary /> },
 
-  { path: "/AdminHome", element: <AdminHome />, errorElement: <div>Page Not Found</div> },
-  { path: "/AdminDashboard", element: <AdminDashboard />, errorElement: <div>Page Not Found</div> },
+  { path: "/AdminHome", element: <AdminHome />, errorElement: <RouteErrorBoundary /> },
+  { path: "/AdminDashboard", element: <AdminDashboard />, errorElement: <RouteErrorBoundary /> },
   // Where projects are actually created and assigned a chairperson.
   {
     path: "/AdminProjects",
@@ -129,20 +142,21 @@ const router = createBrowserRouter([
         <AdminProjects />
       </ProtectedRoute>
     ),
-    errorElement: <div>Page Not Found</div>,
+    errorElement: <RouteErrorBoundary />,
   },
-  { path: "/AdminAddProjects", element: <AdminAddProject />, errorElement: <div>Page Not Found</div> },
-  { path: "/AdminAddMember", element: <AdminAddMember />, errorElement: <div>Page Not Found</div> },
-  { path: "/AdminCommittees", element: <AdminCommittees />, errorElement: <div>Page Not Found</div> },
-  { path: "/AdminViewAccount", element: <AdminViewAccount />, errorElement: <div>Page Not Found</div> },
+  { path: "/AdminAddProjects", element: <AdminAddProject />, errorElement: <RouteErrorBoundary /> },
+  { path: "/AdminAddMember", element: <AdminAddMember />, errorElement: <RouteErrorBoundary /> },
+  { path: "/AdminCommittees", element: <AdminCommittees />, errorElement: <RouteErrorBoundary /> },
+  { path: "/AdminViewAccount", element: <AdminViewAccount />, errorElement: <RouteErrorBoundary /> },
 
-  { path: "/MemberDashboard", element: <MemberDashboard />, errorElement: <div>Page Not Found</div> },
+  { path: "/MemberDashboard", element: <MemberDashboard />, errorElement: <RouteErrorBoundary /> },
 
-  { path: "/Settings", element: <Settings />, errorElement: <div>Page Not Found</div> },
-  { path: "/Reports", element: <Reports />, errorElement: <div>Page Not Found</div> },
+  { path: "/Settings", element: <Settings />, errorElement: <RouteErrorBoundary /> },
+  { path: "/Reports", element: <Reports />, errorElement: <RouteErrorBoundary /> },
 
   // Optional test route
-  { path: "/test", element: <Test />, errorElement: <div>Page Not Found</div> },
+  { path: "/test", element: <Test />, errorElement: <RouteErrorBoundary /> },
+  { path: "*", element: <RouteErrorBoundary /> },
 ]);
 
 createRoot(document.getElementById("root")).render(

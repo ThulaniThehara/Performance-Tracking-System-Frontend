@@ -48,14 +48,14 @@ export default function useNotifications() {
   }, [refresh]);
 
   const markAllRead = useCallback(async () => {
-    setItems((prev) => prev.map((n) => (n.id.startsWith("deadline-") ? n : { ...n, isRead: true })));
-    setUnreadCount(items.filter((n) => n.id.startsWith("deadline-")).length);
+    setItems((prev) => prev.map((n) => ({ ...n, isRead: true })));
+    setUnreadCount(0);
     try {
       await apiFetch("/notifications/read-all", { method: "PATCH" });
     } catch {
       refresh();
     }
-  }, [items, refresh]);
+  }, [refresh]);
 
   return { items, unreadCount, loading, refresh, markRead, markAllRead };
 }

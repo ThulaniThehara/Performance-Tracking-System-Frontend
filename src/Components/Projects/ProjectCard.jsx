@@ -89,7 +89,7 @@ const ProjectCard = ({ project, variant = "contributing" }) => {
           </div>
         )}
 
-        <Link to={`/projects/${project._id}`} className="pm-btn pm-btn-ghost pm-btn-sm">
+        <Link to={`/projects/${project._id || project.id}`} className="pm-btn pm-btn-ghost pm-btn-sm">
           {led ? t('projects.card.manage') : t('projects.card.view')} <FaArrowRight aria-hidden="true" />
         </Link>
       </footer>

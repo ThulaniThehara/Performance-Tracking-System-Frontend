@@ -154,12 +154,60 @@ const AdminHome = () => {
     [allCalendarEntries, selectedDate]
   );
 
-  const upcoming = useMemo(() => {
+  const [activeScheduleTab, setActiveScheduleTab] = useState("ongoing");
+
+  const ONGOING_STATUSES = useMemo(() => ["ongoing", "active", "inprogress", "progress", "started"], []);
+  const normaliseStatus = (s) => String(s || "").toLowerCase().replace(/[\s_-]/g, "");
+
+  const formatDateStr = (dateVal) => {
+    if (!dateVal) return "N/A";
+    const d = new Date(dateVal);
+    if (isNaN(d.getTime())) return "N/A";
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  };
+
+  const ongoingProjectsList = useMemo(() => {
+    return (adminProjects || []).filter((p) =>
+      ONGOING_STATUSES.includes(normaliseStatus(p.status))
+    );
+  }, [adminProjects, ONGOING_STATUSES]);
+
+  const upcomingItemsList = useMemo(() => {
     const today = startOfDay(new Date()).getTime();
-    return allCalendarEntries
-      .filter((e) => startOfDay(e.endDate || e.startDate).getTime() >= today)
-      .slice(0, 4);
-  }, [allCalendarEntries]);
+
+    // 1. Projects with UPCOMING status or future start date (not yet active)
+    const upcomingProjects = (adminProjects || [])
+      .filter((p) => {
+        const norm = normaliseStatus(p.status);
+        if (norm === "upcoming" || norm === "pending" || norm === "planning") return true;
+        if (!ONGOING_STATUSES.includes(norm) && p.status !== "COMPLETED") {
+          const sDate = p.StartDate || p.startDate;
+          return sDate && startOfDay(new Date(sDate)).getTime() > today;
+        }
+        return false;
+      })
+      .map((p) => ({
+        _id: `proj-up-${p._id || p.id}`,
+        title: p.PName,
+        type: "PROJECT",
+        startDate: p.StartDate || p.startDate,
+        endDate: p.EndDate || p.endDate,
+        location: p.societyName || p.society || t('admin.home.organizationProject'),
+        status: "UPCOMING",
+        isProject: true,
+      }));
+
+    // 2. Scheduled calendar events
+    const upcomingEvents = (events || []).filter(
+      (e) => startOfDay(e.endDate || e.startDate).getTime() >= today
+    );
+
+    return [...upcomingProjects, ...upcomingEvents].sort(
+      (a, b) => new Date(a.startDate || 0) - new Date(b.startDate || 0)
+    );
+  }, [adminProjects, events, ONGOING_STATUSES, t]);
+
+  const upcoming = upcomingItemsList.slice(0, 5);
 
   const onFormChange = (e) => {
     setFormError("");
@@ -249,10 +297,27 @@ const AdminHome = () => {
     return classes.join(" ");
   };
 
-  const ongoingPct =
-    stats && stats.totalProjects > 0
-      ? Math.round((stats.ongoingProjects / stats.totalProjects) * 100)
-      : 0;
+  const overallProgress = useMemo(() => {
+    if (stats?.overallProgress !== undefined && stats?.overallProgress !== null) {
+      return stats.overallProgress;
+    }
+    if (!adminProjects || !adminProjects.length) return 0;
+
+    let totalTasks = 0;
+    let completedTasks = 0;
+    let sumProgress = 0;
+
+    adminProjects.forEach((p) => {
+      totalTasks += p.totalTasks || 0;
+      completedTasks += p.completedTasks || 0;
+      sumProgress += Number(p.progress) || (p.status === "COMPLETED" ? 100 : 0);
+    });
+
+    if (totalTasks > 0) {
+      return Math.round((completedTasks / totalTasks) * 100);
+    }
+    return Math.round(sumProgress / adminProjects.length);
+  }, [stats, adminProjects]);
 
   const statCards = [
     {
@@ -309,19 +374,23 @@ const AdminHome = () => {
 
             {/* ---------------- floating stat cards grid ---------------- */}
             <div className="hero-cards-grid">
-              {/* Card 1: Daily Activity */}
+              {/* Card 1: Ongoing Projects */}
               <article className="stat-widget-card">
                 <div className="widget-head">
-                  <span className="widget-title">{t('admin.home.widgets.dailyActivity')}</span>
+                  <span className="widget-title">
+                    {t('admin.home.widgets.ongoingProjects', { defaultValue: 'Ongoing Projects' })}
+                  </span>
                   <span className="widget-dots">•••</span>
                 </div>
                 <div className="widget-body">
                   <div className="widget-info">
-                    <span className="trend-badge positive">↗ +3.49%</span>
+                    <span className="trend-badge positive">↗ In Progress</span>
                     <h3 className="widget-value">
-                      {loading ? <span className="skeleton" /> : (stats?.totalProjects ?? 0)}
+                      {loading ? <span className="skeleton" /> : (stats?.ongoingProjects ?? 0)}
                     </h3>
-                    <p className="widget-sub">{t('admin.home.widgets.totalProjectsSub', { count: stats?.completedProjects ?? 0 })}</p>
+                    <p className="widget-sub">
+                      {t('admin.home.widgets.ongoingProjectsSub', { defaultValue: 'Active projects currently in progress' })}
+                    </p>
                   </div>
                   <div className="widget-chart bar-chart">
                     <svg viewBox="0 0 100 40" className="chart-svg">
@@ -338,46 +407,60 @@ const AdminHome = () => {
                 </div>
               </article>
 
-              {/* Card 2: Completion Statistics Donut */}
-              <article className="stat-widget-card Donut-card">
+              {/* Card 2: Total Projects Completed */}
+              <article className="stat-widget-card">
                 <div className="widget-head">
-                  <span className="widget-title">{t('admin.home.widgets.statistics')}</span>
+                  <span className="widget-title">
+                    {t('admin.home.widgets.completedProjects', { defaultValue: 'Total Projects Completed' })}
+                  </span>
                   <span className="widget-dots">•••</span>
                 </div>
-                <div className="donut-widget-content">
-                  <div className="donut-legend-row">
-                    <span><i className="dot-swatch primary" /> {t('admin.home.widgets.legendOngoing')}</span>
-                    <span><i className="dot-swatch secondary" /> {t('admin.home.widgets.legendActive')}</span>
-                    <span><i className="dot-swatch tertiary" /> {t('admin.home.widgets.legendDone')}</span>
+                <div className="widget-body">
+                  <div className="widget-info">
+                    <span className="trend-badge positive">✓ Finished</span>
+                    <h3 className="widget-value">
+                      {loading ? <span className="skeleton" /> : (stats?.completedProjects ?? 0)}
+                    </h3>
+                    <p className="widget-sub">
+                      {t('admin.home.widgets.completedProjectsSub', {
+                        pct: stats?.totalProjects ? Math.round(((stats.completedProjects ?? 0) / stats.totalProjects) * 100) : 0,
+                        total: stats?.totalProjects ?? 0,
+                        defaultValue: `${stats?.totalProjects ? Math.round(((stats.completedProjects ?? 0) / stats.totalProjects) * 100) : 0}% completion rate (${stats?.totalProjects ?? 0} total)`
+                      })}
+                    </p>
                   </div>
-                  <div className="donut-ring-box">
-                    <svg viewBox="0 0 130 130" className="donut-svg">
-                      <circle cx="65" cy="65" r="50" stroke="#F3EFF8" strokeWidth="8" fill="none" />
-                      <circle cx="65" cy="65" r="50" stroke="#4B2F61" strokeWidth="8" fill="none" strokeDasharray="314" strokeDashoffset="75" strokeLinecap="round" transform="rotate(-90 65 65)" />
-
-                      <circle cx="65" cy="65" r="38" stroke="#F3EFF8" strokeWidth="8" fill="none" />
-                      <circle cx="65" cy="65" r="38" stroke="#744B93" strokeWidth="8" fill="none" strokeDasharray="238" strokeDashoffset="60" strokeLinecap="round" transform="rotate(-90 65 65)" />
-
-                      <circle cx="65" cy="65" r="26" stroke="#F3EFF8" strokeWidth="8" fill="none" />
-                      <circle cx="65" cy="65" r="26" stroke="#9A6EBE" strokeWidth="8" fill="none" strokeDasharray="163" strokeDashoffset="35" strokeLinecap="round" transform="rotate(-90 65 65)" />
+                  <div className="widget-chart bar-chart">
+                    <svg viewBox="0 0 100 40" className="chart-svg">
+                      <rect x="10" y="24" width="7" height="16" rx="3" fill="#EAE2F8" />
+                      <rect x="25" y="18" width="7" height="22" rx="3" fill="#9A6EBE" />
+                      <rect x="40" y="12" width="7" height="28" rx="3" fill="#744B93" />
+                      <rect x="55" y="8" width="7" height="32" rx="3" fill="#6B52D1" />
+                      <rect x="70" y="3" width="7" height="37" rx="3" fill="#4B2F61" />
                     </svg>
                   </div>
                 </div>
               </article>
 
-              {/* Card 3: Performance Rate Sparkline */}
+              {/* Card 3: Total Membership */}
               <article className="stat-widget-card">
                 <div className="widget-head">
-                  <span className="widget-title">{t('admin.home.widgets.performanceRate')}</span>
+                  <span className="widget-title">
+                    {t('admin.home.widgets.totalMembership', { defaultValue: 'Total Membership' })}
+                  </span>
                   <span className="widget-dots">•••</span>
                 </div>
                 <div className="widget-body">
                   <div className="widget-info">
-                    <span className="trend-badge positive">↗ +3.49%</span>
+                    <span className="trend-badge positive">👥 Members</span>
                     <h3 className="widget-value">
-                      {loading ? <span className="skeleton" /> : (stats?.ongoingProjects ?? 0)}
+                      {loading ? <span className="skeleton" /> : (stats?.totalMembers ?? 0)}
                     </h3>
-                    <p className="widget-sub">{t('admin.home.widgets.ongoingProjectsSub', { count: stats?.activeMembers ?? 0 })}</p>
+                    <p className="widget-sub">
+                      {t('admin.home.widgets.totalMembershipSub', {
+                        count: stats?.activeMembers ?? 0,
+                        defaultValue: `${stats?.activeMembers ?? 0} active members registered`
+                      })}
+                    </p>
                   </div>
                   <div className="widget-chart area-chart">
                     <svg viewBox="0 0 120 45" className="chart-svg">
@@ -406,7 +489,7 @@ const AdminHome = () => {
                 <div className="panel-head">
                   <h2>{t('admin.home.panels.projectProgress')}</h2>
                   {stats?.totalProjects > 0 && (
-                    <span className="panel-figure">{ongoingPct}%</span>
+                    <span className="panel-figure">{overallProgress}%</span>
                   )}
                 </div>
 
@@ -415,7 +498,7 @@ const AdminHome = () => {
                     <div className="progress-track">
                       <div
                         className="progress-fill"
-                        style={{ width: `${ongoingPct}%` }}
+                        style={{ width: `${overallProgress}%` }}
                       />
                     </div>
                     <div className="progress-legend">
@@ -456,38 +539,104 @@ const AdminHome = () => {
                 </nav>
               </article>
 
-              <article className="panel">
-                <div className="panel-head">
-                  <h2>{t('admin.home.panels.upcoming')}</h2>
-                  <span className="pill">{upcoming.length}</span>
+              <article className="panel project-schedule-panel">
+                <div className="schedule-panel-head">
+                  <div className="schedule-tabs-bar">
+                    <button
+                      type="button"
+                      className={`schedule-tab-btn ${activeScheduleTab === "ongoing" ? "active" : ""}`}
+                      onClick={() => setActiveScheduleTab("ongoing")}
+                    >
+                      <span className="tab-dot active-dot" />
+                      <span>Ongoing (Active)</span>
+                      <span className="schedule-pill">{ongoingProjectsList.length}</span>
+                    </button>
+                    <button
+                      type="button"
+                      className={`schedule-tab-btn ${activeScheduleTab === "upcoming" ? "active" : ""}`}
+                      onClick={() => setActiveScheduleTab("upcoming")}
+                    >
+                      <span className="tab-dot upcoming-dot" />
+                      <span>Upcoming</span>
+                      <span className="schedule-pill">{upcomingItemsList.length}</span>
+                    </button>
+                  </div>
                 </div>
 
-                {upcoming.length === 0 ? (
-                  <div className="empty-state">
-                    <p>{t('admin.home.emptyUpcoming.title')}</p>
-                    <span>{t('admin.home.emptyUpcoming.body')}</span>
-                  </div>
+                {activeScheduleTab === "ongoing" ? (
+                  ongoingProjectsList.length === 0 ? (
+                    <div className="empty-state">
+                      <p>No Active Projects</p>
+                      <span>There are currently no projects marked as active or ongoing.</span>
+                    </div>
+                  ) : (
+                    <ul className="ongoing-projects-list">
+                      {ongoingProjectsList.map((p) => (
+                        <li key={p._id || p.id} className="ongoing-project-item">
+                          <div className="ongoing-proj-header">
+                            <div className="ongoing-proj-info">
+                              <h4 className="ongoing-proj-title">{p.PName}</h4>
+                              <span className="ongoing-proj-society">{p.societyName || p.department || t('admin.home.organizationProject')}</span>
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
+                              <span className="ongoing-status-badge">Active</span>
+                              <Link to={`/projects/${p._id || p.id}`} className="pm-btn pm-btn-ghost pm-btn-xs" style={{ textDecoration: 'none' }}>
+                                {t('projects.card.manage')} <FaArrowRight aria-hidden="true" />
+                              </Link>
+                            </div>
+                          </div>
+
+                          <div className="ongoing-dates-row">
+                            <div className="date-block started-date">
+                              <span className="date-label">📅 Started Date</span>
+                              <span className="date-value">{formatDateStr(p.StartDate || p.startDate)}</span>
+                            </div>
+                            <div className="date-block end-date">
+                              <span className="date-label">🎯 End Date</span>
+                              <span className="date-value">{p.EndDate || p.endDate ? formatDateStr(p.EndDate || p.endDate) : 'No Deadline'}</span>
+                            </div>
+                          </div>
+
+                          {p.progress !== undefined && (
+                            <div className="ongoing-proj-progress">
+                              <div className="progress-bar-sm">
+                                <div className="progress-fill-sm" style={{ width: `${p.progress || 0}%` }} />
+                              </div>
+                              <span className="progress-text-sm">{p.progress || 0}%</span>
+                            </div>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  )
                 ) : (
-                  <ul className="upcoming-list">
-                    {upcoming.map((ev) => (
-                      <li key={ev._id}>
-                        <span className="up-date">
-                          <b>{new Date(ev.startDate).getDate()}</b>
-                          {new Date(ev.startDate).toLocaleDateString(undefined, {
-                            month: "short",
-                          })}
-                        </span>
-                        <div className="up-body">
-                          <p className="up-title">{ev.title}</p>
-                          <p className="up-meta">
-                            <i className={`dot ${ev.type.toLowerCase()}`} />
-                            {typeLabel(ev.type)}
-                            {ev.location && <> · {ev.location}</>}
-                          </p>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
+                  upcomingItemsList.length === 0 ? (
+                    <div className="empty-state">
+                      <p>{t('admin.home.emptyUpcoming.title')}</p>
+                      <span>{t('admin.home.emptyUpcoming.body')}</span>
+                    </div>
+                  ) : (
+                    <ul className="upcoming-list">
+                      {upcomingItemsList.map((ev) => (
+                        <li key={ev._id}>
+                          <span className="up-date">
+                            <b>{new Date(ev.startDate).getDate()}</b>
+                            {new Date(ev.startDate).toLocaleDateString(undefined, {
+                              month: "short",
+                            })}
+                          </span>
+                          <div className="up-body">
+                            <p className="up-title">{ev.title}</p>
+                            <p className="up-meta">
+                              <i className={`dot ${(ev.type || "event").toLowerCase()}`} />
+                              {typeLabel(ev.type || "event")}
+                              {ev.location && <> · {ev.location}</>}
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )
                 )}
               </article>
             </section>
