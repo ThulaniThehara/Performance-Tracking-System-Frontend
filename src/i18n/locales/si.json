@@ -1,0 +1,1099 @@
+{
+  "common": {
+    "save": "සුරකින්න",
+    "cancel": "අවලංගු කරන්න",
+    "loading": "පූරණය වෙමින්...",
+    "yes": "ඔව්",
+    "no": "නැත"
+  },
+  "enums": {
+    "projectStatus": {
+      "UPCOMING": "ඉදිරි",
+      "ACTIVE": "ක්‍රියාකාරී",
+      "COMPLETED": "සම්පූර්ණයි"
+    },
+    "taskStatus": {
+      "TODO": "කළ යුතුයි",
+      "IN_PROGRESS": "ක්‍රියාත්මක වෙමින්",
+      "COMPLETED": "සම්පූර්ණයි",
+      "OVERDUE": "කල් ඉකුත් වූ"
+    },
+    "priority": {
+      "LOW": "අඩු",
+      "MEDIUM": "මධ්‍යම",
+      "HIGH": "ඉහළ"
+    },
+    "role": {
+      "CHAIRPERSON": "සභාපති",
+      "COMMITTEE_LEAD": "කමිටු නායක",
+      "MEMBER": "සාමාජික",
+      "ADMIN": "පරිපාලක"
+    }
+  },
+  "taskCountdown": {
+    "completed": "සම්පූර්ණයි",
+    "dueToday": "අද නියමිතයි",
+    "dueTomorrow": "හෙට නියමිතයි",
+    "overdue_one": "දිනක් ප්‍රමාද වී ඇත",
+    "overdue_other": "දින {{count}}ක් ප්‍රමාද වී ඇත",
+    "daysLeft_one": "දිනක් ඉතිරිය",
+    "daysLeft_other": "දින {{count}}ක් ඉතිරිය"
+  },
+  "login": {
+    "hero": {
+      "search": "කාර්ය සාධනය සොයන්න…",
+      "engaged": "නියැලීම",
+      "trend": "මෙම වාරයේ +24%"
+    },
+    "features": [
+      "සාමාජික සහභාගීත්වය තත්‍ය කාලීනව නිරීක්ෂණය කිරීම",
+      "සිදුවීම් සහ කමිටු කළමනාකරණය සුමටව සිදුකිරීම",
+      "විනිවිද පෙනෙන කාර්ය සාධන තීක්ෂණ බුද්ධිය"
+    ],
+    "eyebrow": "නැවත සාදරයෙන් පිළිගනිමු",
+    "heading": "ඔබගේ ගිණුමට පිවිසෙන්න",
+    "subtitle": "ඔබගේ උපකරණ පුවරුවට පිවිසීමට අක්තපත්‍ර ඇතුළත් කරන්න.",
+    "usernameLabel": "විද්‍යුත් තැපෑල හෝ දර්ශක අංකය",
+    "usernamePlaceholder": "ඔබගේ විද්‍යුත් තැපෑල හෝ දර්ශක අංකය ඇතුළත් කරන්න",
+    "passwordLabel": "මුරපදය",
+    "passwordPlaceholder": "ඔබගේ මුරපදය ඇතුළත් කරන්න",
+    "errors": {
+      "missingFields": "කරුණාකර පරිශීලක නාමය සහ මුරපදය ඇතුළත් කරන්න.",
+      "loginFailed": "පිවිසීම අසාර්ථක විය. අක්තපත්‍ර පරීක්ෂා කරන්න.",
+      "serverError": "සර්වර් දෝෂයකි. කරුණාකර නැවත උත්සාහ කරන්න."
+    },
+    "signingIn": "පිවිසෙමින්...",
+    "signIn": "පිවිසෙන්න",
+    "forgotPassword": "මුරපදය අමතකද?",
+    "showcaseTag": "කාර්ය මණ්ඩල ඵලදායිතාව සහ නියැලීම වැඩිදියුණු කරන්න"
+  },
+  "shell": {
+    "logout": "පිටවීම",
+    "header": {
+      "searchPlaceholder": "ව්‍යාපෘති, සාමාජිකයින් සොයන්න...",
+      "notifications": "දැනුම්දීම්"
+    },
+    "memberHeader": {
+      "searchPlaceholder": "ක්‍රියාකාරකම්, ව්‍යාපෘති, සහ සාමාජිකයින් සොයන්න...",
+      "defaultName": "සාමාජික"
+    },
+    "nav": {
+      "overview": "දළ විශ්ලේෂණය",
+      "management": "කළමනාකරණය",
+      "dashboard": "උපකරණ පුවරුව",
+      "myProjects": "මගේ ව්‍යාපෘති",
+      "profile": "පැතිකඩ",
+      "projects": "ව්‍යාපෘති",
+      "committees": "කමිටු",
+      "members": "සාමාජිකයින්",
+      "reports": "වාර්තා",
+      "settings": "සැකසුම්"
+    }
+  },
+  "projects": {
+    "card": {
+      "progress": "ප්‍රගතිය",
+      "pendingTasks": "විසඳිය යුතු කාර්යයන්",
+      "pending": "විසඳිය යුතුයි",
+      "manage": "කළමනාකරණය",
+      "view": "බලන්න"
+    },
+    "overview": {
+      "edit": "සංස්කරණය",
+      "progressLabel": "ප්‍රගතිය · කාර්යයන් {{completed}}/{{total}} නිමයි",
+      "unassigned": "පවරා නොමැත"
+    },
+    "committeeCard": {
+      "ledByPrefix": "මෙහෙයවන්නේ",
+      "noLead": "නායකයෙකු පවරා නොමැත",
+      "emptyMembers": "මෙම කමිටුවට තවම කිසිවෙකු එක් කර නොමැත.",
+      "addMember": "සාමාජිකයා එක් කරන්න"
+    },
+    "memberList": {
+      "makeLead": "නායක කරන්න",
+      "assignedTasksTitle": "පැවරූ කාර්යයන් {{count}}",
+      "lead": "නායක",
+      "noMembersYet": "තවම සාමාජිකයින් නැත."
+    },
+    "tasksWidget": {
+      "title": "විසඳිය යුතු කාර්යයන්",
+      "loadError": "ඔබගේ කාර්යයන් පූරණය කළ නොහැකි විය.",
+      "updateError": "කාර්යය යාවත්කාලීන කළ නොහැකි විය.",
+      "tabs": {
+        "all": "සියල්ල",
+        "today": "අද",
+        "upcoming": "ඉදිරි",
+        "overdue": "කල් ඉකුත් වූ"
+      },
+      "emptyOverdue": "කල් ඉකුත් වූවක් නැත — නියමයි.",
+      "emptyToday": "අද නියමිත කාර්යයන් නැත.",
+      "emptyUpcoming": "ඉදිරි කාර්යයන් කිසිවක් නියමිත නැත.",
+      "emptyAll": "විසඳිය යුතු කාර්යයන් නැත — සියල්ල නිමයි!"
+    },
+    "home": {
+      "loadError": "ඔබගේ ව්‍යාපෘති පූරණය කළ නොහැකි විය.",
+      "eyebrow": "ව්‍යාපෘති",
+      "greeting": "ආයුබෝවන්, {{name}}",
+      "subtitle": "ඔබ නායකත්වය දරන සහ දායක වන ඔබගේ සියලුම සංගම් ක්‍රියාකාරකම්",
+      "led": "ඔබ මෙහෙයවන ව්‍යාපෘති",
+      "contributing": "ඔබ දායක වන ව්‍යාපෘති",
+      "emptyTitle": "තවම ව්‍යාපෘති නැත",
+      "emptyBody": "පරිපාලකයෙකු ඔබව ව්‍යාපෘතියකට එකතු කළ විගසම, හෝ එහි සභාපති ලෙස නම් කළ විගසම ඔබට එය මෙහි දිස්වනු ඇත."
+    },
+    "details": {
+      "loadError": "මෙම ව්‍යාපෘතිය පූරණය කළ නොහැකි විය.",
+      "backToProjects": "ව්‍යාපෘති වෙත ආපසු",
+      "pageTitle": "ව්‍යාපෘති විස්තර",
+      "unavailableTitle": "ව්‍යාපෘතිය ලබා ගත නොහැක",
+      "unavailableBody": "මෙම ව්‍යාපෘතිය සොයාගත නොහැකි විය, නැතහොත් ඔබ එහි සාමාජිකයෙක් නොවේ.",
+      "committeesHeading": "කමිටු",
+      "addCommittee": "කමිටුවක් එක් කරන්න",
+      "priorityTitle": "{{priority}} ප්‍රමුඛතාවය",
+      "aria": {
+        "deleteTask": "{{title}} මකන්න",
+        "changeStatusOf": "{{title}} හි තත්ත්වය වෙනස් කරන්න",
+        "editCommittee": "කමිටුව සංස්කරණය කරන්න",
+        "deleteCommittee": "කමිටුව මකන්න",
+        "hideMembers": "සාමාජිකයින් සඟවන්න",
+        "showMembers": "සාමාජිකයින් පෙන්වන්න",
+        "removeMember": "{{name}} ඉවත් කරන්න",
+        "close": "වසන්න"
+      },
+      "noCommitteeAssigned": "ඔබ මෙම ව්‍යාපෘතියේ කිසිදු කමිටුවකට පවරා නොමැත.",
+      "noCommitteesYet": "තවම කමිටු නැත.",
+      "notOnCommittee": "කමිටුවක නොමැති",
+      "addMemberToProject": "ව්‍යාපෘතියට සාමාජිකයෙකු එක් කරන්න",
+      "tasksHeading": "කාර්යයන්",
+      "newTask": "නව කාර්යය",
+      "noTasksInView": "මෙම දසුනේ කාර්යයන් නැත.",
+      "taskFilters": {
+        "all": "සියල්ල",
+        "todo": "කළ යුතුයි",
+        "inProgress": "ක්‍රියාත්මක වෙමින්",
+        "overdue": "කල් ඉකුත් වූ",
+        "completed": "සම්පූර්ණයි"
+      },
+      "confirm": {
+        "deleteCommittee": "\"{{name}}\" මකන්නද? එහි සාමාජිකයින් ව්‍යාපෘතියේ රැඳී සිටිනු ඇත.",
+        "removeMember": "{{name}} මෙම ව්‍යාපෘතියෙන් ඉවත් කරන්නද?",
+        "deleteTask": "\"{{title}}\" මකන්නද?"
+      },
+      "errors": {
+        "committeeNameRequired": "කමිටු නාමය අවශ්‍යයි.",
+        "somethingWrong": "යමක් වැරදී ගියේය.",
+        "loadMembersFailed": "සාමාජික ලැයිස්තුව පූරණය කළ නොහැකි විය.",
+        "pickSomeone": "එක් කිරීමට කෙනෙකු තෝරන්න.",
+        "taskTitleRequired": "කාර්ය මාතෘකාව අවශ්‍යයි.",
+        "assignTask": "කාර්යය කෙනෙකුට පවරන්න.",
+        "pickDueDate": "නියමිත දිනයක් තෝරන්න."
+      },
+      "modals": {
+        "committee": {
+          "editTitle": "කමිටුව සංස්කරණය කරන්න",
+          "newTitle": "නව කමිටුව",
+          "saving": "සුරකිමින්…",
+          "nameLabel": "කමිටු නාමය",
+          "namePlaceholder": "උදා: සැපයුම් අංශය",
+          "descriptionLabel": "විස්තරය",
+          "optional": "විකල්පයි"
+        },
+        "member": {
+          "addToTitle": "{{name}} වෙත එක් කරන්න",
+          "addTitle": "ව්‍යාපෘති සාමාජිකයෙකු එක් කරන්න",
+          "adding": "එක් කරමින්…",
+          "addMember": "සාමාජිකයා එක් කරන්න",
+          "personLabel": "පුද්ගලයා",
+          "selectSomeone": "කෙනෙකු තෝරන්න…",
+          "allAssigned": "ලබා ගත හැකි සියලු දෙනා දැනටමත් මෙම ව්‍යාපෘතියේ සිටී.",
+          "positionLabel": "තනතුර",
+          "positionPlaceholder": "උදා: භාණ්ඩාගාරික"
+        },
+        "task": {
+          "newTitle": "නව කාර්යය",
+          "creating": "සාදමින්…",
+          "createTask": "කාර්යය සාදන්න",
+          "titleLabel": "මාතෘකාව",
+          "titlePlaceholder": "උදා: ශ්‍රවණාගාරය වෙන්කරවා ගන්න",
+          "descriptionLabel": "විස්තරය",
+          "assignToLabel": "පවරන්නේ කාටද",
+          "selectMember": "සාමාජිකයෙකු තෝරන්න…",
+          "committeeLabel": "කමිටුව",
+          "none": "කිසිවක් නැත",
+          "dueDateLabel": "නියමිත දිනය",
+          "dueTimeLabel": "නියමිත වේලාව",
+          "priorityLabel": "ප්‍රමුඛතාවය",
+          "priorityLow": "අඩු",
+          "priorityMedium": "මධ්‍යම",
+          "priorityHigh": "ඉහළ"
+        },
+        "editProject": {
+          "title": "ව්‍යාපෘතිය සංස්කරණය කරන්න",
+          "saving": "සුරකිමින්…",
+          "saveChanges": "වෙනස්කම් සුරකින්න",
+          "nameLabel": "ව්‍යාපෘති නාමය",
+          "descriptionLabel": "විස්තරය",
+          "startDateLabel": "ආරම්භක දිනය",
+          "endDateLabel": "අවසාන දිනය",
+          "statusLabel": "තත්ත්වය",
+          "statusUpcoming": "ඉදිරි",
+          "statusActive": "ක්‍රියාකාරී",
+          "statusCompleted": "සම්පූර්ණයි"
+        }
+      }
+    }
+  },
+  "admin": {
+    "committees": {
+      "addTitle": "නව කමිටු එක් කරන්න",
+      "searchTitle": "කමිටුව සොයන්න"
+    },
+    "addMember": {
+      "toastCreated": "සාමාජික ගිණුම සාර්ථකව සාදන ලදී!",
+      "toastAccountCreated": "ගිණුම සාර්ථකව සාදන ලදී!",
+      "navLabel": "සාමාජික සංචලනය",
+      "addNewMember": "නව සාමාජිකයෙකු එක් කරන්න",
+      "viewMembers": "සාමාජිකයින් බලන්න",
+      "loadFailed": "සාමාජිකයින් පූරණය කිරීම අසාර්ථක විය",
+      "serverError": "සාමාජිකයින් පූරණය කිරීමේදී සර්වර් දෝෂයකි"
+    },
+    "addProject": {
+      "addTitle": "නව ව්‍යාපෘතිය එක් කරන්න",
+      "viewTitle": "ව්‍යාපෘති බලන්න",
+      "formHeading": "ව්‍යාපෘති පෝරමය",
+      "selectedDate": "තෝරාගත් දිනය: {{date}}",
+      "toastCreated": "ව්‍යාපෘතිය සාර්ථකව සාදන ලදී!",
+      "fallbackDepartment": "සාමාන්‍ය",
+      "fallbackChair": "තීරණය කළ යුතුයි"
+    },
+    "projects": {
+      "eyebrow": "කළමනාකරණය",
+      "subtitle": "සංගම් ව්‍යාපෘති සාදන්න සහ එක් එක් ව්‍යාපෘතියට සභාපතිවරයෙකු පවරන්න",
+      "createProject": "ව්‍යාපෘතිය සාදන්න",
+      "loadError": "ව්‍යාපෘති පූරණය කළ නොහැකි විය.",
+      "loadMembersError": "සාමාජික ලැයිස්තුව පූරණය කළ නොහැකි විය.",
+      "searchPlaceholder": "ව්‍යාපෘතිය, සංගමය, හෝ සභාපති අනුව සොයන්න…",
+      "table": {
+        "project": "ව්‍යාපෘතිය",
+        "status": "තත්ත්වය",
+        "startDate": "ආරම්භක දිනය"
+      },
+      "emptyNoProjects": "තවම ව්‍යාපෘති නැත",
+      "emptyNoMatches": "ගැලපීම් නැත",
+      "emptyNoProjectsBody": "ආරම්භ කිරීමට පළමු ව්‍යාපෘතිය සාදා එයට සභාපතිවරයෙකු පවරන්න.",
+      "emptyNoMatchesBody": "වෙනස් සෙවුම් පදයක් උත්සාහ කරන්න.",
+      "modal": {
+        "nameLabel": "ව්‍යාපෘති නාමය",
+        "namePlaceholder": "උදා: වනක්කම් 2026",
+        "descriptionPlaceholder": "මෙම ව්‍යාපෘතිය කුමක් ගැනද?",
+        "selectChairperson": "මෙම ව්‍යාපෘතිය මෙහෙයවන්නේ කවුරුන්දැයි තෝරන්න…",
+        "creating": "සාදමින්…"
+      },
+      "errors": {
+        "nameRequired": "කරුණාකර ව්‍යාපෘතියට නමක් දෙන්න.",
+        "startDateRequired": "කරුණාකර ආරම්භක දිනයක් තෝරන්න.",
+        "chairpersonRequired": "කරුණාකර සභාපතිවරයෙකු පවරන්න.",
+        "createFailed": "ව්‍යාපෘතිය සෑදිය නොහැකි විය."
+      }
+    },
+    "dashboard": {
+      "roleLabels": {
+        "CHAIRPERSON": "සභාපති",
+        "COMMITTEE_LEAD": "කමිටු නායක",
+        "MEMBER": "සාමාජික"
+      },
+      "defaultName": "පරිපාලක පරිශීලක",
+      "defaultRole": "පද්ධති පරිපාලක",
+      "photoTooShort": "කරුණාකර 5MB ට වඩා කුඩා රූපයක් තෝරන්න.",
+      "editProfile": "පැතිකඩ සංස්කරණය",
+      "uploadPhotoTitle": "පැතිකඩ පින්තූරය උඩුගත කරන්න / වෙනස් කරන්න",
+      "memberSince": "සාමාජිකයෙකු වූයේ {{date}} සිට",
+      "overview": {
+        "title": "උපකරණ පුවරු දළ විශ්ලේෂණය",
+        "allTime": "සියලු කාල කාර්ය සාධනය",
+        "projectsDone": "නිමකළ ව්‍යාපෘති",
+        "committeesHeaded": "මෙහෙයවූ කමිටු",
+        "tasksCompleted": "නිමකළ කාර්යයන්",
+        "contributionScore": "දායකත්ව ලකුණු"
+      },
+      "myProjects": {
+        "title": "මගේ ව්‍යාපෘති සහ දායකත්වයන්",
+        "subtitle": "මා විසින් මෙහෙයවන ලද හෝ දායක වූ සංගම් ව්‍යාපෘති",
+        "empty": "තවම ව්‍යාපෘති නැත — ඔබ කිසිදු ව්‍යාපෘතියකට එකතු කර නොමැත.",
+        "year": "වර්ෂය",
+        "contribution": "දායකත්වය {{value}}"
+      },
+      "committees": {
+        "title": "කමිටු සහ නායකත්වය",
+        "subtitle": "නායකත්ව සහ සාමාජික පැවරීම්",
+        "empty": "තවම කමිටු පැවරීම් නැත.",
+        "membersCount": "සාමාජිකයින් {{count}}",
+        "head": "කමිටු ප්‍රධානී"
+      },
+      "recentActivity": {
+        "title": "මෑත ක්‍රියාකාරකම්",
+        "subtitle": "නවතම සන්ධිස්ථාන සහ දායකත්වයන්",
+        "empty": "මෑත ක්‍රියාකාරකම් නැත."
+      },
+      "time": {
+        "justNow": "දැන් පමණි",
+        "minutesAgo_one": "මිනිත්තුවකට පෙර",
+        "minutesAgo_other": "මිනිත්තු {{count}}කට පෙර",
+        "hoursAgo_one": "පැයකට පෙර",
+        "hoursAgo_other": "පැය {{count}}කට පෙර",
+        "yesterday": "ඊයේ",
+        "daysAgo_other": "දින {{count}}කට පෙර"
+      },
+      "editModal": {
+        "title": "පැතිකඩ තොරතුරු සංස්කරණය",
+        "changePhoto": "ඡායාරූපය වෙනස් කරන්න",
+        "uploadPhoto": "ඡායාරූපය උඩුගත කරන්න",
+        "remove": "ඉවත් කරන්න",
+        "fullName": "සම්පූර්ණ නම",
+        "roleTitle": "තනතුර / භූමිකා මාතෘකාව",
+        "email": "විද්‍යුත් තැපැල් ලිපිනය",
+        "contactNumber": "සම්බන්ධතා අංකය",
+        "faculty": "පීඨය / ආයතනය",
+        "saveChanges": "වෙනස්කම් සුරකින්න"
+      }
+    },
+    "home": {
+      "defaultName": "පරිපාලක",
+      "defaultProjectName": "ව්‍යාපෘතිය",
+      "loadError": "උපකරණ පුවරුව පූරණය කළ නොහැකි විය.",
+      "projectDeadlineTitle": "{{name}} අවසාන දිනය",
+      "organizationProject": "සංවිධාන ව්‍යාපෘතිය",
+      "projectDeadlineDescription": "{{name}} සඳහා නිල ව්‍යාපෘති අවසාන දිනය",
+      "eventTypes": {
+        "EVENT": "සිදුවීම",
+        "SPECIAL_TASK": "විශේෂ කාර්යය",
+        "MEETING": "රැස්වීම",
+        "DEADLINE": "අවසාන දිනය"
+      },
+      "quickActions": {
+        "newProject": "නව ව්‍යාපෘතිය",
+        "addMember": "සාමාජිකයෙකු එක් කරන්න"
+      },
+      "hero": {
+        "welcome": "නැවත සාදරයෙන් පිළිගනිමු, {{name}}",
+        "subtitle": "හෙලෝ {{name}}, මෙය ඔබගේ කාර්ය සාධන නිරීක්ෂණ උපකරණ පුවරුවයි.",
+        "newEvent": "නව සිදුවීම"
+      },
+      "widgets": {
+        "dailyActivity": "දෛනික ක්‍රියාකාරකම්",
+        "statistics": "සංඛ්‍යාලේඛන",
+        "performanceRate": "කාර්ය සාධන අනුපාතය",
+        "totalProjectsSub": "මුළු ව්‍යාපෘති (සම්පූර්ණ {{count}})",
+        "ongoingProjectsSub": "ක්‍රියාත්මක ව්‍යාපෘති (සාමාජිකයින් {{count}} ක්‍රියාශීලීයි)",
+        "legendOngoing": "ක්‍රියාත්මක",
+        "legendActive": "සක්‍රීය",
+        "legendDone": "නිමයි"
+      },
+      "panels": {
+        "projectProgress": "ව්‍යාපෘති ප්‍රගතිය",
+        "quickActions": "ඉක්මන් ක්‍රියා",
+        "upcoming": "ඉදිරි",
+        "organizationCalendar": "සංවිධාන දින දර්ශනය"
+      },
+      "progressLegend": {
+        "ongoing": "ක්‍රියාත්මක",
+        "completed": "සම්පූර්ණයි"
+      },
+      "emptyProjects": {
+        "title": "තවම ව්‍යාපෘති නැත",
+        "body": "ඔබගේ පළමු ව්‍යාපෘතිය සාදන්න එවිට මෙම දත්ත ස්වයංක්‍රීයව යාවත්කාලීන වේ.",
+        "cta": "ව්‍යාපෘතියක් එක් කරන්න"
+      },
+      "emptyUpcoming": {
+        "title": "කිසිවක් සැලසුම් කර නැත",
+        "body": "සිදුවීමක් එක් කරන්න එවිට එය මෙහි සහ දින දර්ශනයේ දිස්වනු ඇත."
+      },
+      "calendarAdd": "එක් කරන්න",
+      "today": "අද",
+      "entries_one": "ඇතුළත් කිරීමක්",
+      "entries_other": "ඇතුළත් කිරීම් {{count}}",
+      "noEntries": "මෙම දිනය සඳහා ඇතුළත් කිරීම් නැත.",
+      "remove": "ඉවත් කරන්න",
+      "modal": {
+        "addTitle": "දින දර්ශනයට එක් කරන්න",
+        "titleLabel": "මාතෘකාව",
+        "titlePlaceholder": "උදා: වාර්ෂික මහා සභා රැස්වීම",
+        "typeLabel": "වර්ගය",
+        "startDateLabel": "ආරම්භක දිනය",
+        "endDateLabel": "අවසාන දිනය",
+        "optional": "විකල්පයි",
+        "locationLabel": "ස්ථානය",
+        "locationPlaceholder": "උදා: සුමනදාස ශ්‍රවණාගාරය",
+        "descriptionLabel": "විස්තරය",
+        "descriptionPlaceholder": "සාමාජිකයින් දැනගත යුතු ඕනෑම විස්තරයක්",
+        "saving": "සුරකිමින්…",
+        "addEvent": "සිදුවීම එක් කරන්න"
+      },
+      "errors": {
+        "titleRequired": "කරුණාකර සිදුවීමට මාතෘකාවක් දෙන්න.",
+        "startDateRequired": "කරුණාකර ආරම්භක දිනයක් තෝරන්න.",
+        "saveEventFailed": "සිදුවීම සුරැකිය නොහැකි විය.",
+        "removeEventFailed": "සිදුවීම ඉවත් කළ නොහැකි විය."
+      }
+    }
+  },
+  "chair": {
+    "dashboard": {
+      "editProfile": "පැතිකඩ සංස්කරණය",
+      "viewMore": "වැඩිදුර බලන්න",
+      "personalDetails": "පුද්ගලික විස්තර",
+      "joined": "එක්වූයේ: {{date}}",
+      "noCommittees": "— කමිටු නැත",
+      "performanceReview": "2025 කාර්ය සාධන සමාලෝචනය",
+      "performanceRating": "කාර්ය සාධන ශ්‍රේණිගත කිරීම",
+      "contribution": "දායකත්වය",
+      "experienceAndPerformance": "පළපුරුද්ද සහ කාර්ය සාධනය",
+      "yearsOfExperience": "පළපුරුදු වසර ගණන",
+      "workedProjects": "සේවය කළ ව්‍යාපෘති",
+      "table": {
+        "project": "ව්‍යාපෘතිය",
+        "year": "වර්ෂය",
+        "role": "භූමිකාව"
+      },
+      "noProjectsFound": "— ව්‍යාපෘති හමු නොවීය"
+    },
+    "manageCommittees": {
+      "addTitle": "කමිටුව එක් කරන්න",
+      "viewTitle": "කමිටු බලන්න"
+    },
+    "manageTask": {
+      "addTitle": "කාර්යයන් එක් කරන්න",
+      "viewTitle": "කාර්යයන් බලන්න"
+    },
+    "myProject": {
+      "notFound": "ව්‍යාපෘතිය හමු නොවීය",
+      "loadFailed": "ව්‍යාපෘතිය පූරණය කිරීම අසාර්ථක විය",
+      "loading": "ව්‍යාපෘතිය පූරණය වෙමින්...",
+      "retry": "නැවත උත්සාහ කරන්න",
+      "defaultTitle": "ව්‍යාපෘතිය",
+      "noDescription": "විස්තරයක් නොමැත",
+      "statusLabel": "තත්ත්වය:",
+      "startDateLabel": "ආරම්භක දිනය:",
+      "endDateLabel": "අවසාන දිනය:",
+      "unknownStatus": "නොදනී",
+      "chairPersons": "සභාපතිවරු",
+      "chairPersonRole": "සභාපති",
+      "noChairPersons": "සභාපතිවරු පවරා නොමැත"
+    }
+  },
+  "member": {
+    "dashboard": {
+      "loadError": "උපකරණ පුවරු දත්ත පූරණය කිරීම අසාර්ථක විය.",
+      "sidebarTeams": "කණ්ඩායම්",
+      "sidebarCalendar": "දින දර්ශනය",
+      "hero": {
+        "eyebrow": "සාමාජික උපකරණ පුවරුව",
+        "welcome": "නැවත සාදරයෙන් පිළිගනිමු, {{name}} 👋",
+        "subtitle": "ඔබගේ ව්‍යාපෘති දායකත්වයන්, සංගම් සිදුවීම් සහ ප්‍රගතිය තත්‍ය කාලීනව නිරීක්ෂණය කරන්න."
+      },
+      "stats": {
+        "totalWorkedTitle": "සේවය කළ මුළු ව්‍යාපෘති",
+        "allParticipated": "සියල්ලටම සහභාගී විය",
+        "contributingSub": "දායක ව්‍යාපෘති {{count}}",
+        "chairedTitle": "මෙහෙයවූ ව්‍යාපෘති",
+        "chairpersonBadge": "👑 සභාපති",
+        "chairedSub": "ඔබ සභාපති ලෙස මෙහෙයවන ව්‍යාපෘති",
+        "ongoingTitle": "ක්‍රියාත්මක ව්‍යාපෘති",
+        "currentlyActive": "දැනට ක්‍රියාත්මකයි",
+        "completedSub": "ව්‍යාපෘති {{count}}ක් නිමයි"
+      },
+      "progressPanel": {
+        "title": "ව්‍යාපෘති ප්‍රගතිය",
+        "subtitle": "පවරන ලද ව්‍යාපෘති හරහා සමස්ත සම්පූර්ණත්ව අනුපාතය"
+      },
+      "upcomingPanel": {
+        "title": "ඉදිරි සිදුවීම් සහ අවසාන දින",
+        "subtitle": "නියමිත සංගම් රැස්වීම්, සිදුවීම් සහ ව්‍යාපෘති අවසාන දින",
+        "emptyTitle": "ඉදිරි සිදුවීම් හෝ අවසාන දින නැත",
+        "emptyBody": "සංගම් ක්‍රියාකාරකම්, රැස්වීම් සහ ව්‍යාපෘති අවසාන දින සඳහා පසුව නැවත පරීක්ෂා කරන්න."
+      },
+      "calendar": {
+        "noEventsForDate": "මෙම දිනය සඳහා සිදුවීම් නියමිත නැත."
+      },
+      "deadline": {
+        "chairedLocation": "මෙහෙයවන ව්‍යාපෘතිය",
+        "memberLocation": "සාමාජික ව්‍යාපෘතිය"
+      },
+      "roles": {
+        "chairPerson": "සභාපති",
+        "contributor": "දායකයා"
+      }
+    }
+  },
+  "auth": {
+    "setPassword": {
+      "invalidToken": "වලංගු නොවන හෝ අස්ථානගත වූ ටෝකනයකි.",
+      "passwordTooShort": "මුරපදය අවම වශයෙන් අක්ෂර 6ක් විය යුතුය.",
+      "passwordMismatch": "මුරපද නොගැලපේ.",
+      "setFailed": "මුරපදය සැකසීමට අසමත් විය.",
+      "serverError": "සර්වර් දෝෂයකි. කරුණාකර නැවත උත්සාහ කරන්න.",
+      "successAlert": "මුරපදය සාර්ථකව සකසන ලදී. ඔබට දැන් පිවිසිය හැක.",
+      "heading": "ඔබගේ මුරපදය සකසන්න",
+      "subtitle": "ඔබගේ ගිණුම සක්‍රීය කිරීමට මුරපදයක් සාදන්න.",
+      "newPasswordPlaceholder": "නව මුරපදය",
+      "confirmPasswordPlaceholder": "මුරපදය තහවුරු කරන්න",
+      "settingButton": "සකසමින්...",
+      "setPasswordButton": "මුරපදය සකසන්න"
+    }
+  },
+  "memberForm": {
+    "heading": "ලියාපදිංචි පෝරමය",
+    "subtitle": "ලියාපදිංචි කිරීම සඳහා පෝරමය ප්‍රවේශමෙන් පුරවන්න. සාමාජිකයා සඳහා ස්වයංක්‍රීය තාවකාලික මුරපදයක් ජනනය කරනු ලැබේ.",
+    "fullNameLabel": "සාමාජිකයාගේ සම්පූර්ණ නම",
+    "firstNamePlaceholder": "මුල් නම",
+    "lastNamePlaceholder": "අවසාන නම",
+    "emailLabel": "ශිෂ්‍ය විද්‍යුත් තැපෑල",
+    "emailPlaceholder": "උදා: myname@example.com",
+    "emailHint": "example@example.com",
+    "contactLabel": "සම්බන්ධතා අංකය",
+    "contactPlaceholder": "07X XXX XXXX",
+    "contactHint": "දුරකථන / WhatsApp අංකය",
+    "indexNoLabel": "ශිෂ්‍ය හැඳුනුම්පත / දර්ශක අංකය",
+    "indexNoPlaceholder": "උදා: 225513L",
+    "indexNoHint": "අනන්‍ය ශිෂ්‍ය හැඳුනුම් අංකය",
+    "genderLabel": "ලිංගභේදය",
+    "genderMale": "පිරිමි",
+    "genderFemale": "ගැහැණු",
+    "genderOther": "වෙනත්",
+    "genderHint": "ලිංගභේදය තෝරන්න",
+    "facultyLabel": "පීඨය / අංශය",
+    "facultySelectPlaceholder": "කරුණාකර පීඨය තෝරන්න",
+    "facultyHint": "පවරන ලද පීඨය තෝරන්න",
+    "batchLabel": "අධ්‍යයන කණ්ඩායම",
+    "batchSelectPlaceholder": "කරුණාකර කණ්ඩායම තෝරන්න",
+    "batchOption": "කණ්ඩායම {{n}}",
+    "batchHint": "ඇතුළත් වූ වර්ෂය",
+    "dobLabel": "උපන් දිනය",
+    "dobHint": "උපන් දිනය",
+    "roleLabel": "පද්ධති භූමිකාව",
+    "roleHint": "ප්‍රවේශ අවසර",
+    "tempPasswordLabel": "තාවකාලික මුරපදය",
+    "generateNew": "නව එකක් ජනනය කරන්න",
+    "generateNewTitle": "නව අහඹු මුරපදයක් ජනනය කරන්න",
+    "tempPasswordPlaceholder": "තාවකාලික මුරපදය",
+    "hidePassword": "මුරපදය සඟවන්න",
+    "showPassword": "මුරපදය පෙන්වන්න",
+    "copyPasswordTitle": "මුරපදය පසුරු පුවරුවට පිටපත් කරන්න",
+    "tempPasswordHint": "මෙම තාවකාලික මුරපදය සාමාජිකයාට ඔවුන්ගේ මූලික පිවිසුම සඳහා පවරනු ලැබේ.",
+    "registering": "සාමාජිකයා ලියාපදිංචි කරමින්...",
+    "submit": "ඉදිරිපත් කරන්න",
+    "securityNote": "සාමාජිකයාට ඔවුන්ගේ විද්‍යුත් තැපෑල හෝ දර්ශක අංකය සහ ජනනය කළ තාවකාලික මුරපදය භාවිතයෙන් පිවිසිය හැක.",
+    "errors": {
+      "nameRequired": "කරුණාකර මුල් නම සහ අවසාන නම යන දෙකම සපයන්න.",
+      "requiredFields": "* ලකුණු කර ඇති සියලුම අවශ්‍ය ක්ෂේත්‍ර පුරවන්න.",
+      "createFailed": "ගිණුම සෑදීමට අසමත් විය. විස්තර පරීක්ෂා කරන්න.",
+      "serverError": "සර්වර් දෝෂයකි. කරුණාකර ඔබගේ ජාල සම්බන්ධතාව පරීක්ෂා කර නැවත උත්සාහ කරන්න."
+    },
+    "successModal": {
+      "title": "ගිණුම සාදන ලදී!",
+      "description": "සාමාජික {{name}} සාර්ථකව ලියාපදිංචි කර ඇත.",
+      "loginUsername": "පිවිසුම් පරිශීලක නාමය:",
+      "indexNumber": "දර්ශක අංකය:",
+      "temporaryPassword": "තාවකාලික මුරපදය:",
+      "copyCredentials": "අක්තපත්‍ර පිටපත් කරන්න",
+      "copiedToClipboard": "පසුරු පුවරුවට පිටපත් කරන ලදී!",
+      "done": "නිමයි / නාමාවලිය බලන්න"
+    }
+  },
+  "memberView": {
+    "deleteDialog": {
+      "title": "සාමාජික ගිණුම මකන්න",
+      "message": "ඔබට {{name}} ඉවත් කිරීමට අවශ්‍ය බව විශ්වාසද? මෙම ක්‍රියාව ඔවුන්ගේ ප්‍රවේශය ස්ථිරවම ඉවත් කරයි.",
+      "confirm": "සාමාජිකයා මකන්න"
+    },
+    "listTitle": "සාමාජික ලැයිස්තුව",
+    "tabs": {
+      "all": "සියලුම සාමාජිකයින්",
+      "chairpersons": "සභාපතිවරු",
+      "members": "සාමාජිකයින්"
+    },
+    "searchPlaceholder": "සාමාජිකයින් සොයන්න...",
+    "loadingDirectory": "සාමාජික නාමාවලිය පූරණය වෙමින්...",
+    "table": {
+      "indexId": "දර්ශක අංකය",
+      "joinedDate": "එක්වූ දිනය",
+      "memberName": "සාමාජිකයාගේ නම",
+      "faculty": "පීඨය",
+      "batch": "කණ්ඩායම",
+      "role": "භූමිකාව",
+      "actions": "ක්‍රියා",
+      "notApplicable": "අදාළ නොවේ",
+      "generalFaculty": "සාමාන්‍ය",
+      "batchValue": "කණ්ඩායම {{n}}"
+    },
+    "actions": {
+      "viewDetails": "විස්තර බලන්න",
+      "editMember": "සාමාජිකයා සංස්කරණය කරන්න",
+      "deleteMember": "සාමාජිකයා මකන්න"
+    },
+    "emptyResults": {
+      "title": "සාමාජිකයින් හමු නොවීය",
+      "body": "ඔබගේ වර්තමාන පෙරහන් තේරීමට ගැලපෙන සාමාජිකයින් නොමැත."
+    },
+    "detail": {
+      "indexId": "දර්ශක අංකය / ශිෂ්‍ය හැඳුනුම්පත",
+      "email": "විද්‍යුත් තැපැල් ලිපිනය",
+      "contact": "සම්බන්ධතා අංකය",
+      "faculty": "පීඨය / අංශය",
+      "batch": "අධ්‍යයන කණ්ඩායම",
+      "batchValue": "කණ්ඩායම {{n}}",
+      "registrationDate": "ලියාපදිංචි දිනය"
+    },
+    "editForm": {
+      "fullName": "සම්පූර්ණ නම",
+      "email": "විද්‍යුත් තැපැල් ලිපිනය",
+      "contact": "සම්බන්ධතා අංකය",
+      "faculty": "පීඨය",
+      "batch": "කණ්ඩායම",
+      "role": "පද්ධති භූමිකාව"
+    },
+    "editMemberButton": "සාමාජිකයා සංස්කරණය කරන්න"
+  },
+  "projectAddForm": {
+    "heading": "නව ව්‍යාපෘතිය එක් කරන්න",
+    "subtitle": "විස්තරාත්මක තොරතුරු සහිත නව ව්‍යාපෘතියක් සාදන්න",
+    "fillRequired": "කරුණාකර සියලුම අවශ්‍ය ක්ෂේත්‍ර පුරවන්න",
+    "nameLabel": "ව්‍යාපෘති නාමය",
+    "namePlaceholder": "ව්‍යාපෘති නාමය ඇතුළත් කරන්න",
+    "descriptionLabel": "විස්තරය",
+    "descriptionPlaceholder": "ව්‍යාපෘති විස්තරය ඇතුළත් කරන්න...",
+    "startDateLabel": "ආරම්භක දිනය",
+    "endDateLabel": "අවසාන දිනය",
+    "departmentLabel": "අංශය",
+    "chairPersonLabel": "සභාපති",
+    "chairPersonPlaceholder": "සභාපතිගේ නම",
+    "departments": {
+      "general": "සාමාන්‍ය",
+      "engineering": "ඉංජිනේරු",
+      "science": "විද්‍යා",
+      "arts": "කලා"
+    },
+    "clear": "හිස් කරන්න"
+  },
+  "projectsTable": {
+    "deleteDialog": {
+      "title": "ව්‍යාපෘතිය මකන්න",
+      "message": "\"{{name}}\" මකා දැමීමට අවශ්‍ය බව විශ්වාසද? මෙම ක්‍රියාව ආපසු හැරවිය නොහැක.",
+      "confirm": "මකන්න"
+    },
+    "notApplicable": "අදාළ නොවේ",
+    "editTitle": "ව්‍යාපෘතිය සංස්කරණය කරන්න",
+    "detailsTitle": "ව්‍යාපෘති විස්තර",
+    "detail": {
+      "projectName": "ව්‍යාපෘති නාමය:",
+      "description": "විස්තරය:",
+      "startDate": "ආරම්භක දිනය:",
+      "endDate": "අවසාන දිනය:",
+      "department": "අංශය:",
+      "chairPerson": "සභාපති:",
+      "memberCount": "සාමාජික සංඛ්‍යාව:",
+      "status": "තත්ත්වය:"
+    },
+    "editButton": "සංස්කරණය",
+    "addMembersTitle": "{{name}} වෙත සාමාජිකයින් එක් කරන්න",
+    "addedMembers": "එක් කළ සාමාජිකයින්:",
+    "addButton": "එක් කරන්න",
+    "columns": {
+      "projectName": "ව්‍යාපෘති නාමය",
+      "department": "අංශය",
+      "chairPerson": "සභාපති",
+      "members": "සාමාජිකයින්",
+      "startDate": "ආරම්භක දිනය",
+      "status": "තත්ත්වය",
+      "actions": "ක්‍රියා"
+    },
+    "actionTitles": {
+      "view": "විස්තර බලන්න",
+      "addMembers": "සාමාජිකයින් එක් කරන්න",
+      "edit": "ව්‍යාපෘතිය සංස්කරණය කරන්න",
+      "delete": "ව්‍යාපෘතිය මකන්න"
+    },
+    "viewButton": "බලන්න"
+  },
+  "reports": {
+    "loadError": "වාර්තා දත්ත පූරණය කළ නොහැකි විය.",
+    "feedbackSubmitError": "ප්‍රතිපෝෂණය ඉදිරිපත් කළ නොහැකි විය.",
+    "complaintSubmitError": "පැමිණිල්ල ඉදිරිපත් කළ නොහැකි විය.",
+    "anonymous": "නිර්නාමික සාමාජිකයා",
+    "hero": {
+      "eyebrow": "විශ්ලේෂණ සහ පාලනය",
+      "title": "වාර්තා සහ ප්‍රතිපෝෂණ",
+      "subtitle": "සංවිධානාත්මක කාර්ය සාධනය, ව්‍යාපෘති සැපයුම් මිනුම් සහ සාමාජික ප්‍රතිපෝෂණ තත්‍ය කාලීනව නිරීක්ෂණය කරන්න.",
+      "reportIssue": "ගැටලුවක් වාර්තා කරන්න",
+      "exportCsv": "CSV අපනයනය"
+    },
+    "kpi": {
+      "avgPerformance": "සාමාන්‍ය කාර්ය සාධනය",
+      "liveScore": "සජීවී ලකුණු",
+      "avgPerformanceCaption": "කාර්ය අවසාන දින අනුගමනයෙන් ගණනය කර ඇත",
+      "activeMembers": "ක්‍රියාශීලී සාමාජිකයින්",
+      "activeRoster": "ක්‍රියාශීලී ලේඛනය",
+      "activeMembersCaption": "ක්‍රියාශීලී සභාපතිවරු සහ කමිටු සාමාජිකයින්",
+      "projectHealth": "ව්‍යාපෘති සෞඛ්‍යය",
+      "onTrack": "නිවැරදි මාර්ගයේ",
+      "projectHealthCaption": "විෂය පථයේ ව්‍යාපෘති {{count}}ක්",
+      "taskVelocity": "කාර්ය වේගය",
+      "completion": "සම්පූර්ණත්වය",
+      "taskVelocityCaption": "කාර්යයන් {{total}}න් {{completed}} නිමයි"
+    },
+    "tabs": {
+      "performance": "කාර්ය සාධන ලකුණු පත්‍රිකාව",
+      "projects": "ව්‍යාපෘති සාරාංශ",
+      "feedback": "ප්‍රතිපෝෂණ මධ්‍යස්ථානය",
+      "complaints": "ගැටලු නිරීක්ෂකය"
+    },
+    "searchPlaceholder": "{{tab}} තුළ සොයන්න...",
+    "clearSearch": "සෙවීම හිස් කරන්න",
+    "filters": {
+      "statusLabel": "තත්ත්වය:",
+      "periodLabel": "කාල සීමාව:",
+      "allStatuses": "සියලුම තත්ත්ව",
+      "excellent": "විශිෂ්ටයි",
+      "good": "හොඳයි",
+      "needsAttention": "අවධානය අවශ්‍යයි",
+      "active": "ක්‍රියාකාරී",
+      "completed": "සම්පූර්ණයි",
+      "upcoming": "ඉදිරි",
+      "resolved": "විසඳා ඇත",
+      "inProgress": "ක්‍රියාත්මක වෙමින්",
+      "open": "විවෘතයි",
+      "allTime": "සියලු කාලය (එක්වීමේ සිට)",
+      "thisMonth": "මෙම මාසය",
+      "thisQuarter": "මෙම කාර්තුව",
+      "currentYear": "වර්තමාන වර්ෂය",
+      "reset": "යළි සකසන්න"
+    },
+    "performancePane": {
+      "title": "සාමාජික කාර්ය සාධන ලකුණු පත්‍රිකාව",
+      "subtitle": "පුද්ගල කාර්ය ක්‍රියාත්මක කිරීම, අවසාන දින අනුගමනය සහ සැපයුම් මිනුම්",
+      "exportScorecard": "ලකුණු පත්‍රිකාව අපනයනය",
+      "loadingText": "දත්ත ගබඩාවෙන් සජීවී සාමාජික ලකුණු ලබාගනිමින්...",
+      "emptyTitle": "කාර්ය සාධන වාර්තා හමු නොවීය",
+      "emptyBody": "ඔබගේ සෙවුම් නිර්ණායක සකස් කරන්න හෝ ක්‍රියාකාරී පෙරහන් හිස් කරන්න.",
+      "columns": {
+        "memberDetails": "සාමාජික විස්තර",
+        "assignedProjects": "පවරන ලද ව්‍යාපෘති",
+        "tasksCompleted": "නිමකළ කාර්යයන්",
+        "performanceScore": "කාර්ය සාධන ලකුණු",
+        "rating": "ශ්‍රේණිගත කිරීම",
+        "deadlineAdherence": "අවසාන දින අනුගමනය"
+      },
+      "tasksDoneRatio": "{{total}}න් {{done}} නිමයි",
+      "onTimeCount": "නියමිත වේලාවට {{count}}",
+      "overdueCount": "කල් ඉකුත් වූ {{count}}"
+    },
+    "projectsPane": {
+      "title": "ව්‍යාපෘති සැපයුම සහ සෞඛ්‍යය",
+      "subtitle": "සන්ධිස්ථාන නිරීක්ෂණය, කමිටු වෙන් කිරීම් සහ කාර්ය ප්‍රගතිය",
+      "exportSummary": "සාරාංශය අපනයනය",
+      "loadingText": "දත්ත ගබඩාවෙන් සජීවී ව්‍යාපෘති සාරාංශ ලබාගනිමින්...",
+      "emptyTitle": "ඔබගේ පෙරහනට ගැලපෙන ව්‍යාපෘති වාර්තා නැත",
+      "emptyBody": "සෙවුම් පද හෝ තත්ත්ව පෙරහන් යළි සකසන්න.",
+      "ledBy": "මෙහෙයවන්නේ {{name}}",
+      "overallProgress": "සමස්ත ප්‍රගතිය",
+      "tasksMetric": "කාර්යයන්",
+      "health": "සෞඛ්‍යය: {{value}}",
+      "tasksDonePercent": "කාර්යයන් {{pct}}% නිමයි"
+    },
+    "feedbackPane": {
+      "title": "සාමාජික ප්‍රතිපෝෂණ සහ හැඟීම්",
+      "subtitle": "ක්‍රියාශීලී පරිශීලකයින්ගෙන් සෘජු හැඟීම්, විශේෂාංග අදහස් සහ යෝජනා",
+      "submitNew": "නව ප්‍රතිපෝෂණය ඉදිරිපත් කරන්න",
+      "emptyTitle": "ප්‍රතිපෝෂණ හමු නොවීය",
+      "emptyBody": "ප්‍රතිපෝෂණයක් ඉදිරිපත් කරන්න හෝ ඔබගේ සෙවුම් පෙරහන සකස් කරන්න.",
+      "ratedOf5": "5න් {{rating}}ක් ලකුණු දී ඇත",
+      "submittedOn": "{{date}} දින ඉදිරිපත් කරන ලදී"
+    },
+    "complaintsPane": {
+      "title": "වාර්තා කළ ගැටලු සහ විමසීම්",
+      "subtitle": "තාක්ෂණික ටිකට්පත්, මෙහෙයුම් ගැටලු සහ විසඳුම් ප්‍රගතිය නිරීක්ෂණය කරන්න",
+      "fileIssue": "ගැටලුවක් ගොනු කරන්න",
+      "emptyTitle": "ඔබගේ නිර්ණායකයට ගැලපෙන වාර්තා කළ ගැටලු නැත",
+      "emptyBody": "සියලුම මෙහෙයුම් ටිකට්පත් දැනට පිළිවෙළින් ඇත.",
+      "priority": "ප්‍රමුඛතාවය: {{value}}",
+      "reportedBy": "වාර්තා කළේ: {{name}}"
+    },
+    "feedbackModal": {
+      "title": "පරිශීලක ප්‍රතිපෝෂණය යවන්න",
+      "successTitle": "ස්තූතියි!",
+      "successBody": "ඔබගේ ප්‍රතිපෝෂණය සුරැකී පරිපාලනය සමඟ බෙදාගෙන ඇත.",
+      "nameLabel": "ඔබගේ නම / භූමිකාව",
+      "namePlaceholder": "උදා: අලෙක්ස් ජොන්සන් (විකල්පයි)",
+      "categoryLabel": "ප්‍රතිපෝෂණ වර්ගය",
+      "categories": {
+        "suggestion": "යෝජනාව / වැඩිදියුණු කිරීම",
+        "featureRequest": "විශේෂාංග ඉල්ලීම",
+        "general": "සාමාන්‍ය අත්දැකීම",
+        "bugReport": "UI / භාවිතා දෝෂය"
+      },
+      "ratingLabel": "සමස්ත අත්දැකීම් ශ්‍රේණිගත කිරීම",
+      "starsOf5": "තරු 5න් {{n}}ක්",
+      "messageLabel": "ප්‍රතිපෝෂණ පණිවිඩය *",
+      "messagePlaceholder": "ඔබගේ ප්‍රතිපෝෂණය හෝ අදහස් විස්තරාත්මකව විස්තර කරන්න...",
+      "submit": "ප්‍රතිපෝෂණය ඉදිරිපත් කරන්න"
+    },
+    "complaintModal": {
+      "title": "ගැටලුවක් හෝ ටිකට්පතක් වාර්තා කරන්න",
+      "successTitle": "ටිකට්පත සාදන ලදී",
+      "successBody": "ඔබගේ ගැටලු ටිකට්පත ලියාපදිංචි කර සමාලෝචනය සඳහා පවරා ඇත.",
+      "reporterLabel": "වාර්තා කරන්නාගේ නම",
+      "reporterPlaceholder": "උදා: ජෝන් ඩෝ",
+      "categoryLabel": "වර්ගය",
+      "categories": {
+        "technical": "තාක්ෂණික ගැටලුව",
+        "dataEntry": "දත්ත ඇතුළත් කිරීමේ නිවැරදි කිරීම",
+        "access": "ප්‍රවේශය සහ අවසර",
+        "performance": "පද්ධති කාර්යසාධනය",
+        "other": "වෙනත් විමසීම"
+      },
+      "titleLabel": "ගැටලු මාතෘකාව *",
+      "titlePlaceholder": "ගැටලුවේ කෙටි සාරාංශය",
+      "priorityLabel": "ප්‍රමුඛතා මට්ටම",
+      "priorities": {
+        "low": "අඩු",
+        "medium": "මධ්‍යම",
+        "high": "ඉහළ",
+        "critical": "විවේචනාත්මක"
+      },
+      "descriptionLabel": "සවිස්තර විස්තරය *",
+      "descriptionPlaceholder": "ගැටලුව නැවත ඇති කිරීමට විස්තර හෝ පියවර සපයන්න...",
+      "submit": "ගැටලු ටිකට්පත ඉදිරිපත් කරන්න"
+    }
+  },
+  "memberProjects": {
+    "filters": {
+      "all": "සියලුම ව්‍යාපෘති",
+      "chaired": "මෙහෙයවන",
+      "member": "සාමාජික"
+    },
+    "subtitle": "ඔබ මෙහෙයවන හෝ දායක වන ව්‍යාපෘති",
+    "searchPlaceholder": "ව්‍යාපෘති සොයන්න...",
+    "empty": {
+      "title": "ව්‍යාපෘති හමු නොවීය",
+      "body": "ඔබ තෝරාගත් පෙරහන හෝ සෙවුම් නිර්ණායකයට ගැලපෙන ව්‍යාපෘති සොයාගත නොහැකි විය. සියලුම පවරන ලද ව්‍යාපෘති සෙවීමට ඔබගේ පෙරහන් හිස් කරන්න.",
+      "reset": "පෙරහන් යළි සකසන්න"
+    },
+    "card": {
+      "untitled": "නම් නොකළ ව්‍යාපෘතිය",
+      "members": "සාමාජිකයින්",
+      "committees": "කමිටු",
+      "pending": "විසඳිය යුතුයි"
+    },
+    "avatarGroup": {
+      "teamMember": "කණ්ඩායම් සාමාජිකයා",
+      "member": "සාමාජිකයා"
+    },
+    "taskSidebar": {
+      "markCompleted": "සම්පූර්ණ කළ ලෙස සලකුණු කරන්න",
+      "tasksToComplete_one": "සම්පූර්ණ කිරීමට කාර්යයක්",
+      "tasksToComplete_other": "සම්පූර්ණ කිරීමට කාර්යයන් {{count}}",
+      "dueToday": "අද නියමිතයි",
+      "priority": {
+        "high": "ඉහළ",
+        "medium": "මධ්‍යම",
+        "low": "අඩු"
+      },
+      "allCaughtUp": "සියල්ල නිමයි! 🎉",
+      "noPendingTasks": "දැනට ඔබට පවරා ඇති විසඳිය යුතු කාර්යයන් නැත."
+    }
+  },
+  "chairNav": {
+    "home": "මුල් පිටුව",
+    "manage": "කළමනාකරණය",
+    "tasks": "කාර්යයන්"
+  },
+  "addCommitteeForm": {
+    "connectFailed": "සර්වරයට සම්බන්ධ විය නොහැකි විය",
+    "alreadyAdded": "{{name}} දැනටමත් එක් කර ඇත",
+    "removed": "{{name}} කමිටුවෙන් ඉවත් කරන ලදී",
+    "selectProjectRequired": "කරුණාකර මෙම කමිටුව සඳහා ව්‍යාපෘතියක් තෝරන්න",
+    "nameRequired": "කරුණාකර කමිටු නාමයක් ඇතුළත් කරන්න",
+    "descriptionRequired": "කරුණාකර විස්තරයක් ඇතුළත් කරන්න",
+    "membersRequired": "කරුණාකර කමිටුවට අවම වශයෙන් එක් සාමාජිකයෙකු එක් කරන්න",
+    "createdSuccess": "කමිටුව සාර්ථකව සාදන ලදී!",
+    "createFailed": "කමිටුව සෑදීමට අසමත් විය. කරුණාකර නැවත උත්සාහ කරන්න.",
+    "heading": "නව කමිටුවක් සාදන්න",
+    "subtitle": "ව්‍යාපෘතියක් තෝරන්න, විස්තර සඳහන් කරන්න, සහ සාමාජිකයින් පවරන්න.",
+    "selectProjectLabel": "ව්‍යාපෘතිය තෝරන්න *",
+    "selectProjectPlaceholder": "-- ව්‍යාපෘතියක් තෝරන්න --",
+    "nameLabel": "කමිටු නාමය *",
+    "namePlaceholder": "උදා: තාක්ෂණික මෙහෙයුම් කමිටුව",
+    "descriptionLabel": "විස්තරය *",
+    "descriptionPlaceholder": "මෙම කමිටුවේ වගකීම් සහ විෂය පථය විස්තර කරන්න...",
+    "searchMembersLabel": "සාමාජිකයින් සොයා එක් කරන්න *",
+    "searchPlaceholder": "නම හෝ විද්‍යුත් තැපෑල අනුව සාමාජිකයින් සොයන්න...",
+    "noResults": "\"{{query}}\" ට ගැලපෙන සාමාජිකයින් හමු නොවීය",
+    "selectedMembers": "තෝරාගත් සාමාජිකයින් ({{count}})",
+    "creating": "සාදමින්...",
+    "addCommittee": "කමිටුව එක් කරන්න"
+  },
+  "viewCommittees": {
+    "loadFailed": "කමිටු පූරණය කිරීම අසාර්ථක විය",
+    "memberAdded": "{{name}} කමිටුවට එක් කරන ලදී",
+    "addMemberFailed": "සාමාජිකයා එක් කිරීමට අසමත් විය",
+    "memberRemoved": "සාමාජිකයා කමිටුවෙන් ඉවත් කරන ලදී",
+    "removeMemberFailed": "සාමාජිකයා ඉවත් කිරීමට අසමත් විය",
+    "deletedSuccess": "කමිටුව සාර්ථකව මකන ලදී",
+    "deleteFailed": "කමිටුව මකා දැමීමට අසමත් විය",
+    "deleteDialog": {
+      "title": "කමිටුව මකන්නද?",
+      "message": "\"{{name}}\" මකා දැමීමට අවශ්‍ය බව විශ්වාසද? මෙම ක්‍රියාව ආපසු හැරවිය නොහැකි අතර මෙම කමිටුවෙන් සියලුම සාමාජිකයින් ඉවත් කරයි."
+    },
+    "loading": "කමිටු පූරණය වෙමින්...",
+    "noCommittees": "කමිටු හමු නොවීය. ආරම්භ කිරීමට එකක් සාදන්න!",
+    "deleteCommitteeTitle": "කමිටුව මකන්න",
+    "membersHeader": "සාමාජිකයින් ({{count}})",
+    "addMemberBtn": "සාමාජිකයා එක් කරන්න",
+    "removeMemberTitle": "සාමාජිකයා ඉවත් කරන්න"
+  },
+  "addTask": {
+    "fetchCommitteesFailed": "කමිටු ලබාගැනීමට අසමත් විය",
+    "fetchMembersFailed": "කමිටු සාමාජිකයින් ලබාගැනීමට අසමත් විය",
+    "endDateError": "අවසාන දිනය ආරම්භක දිනයට පසුව විය යුතුය.",
+    "selectCommitteeFirst": "කරුණාකර මුලින්ම කමිටුවක් තෝරන්න!",
+    "fixDateErrors": "ඉදිරිපත් කිරීමට පෙර දින දෝෂ නිවැරදි කරන්න.",
+    "addedSuccess": "කාර්යයන් සාර්ථකව එක් කරන ලදී!",
+    "saveError": "කාර්යයන් සුරැකීමේ දෝෂයකි",
+    "selectCommitteeLabel": "කමිටුව තෝරන්න *",
+    "selectCommitteePlaceholder": "-- කමිටුව තෝරන්න --",
+    "columns": {
+      "taskName": "කාර්ය නාමය",
+      "description": "විස්තරය",
+      "assignedMembers": "පවරන ලද සාමාජිකයින්",
+      "action": "ක්‍රියාව"
+    },
+    "taskNamePlaceholder": "කාර්ය නාමය ඇතුළත් කරන්න",
+    "descriptionPlaceholder": "විස්තරය ඇතුළත් කරන්න",
+    "selectMemberPlaceholder": "සාමාජිකයෙකු තෝරන්න...",
+    "addTaskBtn": "කාර්යය එක් කරන්න"
+  },
+  "viewTasks": {
+    "loadFailed": "කාර්යයන් පූරණය කිරීම අසාර්ථක විය",
+    "fetchMembersFailed": "කමිටු සාමාජිකයින් ලබාගැනීමට අසමත් විය",
+    "assignedUpdated": "පවරන ලද සාමාජිකයා යාවත්කාලීන කරන ලදී",
+    "updateAssignedFailed": "පවරන ලද සාමාජිකයා යාවත්කාලීන කිරීමට අසමත් විය",
+    "assignedMembersUpdated": "පවරන ලද සාමාජිකයින් යාවත්කාලීන කරන ලදී",
+    "updateMembersFailed": "සාමාජිකයින් යාවත්කාලීන කිරීමට අසමත් විය",
+    "deletedAllTasks": "{{name}} යටතේ සියලුම කාර්යයන් මකන ලදී",
+    "taskDeleted": "කාර්යය සාර්ථකව මකන ලදී",
+    "deleteFailed": "මකා දැමීමට අසමත් විය",
+    "deleteDialog": {
+      "committeeTitle": "\"{{name}}\" කමිටුව මකන්නද?",
+      "taskTitle": "කාර්යය මකන්නද?",
+      "committeeMessage": "මෙය {{name}} යටතේ ඇති සියලුම කාර්යයන් ඉවත් කරයි.",
+      "taskMessage": "ඔබට මෙම කාර්යය මකා දැමීමට අවශ්‍ය බව විශ්වාසද?"
+    },
+    "noTasks": "කාර්යයන් හමු නොවීය",
+    "deleteAllTasksTitle": "මෙම කමිටුවේ සියලුම කාර්යයන් මකන්න",
+    "deleteTaskTitle": "කාර්යය මකන්න",
+    "startLabel": "ආරම්භය:",
+    "dueLabel": "නියමිත:",
+    "assignedToLabel": "පවරා ඇත්තේ",
+    "editAssignedTitle": "පවරන ලද සාමාජිකයා සංස්කරණය කරන්න",
+    "noneOption": "-- කිසිවක් නැත --"
+  },
+  "settings": {
+    "title": "සැකසුම්",
+    "subtitle": "ඔබගේ මනාපයන් සහ ගිණුම් සැකසුම් කළමනාකරණය කරන්න",
+    "tabs": {
+      "general": "සාමාන්‍ය",
+      "notifications": "දැනුම්දීම්",
+      "security": "ආරක්ෂාව",
+      "display": "දර්ශනය"
+    },
+    "actions": {
+      "save": "වෙනස්කම් සුරකින්න",
+      "reset": "පෙරනිමියට යළි සකසන්න",
+      "saveSuccess": "සැකසුම් සාර්ථකව සුරකින ලදී"
+    },
+    "general": {
+      "title": "සාමාන්‍ය සැකසුම්",
+      "systemPreferences": "පද්ධති මනාපයන්",
+      "theme": {
+        "label": "තේමාව",
+        "description": "ඔබ කැමති වර්ණ තේමාව තෝරන්න",
+        "light": "ආලෝකමත්",
+        "dark": "අඳුරු",
+        "auto": "ස්වයංක්‍රීය (පද්ධතිය)"
+      },
+      "language": {
+        "label": "භාෂාව",
+        "description": "ඔබ කැමති භාෂාව තෝරන්න"
+      },
+      "timezone": {
+        "label": "කාල කලාපය",
+        "description": "සිදුවීම් සහ දැනුම්දීම් සඳහා ඔබගේ කාල කලාපය සකසන්න"
+      }
+    },
+    "notifications": {
+      "title": "දැනුම්දීම් සැකසුම්",
+      "emailGroup": "විද්‍යුත් තැපැල් දැනුම්දීම්",
+      "email": {
+        "label": "විද්‍යුත් තැපැල් දැනුම්දීම්",
+        "description": "වැදගත් සිදුවීම් සඳහා විද්‍යුත් තැපැල් දැනුම්දීම් ලබා ගන්න"
+      },
+      "taskReminders": {
+        "label": "කාර්ය සිහිකැඳවීම්",
+        "description": "ඉදිරි කාර්යයන් සහ නියමිත දින පිළිබඳව දැනුම් ලබා ගන්න"
+      },
+      "committeeMeetings": {
+        "label": "කමිටු රැස්වීම්",
+        "description": "කමිටු රැස්වීම් සහ නිවේදන සඳහා දැනුම්දීම්"
+      },
+      "projectUpdates": {
+        "label": "ව්‍යාපෘති යාවත්කාලීන",
+        "description": "ව්‍යාපෘති ප්‍රගතිය සහ සන්ධිස්ථාන පිළිබඳව යාවත්කාලීනව සිටින්න"
+      },
+      "performanceAlerts": {
+        "label": "කාර්ය සාධන ඇඟවීම්",
+        "description": "ඔබගේ කාර්ය සාධන දර්ශක පිළිබඳ ඇඟවීම් ලබා ගන්න"
+      }
+    },
+    "security": {
+      "title": "ආරක්ෂාව සහ පෞද්ගලිකත්වය",
+      "accountGroup": "ගිණුම් ආරක්ෂාව",
+      "privacyGroup": "පෞද්ගලිකත්ව සැකසුම්",
+      "twoFactor": {
+        "label": "ද්වි-සාධක සත්‍යාපනය",
+        "description": "ඔබගේ ගිණුමට අමතර ආරක්ෂක ස්ථරයක් එක් කරන්න"
+      },
+      "sessionTimeout": {
+        "label": "සැසි කාලය ඉකුත්වීම (මිනිත්තු)",
+        "description": "අක්‍රිය කාලයකින් පසු ස්වයංක්‍රීයව ඉවත් වීම"
+      },
+      "activityLog": {
+        "label": "ක්‍රියාකාරකම් ලොගය",
+        "description": "ඔබගේ ගිණුම් ක්‍රියාකාරකම් පිළිබඳ වාර්තාවක් තබා ගන්න"
+      },
+      "dataBackup": {
+        "label": "දත්ත උපස්ථය",
+        "description": "ඔබගේ දත්ත ස්වයංක්‍රීයව උපස්ථ කරන්න"
+      }
+    },
+    "display": {
+      "title": "දර්ශන සැකසුම්",
+      "layoutGroup": "සැකැස්ම සහ දසුන",
+      "itemsPerPage": {
+        "label": "පිටුවකට අයිතම",
+        "description": "පිටුවකට පෙන්වන අයිතම ගණන සකසන්න",
+        "option": "අයිතම {{n}}"
+      },
+      "compactMode": {
+        "label": "සංහිත ආකාරය",
+        "description": "අඩු පරතරයක් සහිත වඩාත් සංහිත සැකැස්මක් භාවිතා කරන්න"
+      },
+      "autoRefresh": {
+        "label": "ස්වයංක්‍රීය නැවුම් කිරීම",
+        "description": "නිතිපතා කාල පරාසයන්හිදී දත්ත ස්වයංක්‍රීයව නැවුම් කරන්න"
+      },
+      "showCompletedTasks": {
+        "label": "සම්පූර්ණ කළ කාර්යයන් පෙන්වන්න",
+        "description": "ඔබගේ කාර්ය ලැයිස්තුවේ සම්පූර්ණ කළ කාර්යයන් පෙන්වන්න"
+      }
+    }
+  }
+}

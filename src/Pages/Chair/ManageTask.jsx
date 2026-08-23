@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import Header from '../../Components/Header/Header'
 import TaskBar from '../../Components/SerachAnd/SearchAndButton'
 import LeftNavChair from '../../Components/chair Component/LeftNavChair'
@@ -7,6 +8,7 @@ import ViewTasks from '../../Components/chair Component/ViewTask'
     
 
 const ManageTask = () => {
+   const { t } = useTranslation();
    const [activeView, setActiveView] = useState('add');
 
    const handleViewChange = (view) => {
@@ -16,7 +18,7 @@ const ManageTask = () => {
   return (
     <>
     <Header/>
-    <TaskBar title1="Add Tasks" title2="View Tasks"
+    <TaskBar title1={t('chair.manageTask.addTitle')} title2={t('chair.manageTask.viewTitle')}
      onAddClick={() => handleViewChange('add')}
         onViewClick={() => handleViewChange('view')}
         activeView={activeView}

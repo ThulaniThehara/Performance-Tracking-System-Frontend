@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "../../SCSS/MemberStyles/MemberDashboard.scss";
@@ -18,6 +19,8 @@ import {
   FaSearch,
   FaArrowRight,
   FaCalendarAlt,
+  FaCalendarCheck,
+  FaPlus,
   FaCheckCircle,
   FaClock,
   FaUserCheck,
@@ -31,14 +34,7 @@ import {
   FaCog,
 } from "react-icons/fa";
 
-const EVENT_TYPES = [
-  { value: "EVENT", label: "Event", color: "#6b52d1" },
-  { value: "SPECIAL_TASK", label: "Special Task", color: "#f59e0b" },
-  { value: "MEETING", label: "Meeting", color: "#3b82f6" },
-  { value: "DEADLINE", label: "Deadline", color: "#ef4444" },
-];
-
-const typeLabel = (t) => EVENT_TYPES.find((x) => x.value === t)?.label || "Event";
+const EVENT_TYPE_VALUES = ["EVENT", "SPECIAL_TASK", "MEETING", "DEADLINE"];
 
 const startOfDay = (d) => {
   const x = new Date(d);
@@ -65,6 +61,8 @@ const shortDate = (d) =>
   new Date(d).toLocaleDateString(undefined, { day: "numeric", month: "short" });
 
 const MemberDashboard = () => {
+  const { t } = useTranslation();
+  const typeLabel = (type) => t(`admin.home.eventTypes.${type}`, { defaultValue: t('admin.home.eventTypes.EVENT') });
   const user = getUser();
   const firstName = (user?.name || "Member").split(" ")[0];
   const navigate = useNavigate();
@@ -127,11 +125,11 @@ const MemberDashboard = () => {
       }
     } catch (err) {
       console.error("Error loading employee dashboard:", err);
-      setError("Failed to load dashboard data.");
+      setError(t('member.dashboard.loadError'));
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     loadAllData();
@@ -149,15 +147,15 @@ const MemberDashboard = () => {
     const ledMapped = ledProjects.map((p) => ({
       ...p,
       isChairperson: true,
-      role: "Chair Person",
+      role: t('member.dashboard.roles.chairPerson'),
     }));
     const contMapped = contributingProjects.map((p) => ({
       ...p,
       isChairperson: false,
-      role: "Contributor",
+      role: t('member.dashboard.roles.contributor'),
     }));
     return [...ledMapped, ...contMapped];
-  }, [ledProjects, contributingProjects]);
+  }, [ledProjects, contributingProjects, t]);
 
   const filteredProjects = useMemo(() => {
     if (projectFilter === "chaired") return allWorkedProjects.filter((p) => p.isChairperson);
@@ -188,30 +186,70 @@ const MemberDashboard = () => {
     };
   }, [allWorkedProjects, ledProjects, contributingProjects]);
 
+  // Combine society events + project deadlines automatically
+  const allCalendarEntries = useMemo(() => {
+    const projectDeadlines = [];
+    const seen = new Set();
+
+    allWorkedProjects.forEach((p) => {
+      const d = p.EndDate || p.endDate || p.StartDate || p.startDate;
+      if (d && !seen.has(p._id || p.id)) {
+        seen.add(p._id || p.id);
+        const projectName = p.PName || t('admin.home.defaultProjectName');
+        projectDeadlines.push({
+          _id: `proj-dl-${p._id || p.id}`,
+          title: `📌 ${t('admin.home.projectDeadlineTitle', { name: projectName })}`,
+          type: "DEADLINE",
+          startDate: d,
+          endDate: d,
+          location: p.society || p.department || (p.isChairperson ? t('member.dashboard.deadline.chairedLocation') : t('member.dashboard.deadline.memberLocation')),
+          isProjectDeadline: true,
+          projectName: p.PName,
+        });
+      }
+    });
+
+    return [...events, ...projectDeadlines].sort(
+      (a, b) => new Date(a.startDate) - new Date(b.startDate)
+    );
+  }, [events, allWorkedProjects, t]);
+
   const eventsOnSelected = useMemo(
-    () => events.filter((e) => coversDay(e, selectedDate)),
-    [events, selectedDate]
+    () => allCalendarEntries.filter((e) => coversDay(e, selectedDate)),
+    [allCalendarEntries, selectedDate]
   );
 
   const upcoming = useMemo(() => {
     const today = startOfDay(new Date()).getTime();
-    return events
+    return allCalendarEntries
       .filter((e) => startOfDay(e.endDate || e.startDate).getTime() >= today)
       .slice(0, 5);
-  }, [events]);
+  }, [allCalendarEntries]);
 
   const tileContent = ({ date, view }) => {
     if (view !== "month") return null;
-    const hits = events.filter((e) => coversDay(e, date));
-    if (!hits.length) return null;
+    const hits = allCalendarEntries.filter((e) => coversDay(e, date));
+    const nonDeadlineHits = hits.filter((e) => (e.type || "").toUpperCase() !== "DEADLINE");
+    if (!nonDeadlineHits.length) return null;
 
     return (
       <span className="tile-dots">
-        {hits.slice(0, 3).map((h) => (
-          <i key={h._id} className={`dot ${h.type.toLowerCase()}`} />
+        {nonDeadlineHits.slice(0, 3).map((h) => (
+          <i key={h._id} className={`dot ${(h.type || "event").toLowerCase()}`} />
         ))}
       </span>
     );
+  };
+
+  const tileClassName = ({ date, view }) => {
+    if (view !== "month") return null;
+    const hits = allCalendarEntries.filter((e) => coversDay(e, date));
+    const classes = [];
+    if (hits.length) classes.push("has-event");
+    if (hits.some((e) => (e.type || "").toUpperCase() === "DEADLINE")) {
+      classes.push("has-deadline");
+    }
+    return classes.join(" ");
   };
 
   const ongoingPct =
@@ -235,7 +273,7 @@ const MemberDashboard = () => {
             onClick={() => setActiveTab("home")}
           >
             <FaTachometerAlt className="nav-btn-icon" />
-            <span className="nav-btn-label">Dashboard</span>
+            <span className="nav-btn-label">{t('shell.nav.dashboard')}</span>
           </button>
 
           <button
@@ -246,22 +284,22 @@ const MemberDashboard = () => {
             }}
           >
             <FaFolder className="nav-btn-icon" />
-            <span className="nav-btn-label">My Projects</span>
+            <span className="nav-btn-label">{t('shell.nav.myProjects')}</span>
           </button>
 
           <button className="sidebar-nav-btn">
             <FaUsers className="nav-btn-icon" />
-            <span className="nav-btn-label">Teams</span>
+            <span className="nav-btn-label">{t('member.dashboard.sidebarTeams')}</span>
           </button>
 
           <button className="sidebar-nav-btn">
             <FaFileAlt className="nav-btn-icon" />
-            <span className="nav-btn-label">Reports</span>
+            <span className="nav-btn-label">{t('shell.nav.reports')}</span>
           </button>
 
           <button className="sidebar-nav-btn">
             <FaCalendarAlt className="nav-btn-icon" />
-            <span className="nav-btn-label">Calendar</span>
+            <span className="nav-btn-label">{t('member.dashboard.sidebarCalendar')}</span>
           </button>
         </nav>
 
@@ -269,7 +307,7 @@ const MemberDashboard = () => {
         <div className="sidebar-bottom-menu">
           <button className="sidebar-nav-btn">
             <FaCog className="nav-btn-icon" />
-            <span className="nav-btn-label">Settings</span>
+            <span className="nav-btn-label">{t('shell.nav.settings')}</span>
           </button>
         </div>
       </aside>
@@ -296,7 +334,7 @@ const MemberDashboard = () => {
           <div className="top-header-center">
             <div className="header-search-wrapper">
               <FaSearch className="search-icon" />
-              <input type="text" placeholder="Search activities, projects, and members..." />
+              <input type="text" placeholder={t('shell.memberHeader.searchPlaceholder')} />
             </div>
           </div>
 
@@ -356,7 +394,7 @@ const MemberDashboard = () => {
               <div className="avatar-circle">
                 {firstName.substring(0, 2).toUpperCase()}
               </div>
-              <span className="user-display-name">{user?.name || "Member"}</span>
+              <span className="user-display-name">{user?.name || t('shell.memberHeader.defaultName')}</span>
               <FaChevronDown className="dropdown-chevron" />
 
               {showUserDropdown && (
@@ -393,7 +431,7 @@ const MemberDashboard = () => {
                       transition: "all 0.2s ease",
                     }}
                   >
-                    <FaSignOutAlt /> Logout
+                    <FaSignOutAlt /> {t('shell.logout')}
                   </button>
                 </div>
               )}
@@ -415,9 +453,9 @@ const MemberDashboard = () => {
                 <div className="hero-banner-glow-bg" />
                 <div className="hero-banner-content">
                   <div className="hero-banner-text">
-                    <span className="hero-eyebrow">MEMBER DASHBOARD</span>
-                    <h1>Welcome back, {firstName} 👋</h1>
-                    <p>Track your project contributions, society events, and progress in real time.</p>
+                    <span className="hero-eyebrow">{t('member.dashboard.hero.eyebrow')}</span>
+                    <h1>{t('member.dashboard.hero.welcome', { name: firstName })}</h1>
+                    <p>{t('member.dashboard.hero.subtitle')}</p>
                   </div>
 
                   <div className="hero-banner-meta">
@@ -440,17 +478,17 @@ const MemberDashboard = () => {
                     }}
                   >
                     <div className="widget-head">
-                      <span className="widget-title">Total Projects Worked</span>
+                      <span className="widget-title">{t('member.dashboard.stats.totalWorkedTitle')}</span>
                       <span className="widget-icon-bg purple">
                         <FaFolder />
                       </span>
                     </div>
                     <div className="widget-body">
                       <div className="widget-info">
-                        <span className="trend-badge positive">All Participated</span>
+                        <span className="trend-badge positive">{t('member.dashboard.stats.allParticipated')}</span>
                         <h3 className="widget-value">{stats.totalWorked}</h3>
                         <p className="widget-sub">
-                          {stats.contributingCount} contributing projects
+                          {t('member.dashboard.stats.contributingSub', { count: stats.contributingCount })}
                         </p>
                       </div>
                       <div className="widget-chart">
@@ -474,16 +512,16 @@ const MemberDashboard = () => {
                     }}
                   >
                     <div className="widget-head">
-                      <span className="widget-title">Chaired Projects</span>
+                      <span className="widget-title">{t('member.dashboard.stats.chairedTitle')}</span>
                       <span className="widget-icon-bg gold">
                         <FaCrown />
                       </span>
                     </div>
                     <div className="widget-body">
                       <div className="widget-info">
-                        <span className="trend-badge gold">👑 Chairperson</span>
+                        <span className="trend-badge gold">{t('member.dashboard.stats.chairpersonBadge')}</span>
                         <h3 className="widget-value">{stats.chairedCount}</h3>
-                        <p className="widget-sub">Projects you lead as Chairperson</p>
+                        <p className="widget-sub">{t('member.dashboard.stats.chairedSub')}</p>
                       </div>
                       <div className="widget-chart">
                         <svg viewBox="0 0 100 40" className="chart-svg">
@@ -497,16 +535,16 @@ const MemberDashboard = () => {
                   {/* Card 3: Ongoing Projects */}
                   <article className="stat-widget-card">
                     <div className="widget-head">
-                      <span className="widget-title">Ongoing Projects</span>
+                      <span className="widget-title">{t('member.dashboard.stats.ongoingTitle')}</span>
                       <span className="widget-icon-bg green">
                         <FaClock />
                       </span>
                     </div>
                     <div className="widget-body">
                       <div className="widget-info">
-                        <span className="trend-badge positive">Currently Active</span>
+                        <span className="trend-badge positive">{t('member.dashboard.stats.currentlyActive')}</span>
                         <h3 className="widget-value">{stats.ongoingCount}</h3>
-                        <p className="widget-sub">{stats.completedCount} projects completed</p>
+                        <p className="widget-sub">{t('member.dashboard.stats.completedSub', { count: stats.completedCount })}</p>
                       </div>
                       <div className="widget-chart">
                         <svg viewBox="0 0 120 45" className="chart-svg">
@@ -528,8 +566,8 @@ const MemberDashboard = () => {
                   <article className="glass-panel">
                     <div className="panel-header">
                       <div>
-                        <h2>Project Progress</h2>
-                        <p className="panel-sub">Overall completion ratio across assigned projects</p>
+                        <h2>{t('member.dashboard.progressPanel.title')}</h2>
+                        <p className="panel-sub">{t('member.dashboard.progressPanel.subtitle')}</p>
                       </div>
                       <span className="percentage-display">{ongoingPct}%</span>
                     </div>
@@ -544,71 +582,89 @@ const MemberDashboard = () => {
                       <div className="progress-legend">
                         <span className="legend-item">
                           <i className="swatch ongoing" />
-                          Ongoing <strong>{stats.ongoingCount}</strong>
+                          {t('admin.home.progressLegend.ongoing')} <strong>{stats.ongoingCount}</strong>
                         </span>
                         <span className="legend-item">
                           <i className="swatch done" />
-                          Completed <strong>{stats.completedCount}</strong>
+                          {t('admin.home.progressLegend.completed')} <strong>{stats.completedCount}</strong>
                         </span>
                       </div>
                     </div>
                   </article>
 
                   {/* Upcoming Events & Deadlines */}
-                  <article className="glass-panel">
+                  <article className="glass-panel upcoming-panel-card">
                     <div className="panel-header">
-                      <div>
-                        <h2>Upcoming Events & Deadlines</h2>
-                        <p className="panel-sub">Scheduled society meetings and project task dates</p>
+                      <div className="header-title-wrapper">
+                        <div className="widget-icon-circle purple">
+                          <FaCalendarAlt />
+                        </div>
+                        <div>
+                          <h2>{t('member.dashboard.upcomingPanel.title')}</h2>
+                          <p className="panel-sub">{t('member.dashboard.upcomingPanel.subtitle')}</p>
+                        </div>
                       </div>
                       <span className="badge-count">{upcoming.length}</span>
                     </div>
 
                     {upcoming.length === 0 ? (
-                      <div className="empty-state">
-                        <p>No upcoming events</p>
-                        <span>Check back later for society activities and project deadlines.</span>
+                      <div className="modern-empty-state">
+                        <div className="empty-icon-badge">
+                          <FaCalendarCheck />
+                        </div>
+                        <h4>{t('member.dashboard.upcomingPanel.emptyTitle')}</h4>
+                        <p>{t('member.dashboard.upcomingPanel.emptyBody')}</p>
                       </div>
                     ) : (
-                      <ul className="upcoming-events-list">
-                        {upcoming.map((ev) => (
-                          <li key={ev._id} className="event-item">
-                            <div className="event-date-box">
-                              <span className="day-number">{new Date(ev.startDate).getDate()}</span>
-                              <span className="month-name">
-                                {new Date(ev.startDate).toLocaleDateString(undefined, {
-                                  month: "short",
-                                })}
-                              </span>
-                            </div>
-                            <div className="event-details">
-                              <p className="event-title">{ev.title}</p>
-                              <div className="event-meta">
-                                <span className={`type-tag ${ev.type.toLowerCase()}`}>
-                                  <i className={`dot ${ev.type.toLowerCase()}`} />
-                                  {typeLabel(ev.type)}
-                                </span>
-                                {ev.location && (
-                                  <span className="location-tag">
-                                    <FaMapMarkerAlt /> {ev.location}
+                      <div className="upcoming-events-grid">
+                        {upcoming.map((ev) => {
+                          const evDate = new Date(ev.startDate);
+                          const dayNum = evDate.getDate();
+                          const monthShort = evDate.toLocaleDateString(undefined, { month: "short" }).toUpperCase();
+                          return (
+                            <div key={ev._id} className="modern-event-card">
+                              <div className="event-date-pill">
+                                <span className="date-num">{dayNum}</span>
+                                <span className="date-month">{monthShort}</span>
+                              </div>
+                              <div className="event-info">
+                                <h4 className="event-name">{ev.title}</h4>
+                                <div className="event-tags-row">
+                                  <span className={`event-type-pill ${(ev.type || "event").toLowerCase()}`}>
+                                    <i className={`dot ${(ev.type || "event").toLowerCase()}`} />
+                                    {typeLabel(ev.type)}
                                   </span>
-                                )}
+                                  {ev.location && (
+                                    <span className="event-location-pill">
+                                      <FaMapMarkerAlt /> {ev.location}
+                                    </span>
+                                  )}
+                                </div>
                               </div>
                             </div>
-                          </li>
-                        ))}
-                      </ul>
+                          );
+                        })}
+                      </div>
                     )}
                   </article>
                 </div>
 
                 {/* Right Column: Organization Calendar */}
                 <div className="grid-col-right">
-                  <article className="glass-panel calendar-panel">
-                    <div className="panel-header">
-                      <div>
-                        <h2>Organization Calendar</h2>
-                        <p className="panel-sub">Society calendar & events schedule</p>
+                  <article className="glass-panel calendar-panel modern-cal-panel">
+                    {/* Top Display matching Image 3 */}
+                    <div className="cal-header-card">
+                      <div className="cal-date-display">
+                        <span className="cal-big-day">{selectedDate.getDate()}</span>
+                        <div className="cal-month-year-group">
+                          <span className="cal-month-name">
+                            {selectedDate.toLocaleDateString(undefined, { month: "long" })}
+                          </span>
+                          <span className="cal-year-num">{selectedDate.getFullYear()}</span>
+                        </div>
+                      </div>
+                      <div className="cal-icon-badge">
+                        <FaCalendarAlt />
                       </div>
                     </div>
 
@@ -616,15 +672,16 @@ const MemberDashboard = () => {
                       onChange={setSelectedDate}
                       value={selectedDate}
                       tileContent={tileContent}
+                      tileClassName={tileClassName}
                       prev2Label={null}
                       next2Label={null}
                     />
 
                     <div className="cal-legend">
-                      {EVENT_TYPES.map((t) => (
-                        <span key={t.value} className="legend-chip">
-                          <i className={`dot ${t.value.toLowerCase()}`} />
-                          {t.label}
+                      {EVENT_TYPE_VALUES.map((typeValue) => (
+                        <span key={typeValue} className="legend-chip">
+                          <i className={`dot ${typeValue.toLowerCase()}`} />
+                          {typeLabel(typeValue)}
                         </span>
                       ))}
                     </div>
@@ -633,18 +690,17 @@ const MemberDashboard = () => {
                       <div className="day-detail-head">
                         <span className="selected-date-text">{shortDate(selectedDate)}</span>
                         <span className="entries-count">
-                          {eventsOnSelected.length}{" "}
-                          {eventsOnSelected.length === 1 ? "entry" : "entries"}
+                          {t('admin.home.entries', { count: eventsOnSelected.length })}
                         </span>
                       </div>
 
                       {eventsOnSelected.length === 0 ? (
-                        <p className="day-empty">No events scheduled for this date.</p>
+                        <p className="day-empty">{t('member.dashboard.calendar.noEventsForDate')}</p>
                       ) : (
                         <ul className="day-list">
                           {eventsOnSelected.map((ev) => (
                             <li key={ev._id} className="day-event-card">
-                              <i className={`bar ${ev.type.toLowerCase()}`} />
+                              <i className={`bar ${(ev.type || "event").toLowerCase()}`} />
                               <div className="day-event-info">
                                 <p className="day-title">{ev.title}</p>
                                 <p className="day-meta">

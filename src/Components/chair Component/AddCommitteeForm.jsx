@@ -3,9 +3,11 @@ import { FaSearch, FaTimes, FaFolderOpen, FaUsers, FaTag, FaAlignLeft } from "re
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
 import "../../SCSS/ChairStyle/AddCommitteeForm.scss";
 
 const AddCommitteeForm = ({ projectId, onSuccess, onCancel }) => {
+    const { t } = useTranslation();
     const [formData, setFormData] = useState({
         committeeName: "",
         description: ""
@@ -63,7 +65,7 @@ const AddCommitteeForm = ({ projectId, onSuccess, onCancel }) => {
             setAllMembers(response.data.data || []);
         } catch (error) {
             console.error("Error fetching members:", error);
-            toast.warning("Couldn't connect to server");
+            toast.warning(t('addCommitteeForm.connectFailed'));
         }
     };
 
@@ -79,7 +81,7 @@ const AddCommitteeForm = ({ projectId, onSuccess, onCancel }) => {
         if (!selectedMembers.find((m) => m._id === member._id)) {
             setSelectedMembers([...selectedMembers, member]); 
         } else {
-            toast.info(`${member.name} is already added`);
+            toast.info(t('addCommitteeForm.alreadyAdded', { name: member.name }));
         }
         setSearchQuery("");
         setFilteredMembers([]);
@@ -89,7 +91,7 @@ const AddCommitteeForm = ({ projectId, onSuccess, onCancel }) => {
         const member = selectedMembers.find(m => m._id === memberId);
         setSelectedMembers(selectedMembers.filter((m) => m._id !== memberId));
         if (member) {
-            toast.info(`${member.name} removed from committee`);
+            toast.info(t('addCommitteeForm.removed', { name: member.name }));
         }
     };
 
@@ -98,22 +100,22 @@ const AddCommitteeForm = ({ projectId, onSuccess, onCancel }) => {
         
         // Validation
         if (!selectedProjectId && !projectId) {
-            toast.error("Please select a project for this committee");
+            toast.error(t('addCommitteeForm.selectProjectRequired'));
             return;
         }
 
         if (!formData.committeeName.trim()) {
-            toast.error("Please enter a committee name");
+            toast.error(t('addCommitteeForm.nameRequired'));
             return;
         }
 
         if (!formData.description.trim()) {
-            toast.error("Please enter a description");
+            toast.error(t('addCommitteeForm.descriptionRequired'));
             return;
         }
 
         if (selectedMembers.length === 0) {
-            toast.warning("Please add at least one member to the committee");
+            toast.warning(t('addCommitteeForm.membersRequired'));
             return;
         }
 
@@ -141,7 +143,7 @@ const AddCommitteeForm = ({ projectId, onSuccess, onCancel }) => {
 
             // Success notification
             toast.success(
-                `✅ ${response.data.message || "Committee created successfully!"}`,
+                `✅ ${response.data.message || t('addCommitteeForm.createdSuccess')}`,
                 {
                     position: "top-center",
                     autoClose: 3000,
@@ -167,8 +169,8 @@ const AddCommitteeForm = ({ projectId, onSuccess, onCancel }) => {
             // Error notification with specific message
             const errorMessage = 
                 error.response?.data?.message || 
-                error.response?.data?.error || 
-                "Failed to create committee. Please try again.";
+                error.response?.data?.error ||
+                t('addCommitteeForm.createFailed');
             
             toast.error(
                 `❌ ${errorMessage}`,
@@ -199,12 +201,12 @@ const AddCommitteeForm = ({ projectId, onSuccess, onCancel }) => {
             
             <form onSubmit={handleSubmit} className="add-committee-form">
                 <div className="form-header">
-                    <h2>Create New Committee</h2>
-                    <p>Select a project, specify details, and assign members.</p>
+                    <h2>{t('addCommitteeForm.heading')}</h2>
+                    <p>{t('addCommitteeForm.subtitle')}</p>
                 </div>
 
                 <div className="form-group">
-                    <label><FaFolderOpen className="field-icon" /> Select Project *</label>
+                    <label><FaFolderOpen className="field-icon" /> {t('addCommitteeForm.selectProjectLabel')}</label>
                     <select
                         name="projectId"
                         value={selectedProjectId}
@@ -213,7 +215,7 @@ const AddCommitteeForm = ({ projectId, onSuccess, onCancel }) => {
                         disabled={isSubmitting || !!projectId}
                         required
                     >
-                        <option value="">-- Choose a Project --</option>
+                        <option value="">{t('addCommitteeForm.selectProjectPlaceholder')}</option>
                         {projects.map((proj) => (
                             <option key={proj._id || proj.id} value={proj._id || proj.id}>
                                 {proj.PName || proj.projectName || proj.title}
@@ -223,25 +225,25 @@ const AddCommitteeForm = ({ projectId, onSuccess, onCancel }) => {
                 </div>
 
                 <div className="form-group">
-                    <label><FaTag className="field-icon" /> Committee Name *</label>
+                    <label><FaTag className="field-icon" /> {t('addCommitteeForm.nameLabel')}</label>
                     <input
                         type="text"
                         name="committeeName"
                         value={formData.committeeName}
                         onChange={handleChange}
-                        placeholder="e.g. Technical Operations Committee"
+                        placeholder={t('addCommitteeForm.namePlaceholder')}
                         disabled={isSubmitting}
                         required
                     />
                 </div>
 
                 <div className="form-group">
-                    <label><FaAlignLeft className="field-icon" /> Description *</label>
+                    <label><FaAlignLeft className="field-icon" /> {t('addCommitteeForm.descriptionLabel')}</label>
                     <textarea
                         name="description"
                         value={formData.description}
                         onChange={handleChange}
-                        placeholder="Describe the responsibilities and scope of this committee..."
+                        placeholder={t('addCommitteeForm.descriptionPlaceholder')}
                         rows="3"
                         disabled={isSubmitting}
                         required
@@ -249,12 +251,12 @@ const AddCommitteeForm = ({ projectId, onSuccess, onCancel }) => {
                 </div>
 
                 <div className="form-group">
-                    <label><FaUsers className="field-icon" /> Search and Add Members *</label>
+                    <label><FaUsers className="field-icon" /> {t('addCommitteeForm.searchMembersLabel')}</label>
                     <div className="search-input-wrapper">
                         <FaSearch className="search-icon" />
                         <input
                             type="text"
-                            placeholder="Search members by name or email..."
+                            placeholder={t('addCommitteeForm.searchPlaceholder')}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="search-input"
@@ -298,7 +300,7 @@ const AddCommitteeForm = ({ projectId, onSuccess, onCancel }) => {
 
                     {searchQuery && filteredMembers.length === 0 && (
                         <div className="no-results">
-                            No members found matching "{searchQuery}"
+                            {t('addCommitteeForm.noResults', { query: searchQuery })}
                         </div>
                     )}
                 </div>
@@ -306,7 +308,7 @@ const AddCommitteeForm = ({ projectId, onSuccess, onCancel }) => {
                 {/* Selected Members */}
                 {selectedMembers.length > 0 && (
                     <div className="selected-members-section">
-                        <label>Selected Members ({selectedMembers.length})</label>
+                        <label>{t('addCommitteeForm.selectedMembers', { count: selectedMembers.length })}</label>
                         <div className="selected-members-list">
                             {selectedMembers.map((member) => (
                                 <div key={member._id} className="selected-member-chip">
@@ -337,20 +339,20 @@ const AddCommitteeForm = ({ projectId, onSuccess, onCancel }) => {
                         {isSubmitting ? (
                             <>
                                 <span className="spinner"></span>
-                                Creating...
+                                {t('addCommitteeForm.creating')}
                             </>
                         ) : (
-                            "Add Committee"
+                            t('addCommitteeForm.addCommittee')
                         )}
                     </button>
                     {onCancel && (
-                        <button 
-                            type="button" 
-                            className="btn-cancel" 
+                        <button
+                            type="button"
+                            className="btn-cancel"
                             onClick={onCancel}
                             disabled={isSubmitting}
                         >
-                            Cancel
+                            {t('common.cancel')}
                         </button>
                     )}
                 </div>

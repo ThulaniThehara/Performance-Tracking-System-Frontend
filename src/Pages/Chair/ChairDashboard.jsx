@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Header from '../../Components/Header/Header';
 import LeftNavChair from '../../Components/chair Component/LeftNavChair';
 import "../../SCSS/ChairStyle/ChairDashboard.scss";
@@ -6,6 +7,7 @@ import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 import axios from "axios";
 
 const ChairDashboard = () => {
+  const { t } = useTranslation();
   const [user, setUser] = useState(null);
   const [committees, setCommittees] = useState([]);
   const [memberProjects, setMemberProjects] = useState([]); // { PName, role, year? }
@@ -178,13 +180,13 @@ const ChairDashboard = () => {
               </div>
 
               <div className="profile-actions">
-                <button className="btn btn-edit">EditProfile</button>
-                <button className="btn btn-primary">View more</button>
+                <button className="btn btn-edit">{t('chair.dashboard.editProfile')}</button>
+                <button className="btn btn-primary">{t('chair.dashboard.viewMore')}</button>
               </div>
 
               <hr className="profile-divider" />
 
-              <h4 className="section-title">Personal Details</h4>
+              <h4 className="section-title">{t('chair.dashboard.personalDetails')}</h4>
               <div className="profile-details">
                 <div className="detail-item">
                   <FaPhoneAlt className="icon" />
@@ -199,16 +201,16 @@ const ChairDashboard = () => {
                   <span>{user?.faculy || user?.faculty || 'University of Moratuwa'}</span>
                 </div>
                 <div style={{ marginTop: 8, fontSize: 13, color: '#666' }}>
-                  Joined: {user?.joinedDate ? new Date(user.joinedDate).toLocaleDateString() : '—'}
+                  {t('chair.dashboard.joined', { date: user?.joinedDate ? new Date(user.joinedDate).toLocaleDateString() : '—' })}
                 </div>
               </div>
 
-              <h4 className="section-title">Committees</h4>
+              <h4 className="section-title">{t('shell.nav.committees')}</h4>
               <ul className="committees-list">
-                {loading ? <li>Loading...</li> : (
+                {loading ? <li>{t('common.loading')}</li> : (
                   committees.length ? committees.map((c) => (
                     <li key={c._id || c.CName}>→ {c.CName}</li>
-                  )) : <li>— No committees</li>
+                  )) : <li>{t('chair.dashboard.noCommittees')}</li>
                 )}
               </ul>
             </div>
@@ -218,7 +220,7 @@ const ChairDashboard = () => {
           <main className="main-content">
             {/* Performance Card */}
             <div className="card performance-card">
-              <h3 className="card-title">2025 Performance review</h3>
+              <h3 className="card-title">{t('chair.dashboard.performanceReview')}</h3>
               <hr className="card-divider" />
 
               <div className="performance-body">
@@ -253,14 +255,14 @@ const ChairDashboard = () => {
                 </div>
 
                 <div className="performance-label">
-                  <p className="muted-text">Performance Rating</p>
+                  <p className="muted-text">{t('chair.dashboard.performanceRating')}</p>
                 </div>
               </div>
             </div>
 
             {/* Contribution Card */}
             <div className="card contribution-card">
-              <h3 className="card-title">Contribution</h3>
+              <h3 className="card-title">{t('chair.dashboard.contribution')}</h3>
               <hr className="card-divider" />
 
               <div className="contribution-icons">
@@ -274,26 +276,26 @@ const ChairDashboard = () => {
           {/* Right Experience Sidebar */}
           <aside className="experience-sidebar">
             <div className="experience-card">
-              <h3 className="card-title">Experience & performance</h3>
+              <h3 className="card-title">{t('chair.dashboard.experienceAndPerformance')}</h3>
 
               <div className="experience-section">
-                <p className="muted-text">Years of experience</p>
+                <p className="muted-text">{t('chair.dashboard.yearsOfExperience')}</p>
                 <div className="experience-number">{loading ? "—" : experienceYears}</div>
               </div>
 
               <div className="worked-projects">
-                <p className="muted-text">Worked Projects</p>
+                <p className="muted-text">{t('chair.dashboard.workedProjects')}</p>
                 <table className="projects-table">
                   <thead>
                     <tr>
-                      <th>Project</th>
-                      <th>Year</th>
-                      <th>Role</th>
+                      <th>{t('chair.dashboard.table.project')}</th>
+                      <th>{t('chair.dashboard.table.year')}</th>
+                      <th>{t('chair.dashboard.table.role')}</th>
                     </tr>
                   </thead>
                   <tbody>
                     {loading ? (
-                      <tr><td colSpan="3">Loading...</td></tr>
+                      <tr><td colSpan="3">{t('common.loading')}</td></tr>
                     ) : (
                       memberProjects.length ? memberProjects.map((p, i) => (
                         <tr key={i}>
@@ -302,7 +304,7 @@ const ChairDashboard = () => {
                           <td>{p.role || '—'}</td>
                         </tr>
                       )) : (
-                        <tr><td colSpan="3">— No projects found</td></tr>
+                        <tr><td colSpan="3">{t('chair.dashboard.noProjectsFound')}</td></tr>
                       )
                     )}
                   </tbody>

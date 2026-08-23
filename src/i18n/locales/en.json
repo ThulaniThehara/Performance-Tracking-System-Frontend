@@ -1,0 +1,1099 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "enums": {
+    "projectStatus": {
+      "UPCOMING": "Upcoming",
+      "ACTIVE": "Active",
+      "COMPLETED": "Completed"
+    },
+    "taskStatus": {
+      "TODO": "To Do",
+      "IN_PROGRESS": "In Progress",
+      "COMPLETED": "Completed",
+      "OVERDUE": "Overdue"
+    },
+    "priority": {
+      "LOW": "Low",
+      "MEDIUM": "Medium",
+      "HIGH": "High"
+    },
+    "role": {
+      "CHAIRPERSON": "Chairperson",
+      "COMMITTEE_LEAD": "Committee Lead",
+      "MEMBER": "Member",
+      "ADMIN": "Admin"
+    }
+  },
+  "taskCountdown": {
+    "completed": "Completed",
+    "dueToday": "Due today",
+    "dueTomorrow": "Due tomorrow",
+    "overdue_one": "{{count}} day overdue",
+    "overdue_other": "{{count}} days overdue",
+    "daysLeft_one": "{{count}} day left",
+    "daysLeft_other": "{{count}} days left"
+  },
+  "login": {
+    "hero": {
+      "search": "Search performance…",
+      "engaged": "engaged",
+      "trend": "+24% this term"
+    },
+    "features": [
+      "Real-time member participation tracking",
+      "Streamlined event & committee management",
+      "Transparent performance insights"
+    ],
+    "eyebrow": "Welcome back",
+    "heading": "Sign in to your account",
+    "subtitle": "Enter your credentials to access your dashboard.",
+    "usernameLabel": "Email or Index No",
+    "usernamePlaceholder": "Enter your email or index number",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "errors": {
+      "missingFields": "Please enter username and password.",
+      "loginFailed": "Login failed. Check credentials.",
+      "serverError": "Server error. Please try again."
+    },
+    "signingIn": "Signing in...",
+    "signIn": "Sign In",
+    "forgotPassword": "Forgot password?",
+    "showcaseTag": "Improve WorkForce Productivity & Engagement"
+  },
+  "shell": {
+    "logout": "Logout",
+    "header": {
+      "searchPlaceholder": "Search projects, members...",
+      "notifications": "Notifications"
+    },
+    "memberHeader": {
+      "searchPlaceholder": "Search activities, projects, and members...",
+      "defaultName": "Member"
+    },
+    "nav": {
+      "overview": "OVERVIEW",
+      "management": "MANAGEMENT",
+      "dashboard": "Dashboard",
+      "myProjects": "My Projects",
+      "profile": "Profile",
+      "projects": "Projects",
+      "committees": "Committees",
+      "members": "Members",
+      "reports": "Reports",
+      "settings": "Settings"
+    }
+  },
+  "projects": {
+    "card": {
+      "progress": "Progress",
+      "pendingTasks": "Pending tasks",
+      "pending": "Pending",
+      "manage": "Manage",
+      "view": "View"
+    },
+    "overview": {
+      "edit": "Edit",
+      "progressLabel": "Progress · {{completed}}/{{total}} tasks done",
+      "unassigned": "Unassigned"
+    },
+    "committeeCard": {
+      "ledByPrefix": "Led by",
+      "noLead": "No lead assigned",
+      "emptyMembers": "Nobody has been added to this committee yet.",
+      "addMember": "Add member"
+    },
+    "memberList": {
+      "makeLead": "Make lead",
+      "assignedTasksTitle": "{{count}} assigned tasks",
+      "lead": "Lead",
+      "noMembersYet": "No members yet."
+    },
+    "tasksWidget": {
+      "title": "Pending Tasks",
+      "loadError": "Could not load your tasks.",
+      "updateError": "Could not update the task.",
+      "tabs": {
+        "all": "All",
+        "today": "Today",
+        "upcoming": "Upcoming",
+        "overdue": "Overdue"
+      },
+      "emptyOverdue": "Nothing overdue — nicely done.",
+      "emptyToday": "No tasks due today.",
+      "emptyUpcoming": "No upcoming tasks scheduled.",
+      "emptyAll": "No pending tasks — all caught up!"
+    },
+    "home": {
+      "loadError": "Could not load your projects.",
+      "eyebrow": "Projects",
+      "greeting": "Hello, {{name}}",
+      "subtitle": "Everything you lead and contribute to across your societies",
+      "led": "Projects You Lead",
+      "contributing": "Projects You Contribute To",
+      "emptyTitle": "No projects yet",
+      "emptyBody": "You'll see a project here as soon as an admin adds you to one, or names you its chairperson."
+    },
+    "details": {
+      "loadError": "Could not load this project.",
+      "backToProjects": "Back to Projects",
+      "pageTitle": "Project Details",
+      "unavailableTitle": "Project unavailable",
+      "unavailableBody": "This project could not be found, or you are not a member of it.",
+      "committeesHeading": "Committees",
+      "addCommittee": "Add committee",
+      "priorityTitle": "{{priority}} priority",
+      "aria": {
+        "deleteTask": "Delete {{title}}",
+        "changeStatusOf": "Change status of {{title}}",
+        "editCommittee": "Edit committee",
+        "deleteCommittee": "Delete committee",
+        "hideMembers": "Hide members",
+        "showMembers": "Show members",
+        "removeMember": "Remove {{name}}",
+        "close": "Close"
+      },
+      "noCommitteeAssigned": "You are not assigned to any committee in this project.",
+      "noCommitteesYet": "No committees yet.",
+      "notOnCommittee": "Not on a committee",
+      "addMemberToProject": "Add member to project",
+      "tasksHeading": "Tasks",
+      "newTask": "New task",
+      "noTasksInView": "No tasks in this view.",
+      "taskFilters": {
+        "all": "All",
+        "todo": "To Do",
+        "inProgress": "In Progress",
+        "overdue": "Overdue",
+        "completed": "Completed"
+      },
+      "confirm": {
+        "deleteCommittee": "Delete \"{{name}}\"? Its members stay on the project.",
+        "removeMember": "Remove {{name}} from this project?",
+        "deleteTask": "Delete \"{{title}}\"?"
+      },
+      "errors": {
+        "committeeNameRequired": "Committee name is required.",
+        "somethingWrong": "Something went wrong.",
+        "loadMembersFailed": "Could not load the member list.",
+        "pickSomeone": "Pick someone to add.",
+        "taskTitleRequired": "Task title is required.",
+        "assignTask": "Assign the task to someone.",
+        "pickDueDate": "Pick a due date."
+      },
+      "modals": {
+        "committee": {
+          "editTitle": "Edit Committee",
+          "newTitle": "New Committee",
+          "saving": "Saving…",
+          "nameLabel": "Committee name",
+          "namePlaceholder": "e.g. Logistics",
+          "descriptionLabel": "Description",
+          "optional": "optional"
+        },
+        "member": {
+          "addToTitle": "Add to {{name}}",
+          "addTitle": "Add Project Member",
+          "adding": "Adding…",
+          "addMember": "Add member",
+          "personLabel": "Person",
+          "selectSomeone": "Select someone…",
+          "allAssigned": "Everyone available is already on this project.",
+          "positionLabel": "Position",
+          "positionPlaceholder": "e.g. Treasurer"
+        },
+        "task": {
+          "newTitle": "New Task",
+          "creating": "Creating…",
+          "createTask": "Create task",
+          "titleLabel": "Title",
+          "titlePlaceholder": "e.g. Book the auditorium",
+          "descriptionLabel": "Description",
+          "assignToLabel": "Assign to",
+          "selectMember": "Select member…",
+          "committeeLabel": "Committee",
+          "none": "None",
+          "dueDateLabel": "Due date",
+          "dueTimeLabel": "Due time",
+          "priorityLabel": "Priority",
+          "priorityLow": "Low",
+          "priorityMedium": "Medium",
+          "priorityHigh": "High"
+        },
+        "editProject": {
+          "title": "Edit Project",
+          "saving": "Saving…",
+          "saveChanges": "Save changes",
+          "nameLabel": "Project name",
+          "descriptionLabel": "Description",
+          "startDateLabel": "Start date",
+          "endDateLabel": "End date",
+          "statusLabel": "Status",
+          "statusUpcoming": "Upcoming",
+          "statusActive": "Active",
+          "statusCompleted": "Completed"
+        }
+      }
+    }
+  },
+  "admin": {
+    "committees": {
+      "addTitle": "Add New Committees",
+      "searchTitle": "Search Committee"
+    },
+    "addMember": {
+      "toastCreated": "Member account created successfully!",
+      "toastAccountCreated": "Account created successfully!",
+      "navLabel": "Member navigation",
+      "addNewMember": "Add New Member",
+      "viewMembers": "View Members",
+      "loadFailed": "Failed to load members",
+      "serverError": "Server error while loading members"
+    },
+    "addProject": {
+      "addTitle": "Add New Project",
+      "viewTitle": "View Projects",
+      "formHeading": "Project Form",
+      "selectedDate": "Selected date: {{date}}",
+      "toastCreated": "Project created successfully!",
+      "fallbackDepartment": "General",
+      "fallbackChair": "TBD"
+    },
+    "projects": {
+      "eyebrow": "Management",
+      "subtitle": "Create society projects and assign each one a chairperson",
+      "createProject": "Create Project",
+      "loadError": "Could not load projects.",
+      "loadMembersError": "Could not load the member list.",
+      "searchPlaceholder": "Search by project, society, or chairperson…",
+      "table": {
+        "project": "Project",
+        "status": "Status",
+        "startDate": "Start date"
+      },
+      "emptyNoProjects": "No projects yet",
+      "emptyNoMatches": "No matches",
+      "emptyNoProjectsBody": "Create the first project and assign it a chairperson to get started.",
+      "emptyNoMatchesBody": "Try a different search term.",
+      "modal": {
+        "nameLabel": "Project name",
+        "namePlaceholder": "e.g. Wanakkam 2026",
+        "descriptionPlaceholder": "What is this project about?",
+        "selectChairperson": "Select who will lead this project…",
+        "creating": "Creating…"
+      },
+      "errors": {
+        "nameRequired": "Please give the project a name.",
+        "startDateRequired": "Please pick a start date.",
+        "chairpersonRequired": "Please assign a chairperson.",
+        "createFailed": "Could not create the project."
+      }
+    },
+    "dashboard": {
+      "roleLabels": {
+        "CHAIRPERSON": "Chairperson",
+        "COMMITTEE_LEAD": "Committee Lead",
+        "MEMBER": "Member"
+      },
+      "defaultName": "Admin User",
+      "defaultRole": "System Administrator",
+      "photoTooShort": "Please select an image smaller than 5MB.",
+      "editProfile": "Edit Profile",
+      "uploadPhotoTitle": "Upload / Change Profile Picture",
+      "memberSince": "Member since {{date}}",
+      "overview": {
+        "title": "Dashboard Overview",
+        "allTime": "All Time Performance",
+        "projectsDone": "Projects Done",
+        "committeesHeaded": "Committees Headed",
+        "tasksCompleted": "Tasks Completed",
+        "contributionScore": "Contribution Score"
+      },
+      "myProjects": {
+        "title": "My Projects & Contributions",
+        "subtitle": "Society projects spearheaded or contributed by me",
+        "empty": "No projects yet — you haven't been added to any project.",
+        "year": "YEAR",
+        "contribution": "{{value}} Contribution"
+      },
+      "committees": {
+        "title": "Committees & Leadership",
+        "subtitle": "Leadership and member assignments",
+        "empty": "No committee assignments yet.",
+        "membersCount": "{{count}} Members",
+        "head": "Committee Head"
+      },
+      "recentActivity": {
+        "title": "Recent Activity",
+        "subtitle": "Latest milestones & contributions",
+        "empty": "No recent activity yet."
+      },
+      "time": {
+        "justNow": "Just now",
+        "minutesAgo_one": "{{count}} minute ago",
+        "minutesAgo_other": "{{count}} minutes ago",
+        "hoursAgo_one": "{{count}} hour ago",
+        "hoursAgo_other": "{{count}} hours ago",
+        "yesterday": "Yesterday",
+        "daysAgo_other": "{{count}} days ago"
+      },
+      "editModal": {
+        "title": "Edit Profile Information",
+        "changePhoto": "Change Photo",
+        "uploadPhoto": "Upload Photo",
+        "remove": "Remove",
+        "fullName": "Full Name",
+        "roleTitle": "Designation / Role Title",
+        "email": "Email Address",
+        "contactNumber": "Contact Number",
+        "faculty": "Faculty / Institution",
+        "saveChanges": "Save Changes"
+      }
+    },
+    "home": {
+      "defaultName": "Admin",
+      "defaultProjectName": "Project",
+      "loadError": "Could not load the dashboard.",
+      "projectDeadlineTitle": "{{name}} Deadline",
+      "organizationProject": "Organization Project",
+      "projectDeadlineDescription": "Official project deadline for {{name}}",
+      "eventTypes": {
+        "EVENT": "Event",
+        "SPECIAL_TASK": "Special Task",
+        "MEETING": "Meeting",
+        "DEADLINE": "Deadline"
+      },
+      "quickActions": {
+        "newProject": "New Project",
+        "addMember": "Add Member"
+      },
+      "hero": {
+        "welcome": "Welcome back, {{name}}",
+        "subtitle": "Hi {{name}}, this is your performance tracking dashboard.",
+        "newEvent": "New Event"
+      },
+      "widgets": {
+        "dailyActivity": "Daily Activity",
+        "statistics": "Statistics",
+        "performanceRate": "Performance Rate",
+        "totalProjectsSub": "Total Projects ({{count}} completed)",
+        "ongoingProjectsSub": "Ongoing Projects ({{count}} members active)",
+        "legendOngoing": "Ongoing",
+        "legendActive": "Active",
+        "legendDone": "Done"
+      },
+      "panels": {
+        "projectProgress": "Project Progress",
+        "quickActions": "Quick Actions",
+        "upcoming": "Upcoming",
+        "organizationCalendar": "Organization Calendar"
+      },
+      "progressLegend": {
+        "ongoing": "Ongoing",
+        "completed": "Completed"
+      },
+      "emptyProjects": {
+        "title": "No projects yet",
+        "body": "Create your first project and these figures update automatically.",
+        "cta": "Add a project"
+      },
+      "emptyUpcoming": {
+        "title": "Nothing scheduled",
+        "body": "Add an event and it will appear here and on the calendar."
+      },
+      "calendarAdd": "Add",
+      "today": "Today",
+      "entries_one": "{{count}} entry",
+      "entries_other": "{{count}} entries",
+      "noEntries": "No entries for this day.",
+      "remove": "Remove",
+      "modal": {
+        "addTitle": "Add to Calendar",
+        "titleLabel": "Title",
+        "titlePlaceholder": "e.g. Annual General Meeting",
+        "typeLabel": "Type",
+        "startDateLabel": "Start date",
+        "endDateLabel": "End date",
+        "optional": "optional",
+        "locationLabel": "Location",
+        "locationPlaceholder": "e.g. Sumanadasa Auditorium",
+        "descriptionLabel": "Description",
+        "descriptionPlaceholder": "Any details members should know",
+        "saving": "Saving…",
+        "addEvent": "Add Event"
+      },
+      "errors": {
+        "titleRequired": "Please give the event a title.",
+        "startDateRequired": "Please pick a start date.",
+        "saveEventFailed": "Could not save the event.",
+        "removeEventFailed": "Could not remove the event."
+      }
+    }
+  },
+  "chair": {
+    "dashboard": {
+      "editProfile": "Edit Profile",
+      "viewMore": "View more",
+      "personalDetails": "Personal Details",
+      "joined": "Joined: {{date}}",
+      "noCommittees": "— No committees",
+      "performanceReview": "2025 Performance review",
+      "performanceRating": "Performance Rating",
+      "contribution": "Contribution",
+      "experienceAndPerformance": "Experience & performance",
+      "yearsOfExperience": "Years of experience",
+      "workedProjects": "Worked Projects",
+      "table": {
+        "project": "Project",
+        "year": "Year",
+        "role": "Role"
+      },
+      "noProjectsFound": "— No projects found"
+    },
+    "manageCommittees": {
+      "addTitle": "Add Committee",
+      "viewTitle": "View Committees"
+    },
+    "manageTask": {
+      "addTitle": "Add Tasks",
+      "viewTitle": "View Tasks"
+    },
+    "myProject": {
+      "notFound": "Project not found",
+      "loadFailed": "Failed to load project",
+      "loading": "Loading project...",
+      "retry": "Retry",
+      "defaultTitle": "Project",
+      "noDescription": "No description available",
+      "statusLabel": "Status:",
+      "startDateLabel": "Start Date:",
+      "endDateLabel": "End Date:",
+      "unknownStatus": "Unknown",
+      "chairPersons": "Chair Persons",
+      "chairPersonRole": "Chair Person",
+      "noChairPersons": "No chair persons assigned"
+    }
+  },
+  "member": {
+    "dashboard": {
+      "loadError": "Failed to load dashboard data.",
+      "sidebarTeams": "Teams",
+      "sidebarCalendar": "Calendar",
+      "hero": {
+        "eyebrow": "MEMBER DASHBOARD",
+        "welcome": "Welcome back, {{name}} 👋",
+        "subtitle": "Track your project contributions, society events, and progress in real time."
+      },
+      "stats": {
+        "totalWorkedTitle": "Total Projects Worked",
+        "allParticipated": "All Participated",
+        "contributingSub": "{{count}} contributing projects",
+        "chairedTitle": "Chaired Projects",
+        "chairpersonBadge": "👑 Chairperson",
+        "chairedSub": "Projects you lead as Chairperson",
+        "ongoingTitle": "Ongoing Projects",
+        "currentlyActive": "Currently Active",
+        "completedSub": "{{count}} projects completed"
+      },
+      "progressPanel": {
+        "title": "Project Progress",
+        "subtitle": "Overall completion ratio across assigned projects"
+      },
+      "upcomingPanel": {
+        "title": "Upcoming Events & Deadlines",
+        "subtitle": "Scheduled society meetings, events and project deadlines",
+        "emptyTitle": "No Upcoming Events or Deadlines",
+        "emptyBody": "Check back later for society activities, meetings, and project deadlines."
+      },
+      "calendar": {
+        "noEventsForDate": "No events scheduled for this date."
+      },
+      "deadline": {
+        "chairedLocation": "Chaired Project",
+        "memberLocation": "Member Project"
+      },
+      "roles": {
+        "chairPerson": "Chair Person",
+        "contributor": "Contributor"
+      }
+    }
+  },
+  "auth": {
+    "setPassword": {
+      "invalidToken": "Invalid or missing token.",
+      "passwordTooShort": "Password must be at least 6 characters.",
+      "passwordMismatch": "Passwords do not match.",
+      "setFailed": "Failed to set password.",
+      "serverError": "Server error. Please try again.",
+      "successAlert": "Password set successfully. You can now login.",
+      "heading": "Set Your Password",
+      "subtitle": "Create a password to activate your account.",
+      "newPasswordPlaceholder": "New Password",
+      "confirmPasswordPlaceholder": "Confirm Password",
+      "settingButton": "Setting...",
+      "setPasswordButton": "Set Password"
+    }
+  },
+  "memberForm": {
+    "heading": "Registration Form",
+    "subtitle": "Fill out the form carefully for registration. An automated temporary password will be generated for the member.",
+    "fullNameLabel": "Member Full Name",
+    "firstNamePlaceholder": "First Name",
+    "lastNamePlaceholder": "Last Name",
+    "emailLabel": "Student E-mail",
+    "emailPlaceholder": "ex: myname@example.com",
+    "emailHint": "example@example.com",
+    "contactLabel": "Contact Number",
+    "contactPlaceholder": "07X XXX XXXX",
+    "contactHint": "Phone / WhatsApp number",
+    "indexNoLabel": "Student ID / Index No",
+    "indexNoPlaceholder": "ex: 225513L",
+    "indexNoHint": "Unique student identity number",
+    "genderLabel": "Gender",
+    "genderMale": "Male",
+    "genderFemale": "Female",
+    "genderOther": "Other",
+    "genderHint": "Select gender",
+    "facultyLabel": "Faculty / Department",
+    "facultySelectPlaceholder": "Please Select Faculty",
+    "facultyHint": "Select assigned faculty",
+    "batchLabel": "Academic Batch",
+    "batchSelectPlaceholder": "Please Select Batch",
+    "batchOption": "Batch {{n}}",
+    "batchHint": "Intake batch year",
+    "dobLabel": "Date of Birth",
+    "dobHint": "Date of birth",
+    "roleLabel": "System Role",
+    "roleHint": "Access privileges",
+    "tempPasswordLabel": "Temporary Password",
+    "generateNew": "Generate New",
+    "generateNewTitle": "Generate new random password",
+    "tempPasswordPlaceholder": "Temporary Password",
+    "hidePassword": "Hide password",
+    "showPassword": "Show password",
+    "copyPasswordTitle": "Copy password to clipboard",
+    "tempPasswordHint": "This temporary password will be assigned to the member for their initial login.",
+    "registering": "Registering Member...",
+    "submit": "Submit",
+    "securityNote": "The member can sign in using their Email or Index No and the generated temporary password.",
+    "errors": {
+      "nameRequired": "Please provide both first name and last name.",
+      "requiredFields": "Please fill in all required fields marked with *.",
+      "createFailed": "Failed to create account. Please check details.",
+      "serverError": "Server error. Please check your network connection and try again."
+    },
+    "successModal": {
+      "title": "Account Created!",
+      "description": "Member {{name}} has been registered successfully.",
+      "loginUsername": "Login Username:",
+      "indexNumber": "Index Number:",
+      "temporaryPassword": "Temporary Password:",
+      "copyCredentials": "Copy Credentials",
+      "copiedToClipboard": "Copied to Clipboard!",
+      "done": "Done / View Directory"
+    }
+  },
+  "memberView": {
+    "deleteDialog": {
+      "title": "Delete Member Account",
+      "message": "Are you sure you want to remove {{name}}? This action will permanently remove their access.",
+      "confirm": "Delete Member"
+    },
+    "listTitle": "Members list",
+    "tabs": {
+      "all": "All members",
+      "chairpersons": "Chairpersons",
+      "members": "Members"
+    },
+    "searchPlaceholder": "Search members...",
+    "loadingDirectory": "Loading member directory...",
+    "table": {
+      "indexId": "Index ID",
+      "joinedDate": "Joined Date",
+      "memberName": "Member Name",
+      "faculty": "Faculty",
+      "batch": "Batch",
+      "role": "Role",
+      "actions": "Actions",
+      "notApplicable": "N/A",
+      "generalFaculty": "General",
+      "batchValue": "Batch {{n}}"
+    },
+    "actions": {
+      "viewDetails": "View details",
+      "editMember": "Edit member",
+      "deleteMember": "Delete member"
+    },
+    "emptyResults": {
+      "title": "No members found",
+      "body": "There are no members matching your current filter selection."
+    },
+    "detail": {
+      "indexId": "Index / Student ID",
+      "email": "Email Address",
+      "contact": "Contact Number",
+      "faculty": "Faculty / Department",
+      "batch": "Academic Batch",
+      "batchValue": "Batch {{n}}",
+      "registrationDate": "Registration Date"
+    },
+    "editForm": {
+      "fullName": "Full Name",
+      "email": "Email Address",
+      "contact": "Contact Number",
+      "faculty": "Faculty",
+      "batch": "Batch",
+      "role": "System Role"
+    },
+    "editMemberButton": "Edit Member"
+  },
+  "projectAddForm": {
+    "heading": "Add New Project",
+    "subtitle": "Create a new project with detailed information",
+    "fillRequired": "Please fill in all required fields",
+    "nameLabel": "Project Name",
+    "namePlaceholder": "Enter project name",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Enter project description...",
+    "startDateLabel": "Start Date",
+    "endDateLabel": "End Date",
+    "departmentLabel": "Department",
+    "chairPersonLabel": "Chair Person",
+    "chairPersonPlaceholder": "Chair person name",
+    "departments": {
+      "general": "General",
+      "engineering": "Engineering",
+      "science": "Science",
+      "arts": "Arts"
+    },
+    "clear": "Clear"
+  },
+  "projectsTable": {
+    "deleteDialog": {
+      "title": "Delete Project",
+      "message": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone.",
+      "confirm": "Delete"
+    },
+    "notApplicable": "N/A",
+    "editTitle": "Edit Project",
+    "detailsTitle": "Project Details",
+    "detail": {
+      "projectName": "Project Name:",
+      "description": "Description:",
+      "startDate": "Start Date:",
+      "endDate": "End Date:",
+      "department": "Department:",
+      "chairPerson": "Chair Person:",
+      "memberCount": "Member Count:",
+      "status": "Status:"
+    },
+    "editButton": "Edit",
+    "addMembersTitle": "Add Members to {{name}}",
+    "addedMembers": "Added Members:",
+    "addButton": "Add",
+    "columns": {
+      "projectName": "Project Name",
+      "department": "Department",
+      "chairPerson": "Chair Person",
+      "members": "Members",
+      "startDate": "Start Date",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "actionTitles": {
+      "view": "View Details",
+      "addMembers": "Add Members",
+      "edit": "Edit Project",
+      "delete": "Delete Project"
+    },
+    "viewButton": "View"
+  },
+  "reports": {
+    "loadError": "Could not load reports data.",
+    "feedbackSubmitError": "Could not submit feedback.",
+    "complaintSubmitError": "Could not submit complaint.",
+    "anonymous": "Anonymous Member",
+    "hero": {
+      "eyebrow": "Analytics & Governance",
+      "title": "Reports & Feedback",
+      "subtitle": "Track organizational performance, project delivery metrics, and member feedback in real time.",
+      "reportIssue": "Report Issue",
+      "exportCsv": "Export CSV"
+    },
+    "kpi": {
+      "avgPerformance": "Average Performance",
+      "liveScore": "Live Score",
+      "avgPerformanceCaption": "Calculated from task deadline adherence",
+      "activeMembers": "Active Members",
+      "activeRoster": "Active Roster",
+      "activeMembersCaption": "Active chairpersons and committee members",
+      "projectHealth": "Project Health",
+      "onTrack": "On Track",
+      "projectHealthCaption": "{{count}} project(s) in scope",
+      "taskVelocity": "Task Velocity",
+      "completion": "Completion",
+      "taskVelocityCaption": "{{completed}} of {{total}} tasks finished"
+    },
+    "tabs": {
+      "performance": "Performance Scorecard",
+      "projects": "Project Summaries",
+      "feedback": "Feedback Hub",
+      "complaints": "Issue Tracker"
+    },
+    "searchPlaceholder": "Search in {{tab}}...",
+    "clearSearch": "Clear search",
+    "filters": {
+      "statusLabel": "Status:",
+      "periodLabel": "Period:",
+      "allStatuses": "All Statuses",
+      "excellent": "Excellent",
+      "good": "Good",
+      "needsAttention": "Needs Attention",
+      "active": "Active",
+      "completed": "Completed",
+      "upcoming": "Upcoming",
+      "resolved": "Resolved",
+      "inProgress": "In Progress",
+      "open": "Open",
+      "allTime": "All Time (Joined to Date)",
+      "thisMonth": "This Month",
+      "thisQuarter": "This Quarter",
+      "currentYear": "Current Year",
+      "reset": "Reset"
+    },
+    "performancePane": {
+      "title": "Member Performance Scorecard",
+      "subtitle": "Individual task execution, deadline adherence, and delivery metrics",
+      "exportScorecard": "Export Scorecard",
+      "loadingText": "Fetching live member scores from database...",
+      "emptyTitle": "No performance records found",
+      "emptyBody": "Try adjusting your search criteria or clear active filters.",
+      "columns": {
+        "memberDetails": "Member Details",
+        "assignedProjects": "Assigned Project(s)",
+        "tasksCompleted": "Tasks Completed",
+        "performanceScore": "Performance Score",
+        "rating": "Rating",
+        "deadlineAdherence": "Deadline Adherence"
+      },
+      "tasksDoneRatio": "{{done}} / {{total}} Done",
+      "onTimeCount": "{{count}} on-time",
+      "overdueCount": "{{count}} overdue"
+    },
+    "projectsPane": {
+      "title": "Project Delivery & Health",
+      "subtitle": "Milestone tracking, committee allocations, and task progression",
+      "exportSummary": "Export Summary",
+      "loadingText": "Fetching live project summaries from database...",
+      "emptyTitle": "No project records match your filter",
+      "emptyBody": "Try resetting the search terms or status filters.",
+      "ledBy": "Led by {{name}}",
+      "overallProgress": "Overall Progress",
+      "tasksMetric": "Tasks",
+      "health": "Health: {{value}}",
+      "tasksDonePercent": "{{pct}}% Tasks Done"
+    },
+    "feedbackPane": {
+      "title": "Member Feedback & Sentiment",
+      "subtitle": "Direct impressions, feature ideas, and suggestions from active users",
+      "submitNew": "Submit New Feedback",
+      "emptyTitle": "No feedback found",
+      "emptyBody": "Submit feedback or adjust your search filter.",
+      "ratedOf5": "Rated {{rating}} of 5",
+      "submittedOn": "Submitted on {{date}}"
+    },
+    "complaintsPane": {
+      "title": "Reported Issues & Inquiries",
+      "subtitle": "Track technical tickets, operational concerns, and resolution progress",
+      "fileIssue": "File An Issue",
+      "emptyTitle": "No reported issues match your criteria",
+      "emptyBody": "All operational tickets are currently in order.",
+      "priority": "Priority: {{value}}",
+      "reportedBy": "Reported by: {{name}}"
+    },
+    "feedbackModal": {
+      "title": "Send User Feedback",
+      "successTitle": "Thank You!",
+      "successBody": "Your feedback has been saved and shared with administration.",
+      "nameLabel": "Your Name / Role",
+      "namePlaceholder": "e.g. Alex Johnson (optional)",
+      "categoryLabel": "Feedback Category",
+      "categories": {
+        "suggestion": "Suggestion / Improvement",
+        "featureRequest": "Feature Request",
+        "general": "General Experience",
+        "bugReport": "UI / Usability Bug"
+      },
+      "ratingLabel": "Overall Experience Rating",
+      "starsOf5": "{{n}} of 5 Stars",
+      "messageLabel": "Feedback Message *",
+      "messagePlaceholder": "Describe your feedback or thoughts in detail...",
+      "submit": "Submit Feedback"
+    },
+    "complaintModal": {
+      "title": "Report An Issue or Ticket",
+      "successTitle": "Ticket Created",
+      "successBody": "Your issue ticket has been registered and assigned for review.",
+      "reporterLabel": "Reporter Name",
+      "reporterPlaceholder": "e.g. John Doe",
+      "categoryLabel": "Category",
+      "categories": {
+        "technical": "Technical Issue",
+        "dataEntry": "Data Entry Correction",
+        "access": "Access & Permissions",
+        "performance": "System Performance",
+        "other": "Other Inquiry"
+      },
+      "titleLabel": "Issue Title *",
+      "titlePlaceholder": "Short summary of the issue",
+      "priorityLabel": "Priority Level",
+      "priorities": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High",
+        "critical": "Critical"
+      },
+      "descriptionLabel": "Detailed Description *",
+      "descriptionPlaceholder": "Provide details or steps to reproduce the issue...",
+      "submit": "Submit Issue Ticket"
+    }
+  },
+  "memberProjects": {
+    "filters": {
+      "all": "All Projects",
+      "chaired": "Chaired",
+      "member": "Member"
+    },
+    "subtitle": "Projects you lead or contribute to",
+    "searchPlaceholder": "Search projects...",
+    "empty": {
+      "title": "No Projects Found",
+      "body": "We couldn't find any projects matching your selected filter or search criteria. Try clearing your filters to explore all assigned projects.",
+      "reset": "Reset Filters"
+    },
+    "card": {
+      "untitled": "Untitled Project",
+      "members": "MEMBERS",
+      "committees": "COMMITTEES",
+      "pending": "PENDING"
+    },
+    "avatarGroup": {
+      "teamMember": "Team Member",
+      "member": "Member"
+    },
+    "taskSidebar": {
+      "markCompleted": "Mark as completed",
+      "tasksToComplete_one": "{{count}} task to complete",
+      "tasksToComplete_other": "{{count}} tasks to complete",
+      "dueToday": "Due Today",
+      "priority": {
+        "high": "High",
+        "medium": "Med",
+        "low": "Low"
+      },
+      "allCaughtUp": "All caught up! 🎉",
+      "noPendingTasks": "No pending tasks assigned to you right now."
+    }
+  },
+  "chairNav": {
+    "home": "Home",
+    "manage": "Manage",
+    "tasks": "Tasks"
+  },
+  "addCommitteeForm": {
+    "connectFailed": "Couldn't connect to server",
+    "alreadyAdded": "{{name}} is already added",
+    "removed": "{{name}} removed from committee",
+    "selectProjectRequired": "Please select a project for this committee",
+    "nameRequired": "Please enter a committee name",
+    "descriptionRequired": "Please enter a description",
+    "membersRequired": "Please add at least one member to the committee",
+    "createdSuccess": "Committee created successfully!",
+    "createFailed": "Failed to create committee. Please try again.",
+    "heading": "Create New Committee",
+    "subtitle": "Select a project, specify details, and assign members.",
+    "selectProjectLabel": "Select Project *",
+    "selectProjectPlaceholder": "-- Choose a Project --",
+    "nameLabel": "Committee Name *",
+    "namePlaceholder": "e.g. Technical Operations Committee",
+    "descriptionLabel": "Description *",
+    "descriptionPlaceholder": "Describe the responsibilities and scope of this committee...",
+    "searchMembersLabel": "Search and Add Members *",
+    "searchPlaceholder": "Search members by name or email...",
+    "noResults": "No members found matching \"{{query}}\"",
+    "selectedMembers": "Selected Members ({{count}})",
+    "creating": "Creating...",
+    "addCommittee": "Add Committee"
+  },
+  "viewCommittees": {
+    "loadFailed": "Failed to load committees",
+    "memberAdded": "{{name}} added to committee",
+    "addMemberFailed": "Failed to add member",
+    "memberRemoved": "Member removed from committee",
+    "removeMemberFailed": "Failed to remove member",
+    "deletedSuccess": "Committee deleted successfully",
+    "deleteFailed": "Failed to delete committee",
+    "deleteDialog": {
+      "title": "Delete Committee?",
+      "message": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone and will remove all members from this committee."
+    },
+    "loading": "Loading committees...",
+    "noCommittees": "No committees found. Create one to get started!",
+    "deleteCommitteeTitle": "Delete committee",
+    "membersHeader": "Members ({{count}})",
+    "addMemberBtn": "Add Member",
+    "removeMemberTitle": "Remove member"
+  },
+  "addTask": {
+    "fetchCommitteesFailed": "Failed to fetch committees",
+    "fetchMembersFailed": "Failed to fetch committee members",
+    "endDateError": "End date must be after Start date.",
+    "selectCommitteeFirst": "Please select a committee first!",
+    "fixDateErrors": "Please fix date errors before submitting.",
+    "addedSuccess": "Tasks added successfully!",
+    "saveError": "Error saving tasks",
+    "selectCommitteeLabel": "Select Committee *",
+    "selectCommitteePlaceholder": "-- Select Committee --",
+    "columns": {
+      "taskName": "Task Name",
+      "description": "Description",
+      "assignedMembers": "Assigned Members",
+      "action": "Action"
+    },
+    "taskNamePlaceholder": "Enter task name",
+    "descriptionPlaceholder": "Enter description",
+    "selectMemberPlaceholder": "Select member...",
+    "addTaskBtn": "Add Task"
+  },
+  "viewTasks": {
+    "loadFailed": "Failed to load tasks",
+    "fetchMembersFailed": "Failed to fetch committee members",
+    "assignedUpdated": "Assigned member updated",
+    "updateAssignedFailed": "Failed to update assigned member",
+    "assignedMembersUpdated": "Assigned members updated",
+    "updateMembersFailed": "Failed to update members",
+    "deletedAllTasks": "Deleted all tasks under {{name}}",
+    "taskDeleted": "Task deleted successfully",
+    "deleteFailed": "Failed to delete",
+    "deleteDialog": {
+      "committeeTitle": "Delete Committee \"{{name}}\"?",
+      "taskTitle": "Delete Task?",
+      "committeeMessage": "This will remove all tasks under {{name}}.",
+      "taskMessage": "Are you sure you want to delete this task?"
+    },
+    "noTasks": "No tasks found",
+    "deleteAllTasksTitle": "Delete all tasks for this committee",
+    "deleteTaskTitle": "Delete task",
+    "startLabel": "Start:",
+    "dueLabel": "Due:",
+    "assignedToLabel": "Assigned To",
+    "editAssignedTitle": "Edit assigned member",
+    "noneOption": "-- none --"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your preferences and account settings",
+    "tabs": {
+      "general": "General",
+      "notifications": "Notifications",
+      "security": "Security",
+      "display": "Display"
+    },
+    "actions": {
+      "save": "Save Changes",
+      "reset": "Reset to Default",
+      "saveSuccess": "Settings saved successfully"
+    },
+    "general": {
+      "title": "General Settings",
+      "systemPreferences": "System Preferences",
+      "theme": {
+        "label": "Theme",
+        "description": "Choose your preferred color theme",
+        "light": "Light",
+        "dark": "Dark",
+        "auto": "Auto (System)"
+      },
+      "language": {
+        "label": "Language",
+        "description": "Select your preferred language"
+      },
+      "timezone": {
+        "label": "Timezone",
+        "description": "Set your timezone for events and notifications"
+      }
+    },
+    "notifications": {
+      "title": "Notification Settings",
+      "emailGroup": "Email Notifications",
+      "email": {
+        "label": "Email Notifications",
+        "description": "Receive email notifications for important events"
+      },
+      "taskReminders": {
+        "label": "Task Reminders",
+        "description": "Get notified about upcoming tasks and deadlines"
+      },
+      "committeeMeetings": {
+        "label": "Committee Meetings",
+        "description": "Notifications for committee meetings and announcements"
+      },
+      "projectUpdates": {
+        "label": "Project Updates",
+        "description": "Stay updated with project progress and milestones"
+      },
+      "performanceAlerts": {
+        "label": "Performance Alerts",
+        "description": "Receive alerts about your performance metrics"
+      }
+    },
+    "security": {
+      "title": "Security & Privacy",
+      "accountGroup": "Account Security",
+      "privacyGroup": "Privacy Settings",
+      "twoFactor": {
+        "label": "Two-Factor Authentication",
+        "description": "Add an extra layer of security to your account"
+      },
+      "sessionTimeout": {
+        "label": "Session Timeout (minutes)",
+        "description": "Auto-logout after inactivity period"
+      },
+      "activityLog": {
+        "label": "Activity Log",
+        "description": "Keep a record of your account activity"
+      },
+      "dataBackup": {
+        "label": "Data Backup",
+        "description": "Automatically backup your data"
+      }
+    },
+    "display": {
+      "title": "Display Settings",
+      "layoutGroup": "Layout & View",
+      "itemsPerPage": {
+        "label": "Items Per Page",
+        "description": "Set the number of items displayed per page",
+        "option": "{{n}} items"
+      },
+      "compactMode": {
+        "label": "Compact Mode",
+        "description": "Use a more compact layout with less spacing"
+      },
+      "autoRefresh": {
+        "label": "Auto-Refresh",
+        "description": "Automatically refresh data at regular intervals"
+      },
+      "showCompletedTasks": {
+        "label": "Show Completed Tasks",
+        "description": "Display completed tasks in your task list"
+      }
+    }
+  }
+}

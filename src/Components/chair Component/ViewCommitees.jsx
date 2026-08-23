@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaPlus, FaTrash, FaEdit, FaSave, FaTimes, FaSearch } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import ConfirmDialog from '../ConfirmationComponent/ConfirmDialog';
 import '../../SCSS/ChairStyle/ViewCommittees.scss';
 
 const ViewCommittees = ({ projectId }) => {
+    const { t } = useTranslation();
     const [committees, setCommittees] = useState([]);
     const [allMembers, setAllMembers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -46,7 +48,7 @@ const ViewCommittees = ({ projectId }) => {
             setCommittees(response.data.data || []);
         } catch (error) {
             console.error('Error fetching committees:', error);
-            toast.error('Failed to load committees');
+            toast.error(t('viewCommittees.loadFailed'));
             setCommittees([]);
         } finally {
             setLoading(false);
@@ -88,12 +90,12 @@ const ViewCommittees = ({ projectId }) => {
                     : committee
             ));
 
-            toast.success(`${member.name} added to committee`);
+            toast.success(t('viewCommittees.memberAdded', { name: member.name }));
             setSearchQuery("");
             setShowAddMember(null);
         } catch (error) {
             console.error('Error adding member:', error);
-            toast.error(error.response?.data?.message || 'Failed to add member');
+            toast.error(error.response?.data?.message || t('viewCommittees.addMemberFailed'));
         }
     };
 
@@ -116,10 +118,10 @@ const ViewCommittees = ({ projectId }) => {
                     : committee
             ));
 
-            toast.success('Member removed from committee');
+            toast.success(t('viewCommittees.memberRemoved'));
         } catch (error) {
             console.error('Error removing member:', error);
-            toast.error(error.response?.data?.message || 'Failed to remove member');
+            toast.error(error.response?.data?.message || t('viewCommittees.removeMemberFailed'));
         }
     };
 
@@ -151,11 +153,11 @@ const ViewCommittees = ({ projectId }) => {
             // Remove from local state
             setCommittees(committees.filter(committee => committee._id !== committeeId));
 
-            toast.success('Committee deleted successfully');
+            toast.success(t('viewCommittees.deletedSuccess'));
             closeDeleteConfirmation();
         } catch (error) {
             console.error('Error deleting committee:', error);
-            toast.error(error.response?.data?.message || 'Failed to delete committee');
+            toast.error(error.response?.data?.message || t('viewCommittees.deleteFailed'));
             closeDeleteConfirmation();
         }
     };
@@ -169,7 +171,7 @@ const ViewCommittees = ({ projectId }) => {
         return (
             <div className="view-committees-loading">
                 <div className="spinner-large"></div>
-                <p>Loading committees...</p>
+                <p>{t('viewCommittees.loading')}</p>
             </div>
         );
     }
@@ -181,17 +183,17 @@ const ViewCommittees = ({ projectId }) => {
             {/* Confirmation Dialog */}
             <ConfirmDialog
                 isOpen={confirmDialog.isOpen}
-                title="Delete Committee?"
-                message={`Are you sure you want to delete "${confirmDialog.committeeName}"? This action cannot be undone and will remove all members from this committee.`}
+                title={t('viewCommittees.deleteDialog.title')}
+                message={t('viewCommittees.deleteDialog.message', { name: confirmDialog.committeeName })}
                 onConfirm={confirmDeleteCommittee}
                 onCancel={closeDeleteConfirmation}
-                confirmText="Delete"
-                cancelText="Cancel"
+                confirmText={t('projectsTable.deleteDialog.confirm')}
+                cancelText={t('common.cancel')}
             />
 
             {committees.length === 0 ? (
                 <div className="no-committees">
-                    <p>No committees found. Create one to get started!</p>
+                    <p>{t('viewCommittees.noCommittees')}</p>
                 </div>
             ) : (
                 <div className="committees-grid">
@@ -202,7 +204,7 @@ const ViewCommittees = ({ projectId }) => {
                                 <button
                                     className="btn-delete-committee"
                                     onClick={() => openDeleteConfirmation(committee._id, committee.CName)}
-                                    title="Delete committee"
+                                    title={t('viewCommittees.deleteCommitteeTitle')}
                                 >
                                     <FaTrash />
                                 </button>
@@ -214,7 +216,7 @@ const ViewCommittees = ({ projectId }) => {
 
                             <div className="committee-members">
                                 <div className="members-header">
-                                    <span>Members ({committee.Members?.length || 0})</span>
+                                    <span>{t('viewCommittees.membersHeader', { count: committee.Members?.length || 0 })}</span>
                                 </div>
 
                                 <div className="members-list">
@@ -230,14 +232,14 @@ const ViewCommittees = ({ projectId }) => {
                                                 <button
                                                     className="btn-remove-member"
                                                     onClick={() => handleRemoveMember(committee._id, member._id)}
-                                                    title="Remove member"
+                                                    title={t('viewCommittees.removeMemberTitle')}
                                                 >
                                                     <FaTrash />
                                                 </button>
                                             </div>
                                         ))
                                     ) : (
-                                        <p className="no-members">No members added yet</p>
+                                        <p className="no-members">{t('projects.memberList.noMembersYet')}</p>
                                     )}
 
                                     {/* Empty slots for visual effect */}
@@ -254,7 +256,7 @@ const ViewCommittees = ({ projectId }) => {
                                     className="btn-add-member"
                                     onClick={() => toggleAddMember(committee._id)}
                                 >
-                                    <FaPlus /> Add Member
+                                    <FaPlus /> {t('viewCommittees.addMemberBtn')}
                                 </button>
 
                                 {/* Add Member Search */}
@@ -264,7 +266,7 @@ const ViewCommittees = ({ projectId }) => {
                                             <FaSearch className="search-icon" />
                                             <input
                                                 type="text"
-                                                placeholder="Search members..."
+                                                placeholder={t('memberView.searchPlaceholder')}
                                                 value={searchQuery}
                                                 onChange={(e) => setSearchQuery(e.target.value)}
                                                 className="search-input"

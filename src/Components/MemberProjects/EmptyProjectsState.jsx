@@ -1,7 +1,9 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { FaFolderOpen, FaUndo } from "react-icons/fa";
 
 const EmptyProjectsState = ({ onResetFilters }) => {
+  const { t } = useTranslation();
   return (
     <div
       className="empty-projects-state"
@@ -36,11 +38,11 @@ const EmptyProjectsState = ({ onResetFilters }) => {
       </div>
 
       <h3 style={{ margin: 0, fontSize: "1.4rem", fontWeight: 800, color: "#1d1545" }}>
-        No Projects Found
+        {t('memberProjects.empty.title')}
       </h3>
 
       <p style={{ margin: 0, maxWidth: 440, fontSize: "0.92rem", color: "#5b5575", lineHeight: 1.5 }}>
-        We couldn't find any projects matching your selected filter or search criteria. Try clearing your filters to explore all assigned projects.
+        {t('memberProjects.empty.body')}
       </p>
 
       {onResetFilters && (
@@ -63,7 +65,7 @@ const EmptyProjectsState = ({ onResetFilters }) => {
             transition: "all 0.2s ease",
           }}
         >
-          <FaUndo /> Reset Filters
+          <FaUndo /> {t('memberProjects.empty.reset')}
         </button>
       )}
     </div>

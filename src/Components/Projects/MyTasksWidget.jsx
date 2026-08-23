@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState, useMemo } from "react";
 import { FaRegCalendarCheck } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import TaskCard from "./TaskCard";
 import { apiFetch } from "../../utils/api";
 
@@ -7,14 +8,16 @@ import { apiFetch } from "../../utils/api";
  * The dashboard "Pending Tasks" widget.
  * Only displays active, pending, and overdue tasks that require action.
  */
-const TABS = [
-  { key: "all", label: "All" },
-  { key: "today", label: "Today" },
-  { key: "upcoming", label: "Upcoming" },
-  { key: "overdue", label: "Overdue" },
+const TAB_KEYS = [
+  { key: "all", labelKey: "all" },
+  { key: "today", labelKey: "today" },
+  { key: "upcoming", labelKey: "upcoming" },
+  { key: "overdue", labelKey: "overdue" },
 ];
 
-const MyTasksWidget = ({ title = "Pending Tasks" }) => {
+const MyTasksWidget = ({ title }) => {
+  const { t } = useTranslation();
+  const resolvedTitle = title ?? t('projects.tasksWidget.title');
   const [data, setData] = useState(null);
   const [tab, setTab] = useState("all");
   const [loading, setLoading] = useState(true);
@@ -29,11 +32,11 @@ const MyTasksWidget = ({ title = "Pending Tasks" }) => {
       if (!res) return;
       setData(res.data);
     } catch (e) {
-      setError(e.message || "Could not load your tasks.");
+      setError(e.message || t('projects.tasksWidget.loadError'));
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     load();
@@ -58,7 +61,7 @@ const MyTasksWidget = ({ title = "Pending Tasks" }) => {
       if (!res) return;
       await load();
     } catch (e) {
-      setError(e.message || "Could not update the task.");
+      setError(e.message || t('projects.tasksWidget.updateError'));
     } finally {
       setBusyId(null);
     }
@@ -76,25 +79,25 @@ const MyTasksWidget = ({ title = "Pending Tasks" }) => {
     <section className="pm-panel pm-tasks-widget">
       <header className="pm-panel-head">
         <h2>
-          <FaRegCalendarCheck aria-hidden="true" /> {title}
+          <FaRegCalendarCheck aria-hidden="true" /> {resolvedTitle}
         </h2>
         <span className="pm-count-pill">{counts.all}</span>
       </header>
 
       <div className="pm-tabs" role="tablist">
-        {TABS.map((t) => {
-          const n = counts[t.key] ?? 0;
+        {TAB_KEYS.map((tabInfo) => {
+          const n = counts[tabInfo.key] ?? 0;
           return (
             <button
-              key={t.key}
+              key={tabInfo.key}
               role="tab"
-              aria-selected={tab === t.key}
-              className={`pm-tab ${tab === t.key ? "is-active" : ""} ${
-                t.key === "overdue" && n > 0 ? "has-alert" : ""
+              aria-selected={tab === tabInfo.key}
+              className={`pm-tab ${tab === tabInfo.key ? "is-active" : ""} ${
+                tabInfo.key === "overdue" && n > 0 ? "has-alert" : ""
               }`}
-              onClick={() => setTab(t.key)}
+              onClick={() => setTab(tabInfo.key)}
             >
-              {t.label}
+              {t(`projects.tasksWidget.tabs.${tabInfo.labelKey}`)}
               <span className="tab-count">{n}</span>
             </button>
           );
@@ -110,12 +113,12 @@ const MyTasksWidget = ({ title = "Pending Tasks" }) => {
       ) : list.length === 0 ? (
         <p className="pm-empty-inline">
           {tab === "overdue"
-            ? "Nothing overdue — nicely done."
+            ? t('projects.tasksWidget.emptyOverdue')
             : tab === "today"
-            ? "No tasks due today."
+            ? t('projects.tasksWidget.emptyToday')
             : tab === "upcoming"
-            ? "No upcoming tasks scheduled."
-            : "No pending tasks — all caught up!"}
+            ? t('projects.tasksWidget.emptyUpcoming')
+            : t('projects.tasksWidget.emptyAll')}
         </p>
       ) : (
         <div className="pm-task-list">

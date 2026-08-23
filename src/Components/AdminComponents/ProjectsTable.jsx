@@ -1,10 +1,12 @@
 import { React, useState, useEffect } from 'react'
 import { FaEdit, FaTrash, FaUserPlus } from 'react-icons/fa'
+import { useTranslation } from 'react-i18next'
 import ConfirmDialog from '../ConfirmationComponent/ConfirmDialog'
 import "../../SCSS/AdminStyles/AdminProjectStyles/AdminProjects.scss"
 import "../../SCSS/componentStyle/ProjectModal.scss"
 
 const ProjectsTable = ({ projects: propsProjects = [], onProjectDeleted, onProjectUpdated, searchQuery = '', filterDept = '' }) => {
+  const { t } = useTranslation();
   const [selectedProject, setSelectedProject] = useState(null)
   const [isEditMode, setIsEditMode] = useState(false)
   const [showConfirmDelete, setShowConfirmDelete] = useState(false)
@@ -35,7 +37,7 @@ const ProjectsTable = ({ projects: propsProjects = [], onProjectDeleted, onProje
   });
 
   const formatDate = (date) => {
-    if (!date) return 'N/A'
+    if (!date) return t('projectsTable.notApplicable')
     return new Date(date).toLocaleDateString()
   }
 
@@ -108,12 +110,12 @@ const ProjectsTable = ({ projects: propsProjects = [], onProjectDeleted, onProje
     <div className='projects-table-container'>
       <ConfirmDialog
         isOpen={showConfirmDelete}
-        title="Delete Project"
-        message={`Are you sure you want to delete "${projectToDelete?.projectName}"? This action cannot be undone.`}
+        title={t('projectsTable.deleteDialog.title')}
+        message={t('projectsTable.deleteDialog.message', { name: projectToDelete?.projectName })}
         onConfirm={handleConfirmDelete}
         onCancel={() => setShowConfirmDelete(false)}
-        confirmText="Delete"
-        cancelText="Cancel"
+        confirmText={t('projectsTable.deleteDialog.confirm')}
+        cancelText={t('common.cancel')}
       />
 
       {/* Edit/View Project Modal */}
@@ -121,7 +123,7 @@ const ProjectsTable = ({ projects: propsProjects = [], onProjectDeleted, onProje
         <div className="modal-overlay" onClick={handleCloseModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2>{isEditMode ? 'Edit Project' : 'Project Details'}</h2>
+              <h2>{isEditMode ? t('projectsTable.editTitle') : t('projectsTable.detailsTitle')}</h2>
               <button className="modal-close" onClick={handleCloseModal}>×</button>
             </div>
 
@@ -130,41 +132,41 @@ const ProjectsTable = ({ projects: propsProjects = [], onProjectDeleted, onProje
                 <div className="project-details">
                   <div className="detail-section">
                     <div className="detail-item">
-                      <label>Project Name:</label>
+                      <label>{t('projectsTable.detail.projectName')}</label>
                       <p>{selectedProject.projectName}</p>
                     </div>
                     <div className="detail-item">
-                      <label>Description:</label>
+                      <label>{t('projectsTable.detail.description')}</label>
                       <p>{selectedProject.description}</p>
                     </div>
                   </div>
                   <div className="detail-section">
                     <div className="detail-item">
-                      <label>Start Date:</label>
+                      <label>{t('projectsTable.detail.startDate')}</label>
                       <p>{formatDate(selectedProject.startDate)}</p>
                     </div>
                     <div className="detail-item">
-                      <label>End Date:</label>
+                      <label>{t('projectsTable.detail.endDate')}</label>
                       <p>{formatDate(selectedProject.endDate)}</p>
                     </div>
                   </div>
                   <div className="detail-section">
                     <div className="detail-item">
-                      <label>Department:</label>
+                      <label>{t('projectsTable.detail.department')}</label>
                       <p>{selectedProject.department}</p>
                     </div>
                     <div className="detail-item">
-                      <label>Chair Person:</label>
+                      <label>{t('projectsTable.detail.chairPerson')}</label>
                       <p>{selectedProject.chairPerson}</p>
                     </div>
                   </div>
                   <div className="detail-section">
                     <div className="detail-item">
-                      <label>Member Count:</label>
+                      <label>{t('projectsTable.detail.memberCount')}</label>
                       <p>{selectedProject.memberCount}</p>
                     </div>
                     <div className="detail-item">
-                      <label>Status:</label>
+                      <label>{t('projectsTable.detail.status')}</label>
                       <p>{selectedProject.status}</p>
                     </div>
                   </div>
@@ -172,35 +174,35 @@ const ProjectsTable = ({ projects: propsProjects = [], onProjectDeleted, onProje
               ) : (
                 <form className="project-edit-form">
                   <div className="form-group">
-                    <label>Project Name:</label>
+                    <label>{t('projectsTable.detail.projectName')}</label>
                     <input type="text" name="projectName" value={editFormData.projectName} onChange={handleEditInputChange} />
                   </div>
                   <div className="form-group">
-                    <label>Description:</label>
+                    <label>{t('projectsTable.detail.description')}</label>
                     <textarea name="description" rows="3" value={editFormData.description} onChange={handleEditInputChange} />
                   </div>
                   <div className="form-row">
                     <div className="form-group">
-                      <label>Start Date:</label>
+                      <label>{t('projectsTable.detail.startDate')}</label>
                       <input type="date" name="startDate" value={editFormData.startDate} onChange={handleEditInputChange} />
                     </div>
                     <div className="form-group">
-                      <label>End Date:</label>
+                      <label>{t('projectsTable.detail.endDate')}</label>
                       <input type="date" name="endDate" value={editFormData.endDate} onChange={handleEditInputChange} />
                     </div>
                   </div>
                   <div className="form-row">
                     <div className="form-group">
-                      <label>Department:</label>
+                      <label>{t('projectsTable.detail.department')}</label>
                       <select name="department" value={editFormData.department} onChange={handleEditInputChange}>
-                        <option value="General">General</option>
-                        <option value="Engineering">Engineering</option>
-                        <option value="Science">Science</option>
-                        <option value="Arts">Arts</option>
+                        <option value="General">{t('projectAddForm.departments.general')}</option>
+                        <option value="Engineering">{t('projectAddForm.departments.engineering')}</option>
+                        <option value="Science">{t('projectAddForm.departments.science')}</option>
+                        <option value="Arts">{t('projectAddForm.departments.arts')}</option>
                       </select>
                     </div>
                     <div className="form-group">
-                      <label>Chair Person:</label>
+                      <label>{t('projectsTable.detail.chairPerson')}</label>
                       <input type="text" name="chairPerson" value={editFormData.chairPerson} onChange={handleEditInputChange} />
                     </div>
                   </div>
@@ -211,13 +213,13 @@ const ProjectsTable = ({ projects: propsProjects = [], onProjectDeleted, onProje
             <div className="modal-footer">
               {!isEditMode ? (
                 <>
-                  <button className="btn-secondary" onClick={handleCloseModal}>Close</button>
-                  <button className="btn-primary" onClick={() => setIsEditMode(true)}>Edit</button>
+                  <button className="btn-secondary" onClick={handleCloseModal}>{t('projects.details.aria.close')}</button>
+                  <button className="btn-primary" onClick={() => setIsEditMode(true)}>{t('projectsTable.editButton')}</button>
                 </>
               ) : (
                 <>
-                  <button className="btn-secondary" onClick={() => setIsEditMode(false)}>Cancel</button>
-                  <button className="btn-primary" onClick={handleSaveChanges}>Save Changes</button>
+                  <button className="btn-secondary" onClick={() => setIsEditMode(false)}>{t('common.cancel')}</button>
+                  <button className="btn-primary" onClick={handleSaveChanges}>{t('admin.dashboard.editModal.saveChanges')}</button>
                 </>
               )}
             </div>
@@ -230,7 +232,7 @@ const ProjectsTable = ({ projects: propsProjects = [], onProjectDeleted, onProje
         <div className="modal-overlay" onClick={() => setShowAddMembersModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2>Add Members to {selectedProject.projectName}</h2>
+              <h2>{t('projectsTable.addMembersTitle', { name: selectedProject.projectName })}</h2>
               <button className="modal-close" onClick={() => setShowAddMembersModal(false)}>×</button>
             </div>
 
@@ -243,18 +245,18 @@ const ProjectsTable = ({ projects: propsProjects = [], onProjectDeleted, onProje
                       <p>{member.email}</p>
                       <span className="dept-badge">{member.department}</span>
                     </div>
-                    <button 
+                    <button
                       className="btn-add-member"
                       onClick={() => handleAddMemberToProject(member.id)}
                     >
-                      Add
+                      {t('projectsTable.addButton')}
                     </button>
                   </div>
                 ))}
               </div>
               {projectMembers[selectedProject.id] && projectMembers[selectedProject.id].length > 0 && (
                 <div className="added-members">
-                  <h4>Added Members:</h4>
+                  <h4>{t('projectsTable.addedMembers')}</h4>
                   <ul>
                     {projectMembers[selectedProject.id].map(member => (
                       <li key={member.id}>{member.name} ({member.department})</li>
@@ -265,7 +267,7 @@ const ProjectsTable = ({ projects: propsProjects = [], onProjectDeleted, onProje
             </div>
 
             <div className="modal-footer">
-              <button className="btn-secondary" onClick={() => setShowAddMembersModal(false)}>Close</button>
+              <button className="btn-secondary" onClick={() => setShowAddMembersModal(false)}>{t('projects.details.aria.close')}</button>
             </div>
           </div>
         </div>
@@ -275,13 +277,13 @@ const ProjectsTable = ({ projects: propsProjects = [], onProjectDeleted, onProje
         <table className='modern-table'>
           <thead>
             <tr>
-              <th>Project Name</th>
-              <th>Department</th>
-              <th>Chair Person</th>
-              <th>Members</th>
-              <th>Start Date</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th>{t('projectsTable.columns.projectName')}</th>
+              <th>{t('projectsTable.columns.department')}</th>
+              <th>{t('projectsTable.columns.chairPerson')}</th>
+              <th>{t('projectsTable.columns.members')}</th>
+              <th>{t('projectsTable.columns.startDate')}</th>
+              <th>{t('projectsTable.columns.status')}</th>
+              <th>{t('projectsTable.columns.actions')}</th>
             </tr>
           </thead>
           <tbody>
@@ -302,31 +304,31 @@ const ProjectsTable = ({ projects: propsProjects = [], onProjectDeleted, onProje
                   <span className={`status-badge status-${project.status}`}>{project.status}</span>
                 </td>
                 <td className='actions-cell'>
-                  <button 
+                  <button
                     className='btn-action btn-view'
                     onClick={() => handleViewClick(project)}
-                    title='View Details'
+                    title={t('projectsTable.actionTitles.view')}
                   >
-                    View
+                    {t('projectsTable.viewButton')}
                   </button>
-                  <button 
+                  <button
                     className='btn-action btn-add-person'
                     onClick={() => handleAddMembers(project)}
-                    title='Add Members'
+                    title={t('projectsTable.actionTitles.addMembers')}
                   >
                     <FaUserPlus />
                   </button>
-                  <button 
+                  <button
                     className='btn-action btn-edit'
                     onClick={() => handleEditClick(project)}
-                    title='Edit Project'
+                    title={t('projectsTable.actionTitles.edit')}
                   >
                     <FaEdit />
                   </button>
-                  <button 
+                  <button
                     className='btn-action btn-delete'
                     onClick={() => handleDeleteClick(project)}
-                    title='Delete Project'
+                    title={t('projectsTable.actionTitles.delete')}
                   >
                     <FaTrash />
                   </button>

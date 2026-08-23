@@ -1,5 +1,6 @@
 import React from "react";
 import { FaCheck, FaSpinner, FaRegCircle, FaExclamationTriangle } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import { humanise } from "../../utils/projectUtils";
 
 /**
@@ -9,20 +10,22 @@ import { humanise } from "../../utils/projectUtils";
  * never communicated by colour alone.
  */
 const CONFIG = {
-  TODO: { cls: "is-todo", icon: <FaRegCircle />, label: "To Do" },
-  IN_PROGRESS: { cls: "is-progress", icon: <FaSpinner />, label: "In Progress" },
-  COMPLETED: { cls: "is-done", icon: <FaCheck />, label: "Completed" },
-  OVERDUE: { cls: "is-overdue", icon: <FaExclamationTriangle />, label: "Overdue" },
+  TODO: { cls: "is-todo", icon: <FaRegCircle /> },
+  IN_PROGRESS: { cls: "is-progress", icon: <FaSpinner /> },
+  COMPLETED: { cls: "is-done", icon: <FaCheck /> },
+  OVERDUE: { cls: "is-overdue", icon: <FaExclamationTriangle /> },
 };
 
 const TaskStatusBadge = ({ status, compact = false }) => {
+  const { t } = useTranslation();
   const key = String(status || "TODO").toUpperCase();
-  const cfg = CONFIG[key] || { cls: "is-todo", icon: <FaRegCircle />, label: humanise(key) };
+  const cfg = CONFIG[key] || { cls: "is-todo", icon: <FaRegCircle /> };
+  const label = t(`enums.taskStatus.${key}`, { defaultValue: humanise(key) });
 
   return (
     <span className={`pm-status-badge ${cfg.cls} ${compact ? "is-compact" : ""}`}>
       <span className="badge-icon" aria-hidden="true">{cfg.icon}</span>
-      {cfg.label}
+      {label}
     </span>
   );
 };

@@ -1,4 +1,5 @@
 import { FaArrowAltCircleLeft,FaArrowAltCircleRight } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import TaskBar from "../../Components/SerachAnd/SearchAndButton";
 import "../../SCSS/AdminStyles/AdminCommitees/Manage Committees.scss"
 import Header from "../../Components/Header/Header";
@@ -12,6 +13,7 @@ import ViewCommittees from "../../Components/chair Component/ViewCommitees";
 
 
 const ManageCommittees = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate()
 
     const [activeView, setActiveView] = useState('add');
@@ -30,8 +32,8 @@ const ManageCommittees = () => {
             <LeftNavigationBar/>
             <div className="taskbar-wrapper">
               <TaskBar
-            title1="Add New Committees"
-            title2="Search Committee"
+            title1={t('admin.committees.addTitle')}
+            title2={t('admin.committees.searchTitle')}
             onAddClick={() => handleViewChange('add')}
             onViewClick={() => handleViewChange('view')}
             activeView={activeView}

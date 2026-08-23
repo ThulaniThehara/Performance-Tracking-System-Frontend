@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import "../../SCSS/AdminStyles/AdminDashboard/AdminDashboard.scss";
 import Header from "../../Components/Header/Header";
 import LeftNavigationBar from "../../Components/LeftNavigationBar/LeftNavigationBar";
@@ -28,13 +29,8 @@ import {
 
 const baseURL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
-const ROLE_LABELS = {
-  CHAIRPERSON: "Chairperson",
-  COMMITTEE_LEAD: "Committee Lead",
-  MEMBER: "Member",
-};
-
 const AdminDashboard = () => {
+  const { t } = useTranslation();
   const fileInputRef = useRef(null);
 
   // Helper to format date cleanly
@@ -56,8 +52,8 @@ const AdminDashboard = () => {
 
   // Admin Personal Profile State (Dynamically fetched)
   const [profile, setProfile] = useState({
-    name: "Admin User",
-    role: "System Administrator",
+    name: t('admin.dashboard.defaultName'),
+    role: t('admin.dashboard.defaultRole'),
     indexNo: "ADM001",
     email: "admin@gmail.com",
     phone: "+94 77 123 4567",
@@ -142,7 +138,7 @@ const AdminDashboard = () => {
 
     // Check size limit (e.g. 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      alert("Please select an image smaller than 5MB.");
+      alert(t('admin.dashboard.photoTooShort'));
       return;
     }
 
@@ -193,13 +189,13 @@ const AdminDashboard = () => {
     if (!dateVal) return "";
     const diffMs = Date.now() - new Date(dateVal).getTime();
     const minutes = Math.floor(diffMs / 60000);
-    if (minutes < 1) return "Just now";
-    if (minutes < 60) return `${minutes} minute${minutes === 1 ? "" : "s"} ago`;
+    if (minutes < 1) return t('admin.dashboard.time.justNow');
+    if (minutes < 60) return t('admin.dashboard.time.minutesAgo', { count: minutes });
     const hours = Math.floor(minutes / 60);
-    if (hours < 24) return `${hours} hour${hours === 1 ? "" : "s"} ago`;
+    if (hours < 24) return t('admin.dashboard.time.hoursAgo', { count: hours });
     const days = Math.floor(hours / 24);
-    if (days === 1) return "Yesterday";
-    if (days < 7) return `${days} days ago`;
+    if (days === 1) return t('admin.dashboard.time.yesterday');
+    if (days < 7) return t('admin.dashboard.time.daysAgo', { count: days });
     return new Date(dateVal).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
   };
 
@@ -214,7 +210,7 @@ const AdminDashboard = () => {
           (data.projects || []).map((p) => ({
             id: p.id,
             name: p.name,
-            role: p.position || ROLE_LABELS[p.role] || "Member",
+            role: p.position || t(`admin.dashboard.roleLabels.${p.role}`, { defaultValue: t('admin.dashboard.roleLabels.MEMBER') }),
             year: p.year,
             category: p.societyName || "",
             status: p.status ? p.status.charAt(0) + p.status.slice(1).toLowerCase() : "Active",
@@ -226,7 +222,7 @@ const AdminDashboard = () => {
           (data.committees || []).map((c) => ({
             id: c.id,
             name: c.name,
-            role: c.role === "COMMITTEE_LEAD" ? "Committee Head" : (c.position || "Member"),
+            role: c.role === "COMMITTEE_LEAD" ? t('admin.dashboard.committees.head') : (c.position || t('admin.dashboard.roleLabels.MEMBER')),
             year: c.year,
             membersCount: c.membersCount,
             status: c.status ? c.status.charAt(0) + c.status.slice(1).toLowerCase() : "Active",
@@ -313,7 +309,7 @@ const AdminDashboard = () => {
                   type="button"
                   className="avatar-camera-btn"
                   onClick={() => fileInputRef.current?.click()}
-                  title="Upload / Change Profile Picture"
+                  title={t('admin.dashboard.uploadPhotoTitle')}
                 >
                   <FaCamera />
                 </button>
@@ -347,7 +343,7 @@ const AdminDashboard = () => {
                     }}
                   >
                     <FaEdit />
-                    <span>Edit Profile</span>
+                    <span>{t('admin.dashboard.editProfile')}</span>
                   </button>
                 </div>
 
@@ -366,7 +362,7 @@ const AdminDashboard = () => {
                   </div>
                   <div className="info-chip">
                     <FaCalendarAlt className="chip-icon" />
-                    <span>Member since {profile.joinedDate}</span>
+                    <span>{t('admin.dashboard.memberSince', { date: profile.joinedDate })}</span>
                   </div>
                 </div>
               </div>
@@ -377,9 +373,9 @@ const AdminDashboard = () => {
           {/* 2. Modern 4-Card Stats Overview (Matching Brand Palette) */}
           <section className="stats-overview-section">
             <div className="section-header-inline">
-              <h2>Dashboard Overview</h2>
+              <h2>{t('admin.dashboard.overview.title')}</h2>
               <span className="period-badge">
-                <FaCalendarCheck /> All Time Performance
+                <FaCalendarCheck /> {t('admin.dashboard.overview.allTime')}
               </span>
             </div>
 
@@ -392,7 +388,7 @@ const AdminDashboard = () => {
                   </div>
                 </div>
                 <div className="stat-body">
-                  <span className="stat-title">Projects Done</span>
+                  <span className="stat-title">{t('admin.dashboard.overview.projectsDone')}</span>
                   <span className="stat-number">
                     {loadingDashboard ? "…" : `${dashboardStats.completedProjects}/${dashboardStats.totalProjects}`}
                   </span>
@@ -415,7 +411,7 @@ const AdminDashboard = () => {
                   </div>
                 </div>
                 <div className="stat-body">
-                  <span className="stat-title">Committees Headed</span>
+                  <span className="stat-title">{t('admin.dashboard.overview.committeesHeaded')}</span>
                   <span className="stat-number">
                     {loadingDashboard ? "…" : `${dashboardStats.committeesLed}/${dashboardStats.totalCommittees}`}
                   </span>
@@ -438,7 +434,7 @@ const AdminDashboard = () => {
                   </div>
                 </div>
                 <div className="stat-body">
-                  <span className="stat-title">Tasks Completed</span>
+                  <span className="stat-title">{t('admin.dashboard.overview.tasksCompleted')}</span>
                   <span className="stat-number">
                     {loadingDashboard ? "…" : dashboardStats.tasksCompleted}
                   </span>
@@ -461,7 +457,7 @@ const AdminDashboard = () => {
                   </div>
                 </div>
                 <div className="stat-body">
-                  <span className="stat-title">Contribution Score</span>
+                  <span className="stat-title">{t('admin.dashboard.overview.contributionScore')}</span>
                   <span className="stat-number">
                     {loadingDashboard ? "…" : `${dashboardStats.contributionScore}%`}
                   </span>
@@ -478,19 +474,19 @@ const AdminDashboard = () => {
             <div className="grid-card-block">
               <div className="card-header-row">
                 <div className="title-group">
-                  <h3>My Projects & Contributions</h3>
-                  <p>Society projects spearheaded or contributed by me</p>
+                  <h3>{t('admin.dashboard.myProjects.title')}</h3>
+                  <p>{t('admin.dashboard.myProjects.subtitle')}</p>
                 </div>
               </div>
 
               <div className="event-cards-list">
                 {!loadingDashboard && myProjects.length === 0 && (
-                  <p className="empty-state-text">No projects yet — you haven't been added to any project.</p>
+                  <p className="empty-state-text">{t('admin.dashboard.myProjects.empty')}</p>
                 )}
                 {myProjects.map((p) => (
                   <div key={p.id} className="event-card-item">
                     <div className="event-date-box">
-                      <span className="date-label">YEAR</span>
+                      <span className="date-label">{t('admin.dashboard.myProjects.year')}</span>
                       <span className="date-year">{p.year}</span>
                     </div>
 
@@ -502,7 +498,7 @@ const AdminDashboard = () => {
                       <p className="event-subtitle">
                         <span>{p.role}</span>
                         <span className="bullet-sep">·</span>
-                        <span>{p.contribution} Contribution</span>
+                        <span>{t('admin.dashboard.myProjects.contribution', { value: p.contribution })}</span>
                       </p>
                     </div>
 
@@ -523,14 +519,14 @@ const AdminDashboard = () => {
               <div className="grid-card-block">
                 <div className="card-header-row">
                   <div className="title-group">
-                    <h3>Committees & Leadership</h3>
-                    <p>Leadership and member assignments</p>
+                    <h3>{t('admin.dashboard.committees.title')}</h3>
+                    <p>{t('admin.dashboard.committees.subtitle')}</p>
                   </div>
                 </div>
 
                 <div className="committees-mini-list">
                   {!loadingDashboard && myCommittees.length === 0 && (
-                    <p className="empty-state-text">No committee assignments yet.</p>
+                    <p className="empty-state-text">{t('admin.dashboard.committees.empty')}</p>
                   )}
                   {myCommittees.map((c) => (
                     <div key={c.id} className="committee-mini-item">
@@ -539,7 +535,7 @@ const AdminDashboard = () => {
                       </div>
                       <div className="committee-info">
                         <span className="c-name">{c.name}</span>
-                        <span className="c-role-text">{c.role} · {c.membersCount} Members</span>
+                        <span className="c-role-text">{c.role} · {t('admin.dashboard.committees.membersCount', { count: c.membersCount })}</span>
                       </div>
                       <span className={`c-status-tag ${c.status.toLowerCase()}`}>
                         {c.status}
@@ -553,14 +549,14 @@ const AdminDashboard = () => {
               <div className="grid-card-block">
                 <div className="card-header-row">
                   <div className="title-group">
-                    <h3>Recent Activity</h3>
-                    <p>Latest milestones & contributions</p>
+                    <h3>{t('admin.dashboard.recentActivity.title')}</h3>
+                    <p>{t('admin.dashboard.recentActivity.subtitle')}</p>
                   </div>
                 </div>
 
                 <div className="recent-activity-feed">
                   {!loadingDashboard && recentActivities.length === 0 && (
-                    <p className="empty-state-text">No recent activity yet.</p>
+                    <p className="empty-state-text">{t('admin.dashboard.recentActivity.empty')}</p>
                   )}
                   {recentActivities.map((a) => (
                     <div key={a.id} className="activity-feed-row">
@@ -591,7 +587,7 @@ const AdminDashboard = () => {
         <div className="modal-overlay" onClick={() => setIsEditModalOpen(false)}>
           <div className="modal-content admin-edit-profile-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2>Edit Profile Information</h2>
+              <h2>{t('admin.dashboard.editModal.title')}</h2>
               <button
                 type="button"
                 className="modal-close"
@@ -619,7 +615,7 @@ const AdminDashboard = () => {
                       onClick={() => fileInputRef.current?.click()}
                     >
                       <FaCamera />
-                      <span>{editFormData.profileImage ? "Change Photo" : "Upload Photo"}</span>
+                      <span>{editFormData.profileImage ? t('admin.dashboard.editModal.changePhoto') : t('admin.dashboard.editModal.uploadPhoto')}</span>
                     </button>
                     {editFormData.profileImage && (
                       <button
@@ -628,7 +624,7 @@ const AdminDashboard = () => {
                         onClick={handleRemovePhoto}
                       >
                         <FaTrashAlt />
-                        <span>Remove</span>
+                        <span>{t('admin.dashboard.editModal.remove')}</span>
                       </button>
                     )}
                   </div>
@@ -636,7 +632,7 @@ const AdminDashboard = () => {
 
                 <div className="modal-form-grid">
                   <div className="modal-field">
-                    <label>Full Name</label>
+                    <label>{t('admin.dashboard.editModal.fullName')}</label>
                     <input
                       type="text"
                       value={editFormData.name}
@@ -647,7 +643,7 @@ const AdminDashboard = () => {
                   </div>
 
                   <div className="modal-field">
-                    <label>Designation / Role Title</label>
+                    <label>{t('admin.dashboard.editModal.roleTitle')}</label>
                     <input
                       type="text"
                       value={editFormData.role}
@@ -658,7 +654,7 @@ const AdminDashboard = () => {
                   </div>
 
                   <div className="modal-field">
-                    <label>Email Address</label>
+                    <label>{t('admin.dashboard.editModal.email')}</label>
                     <input
                       type="email"
                       value={editFormData.email}
@@ -669,7 +665,7 @@ const AdminDashboard = () => {
                   </div>
 
                   <div className="modal-field">
-                    <label>Contact Number</label>
+                    <label>{t('admin.dashboard.editModal.contactNumber')}</label>
                     <input
                       type="text"
                       value={editFormData.phone}
@@ -679,7 +675,7 @@ const AdminDashboard = () => {
                   </div>
 
                   <div className="modal-field full-width">
-                    <label>Faculty / Institution</label>
+                    <label>{t('admin.dashboard.editModal.faculty')}</label>
                     <input
                       type="text"
                       value={editFormData.location}
@@ -696,10 +692,10 @@ const AdminDashboard = () => {
                   className="btn-modal secondary"
                   onClick={() => setIsEditModalOpen(false)}
                 >
-                  Cancel
+                  {t('common.cancel')}
                 </button>
                 <button type="submit" className="btn-modal primary">
-                  <FaCheck /> Save Changes
+                  <FaCheck /> {t('admin.dashboard.editModal.saveChanges')}
                 </button>
               </div>
             </form>

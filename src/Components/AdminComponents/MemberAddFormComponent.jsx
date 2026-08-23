@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import "../../SCSS/componentStyle/AdminMemberForm.scss";
 import {
   FaUserCheck,
@@ -40,6 +41,7 @@ const generateRandomPassword = () => {
 };
 
 const MemberAddFormComponent = ({ onMemberAdded }) => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -96,7 +98,7 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
     const fullName = `${formData.firstName} ${formData.lastName}`.trim();
 
     if (!formData.firstName.trim() || !formData.lastName.trim()) {
-      setError("Please provide both first name and last name.");
+      setError(t('memberForm.errors.nameRequired'));
       return;
     }
 
@@ -112,7 +114,7 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
     ];
     for (const key of required) {
       if (!String(formData[key] || "").trim()) {
-        setError("Please fill in all required fields marked with *.");
+        setError(t('memberForm.errors.requiredFields'));
         return;
       }
     }
@@ -146,7 +148,7 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
       const data = text ? JSON.parse(text) : null;
 
       if (!res.ok) {
-        setError(data?.message || "Failed to create account. Please check details.");
+        setError(data?.message || t('memberForm.errors.createFailed'));
         return;
       }
 
@@ -180,7 +182,7 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
         temporaryPassword: generateRandomPassword(),
       });
     } catch (err) {
-      setError("Server error. Please check your network connection and try again.");
+      setError(t('memberForm.errors.serverError'));
     } finally {
       setLoading(false);
     }
@@ -199,9 +201,9 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
       <div className="member-registration-card">
         {/* Form Header */}
         <div className="form-card-header">
-          <h1 className="form-main-heading">Registration Form</h1>
+          <h1 className="form-main-heading">{t('memberForm.heading')}</h1>
           <p className="form-sub-description">
-            Fill out the form carefully for registration. An automated temporary password will be generated for the member.
+            {t('memberForm.subtitle')}
           </p>
         </div>
 
@@ -210,7 +212,7 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
           {/* Row 1: Student Name (First Name + Last Name) */}
           <div className="form-group-full">
             <label className="form-label">
-              Member Full Name <span className="req-star">*</span>
+              {t('memberForm.fullNameLabel')} <span className="req-star">*</span>
             </label>
             <div className="form-dual-inputs">
               <div className="input-subfield">
@@ -219,11 +221,11 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleInputChange}
-                  placeholder="First Name"
+                  placeholder={t('memberForm.firstNamePlaceholder')}
                   className="modern-input"
                   required
                 />
-                <span className="field-hint">First Name</span>
+                <span className="field-hint">{t('memberForm.firstNamePlaceholder')}</span>
               </div>
               <div className="input-subfield">
                 <input
@@ -231,11 +233,11 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleInputChange}
-                  placeholder="Last Name"
+                  placeholder={t('memberForm.lastNamePlaceholder')}
                   className="modern-input"
                   required
                 />
-                <span className="field-hint">Last Name</span>
+                <span className="field-hint">{t('memberForm.lastNamePlaceholder')}</span>
               </div>
             </div>
           </div>
@@ -244,7 +246,7 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
           <div className="form-grid-2col">
             <div className="form-field-item">
               <label className="form-label" htmlFor="memberEmail">
-                Student E-mail <span className="req-star">*</span>
+                {t('memberForm.emailLabel')} <span className="req-star">*</span>
               </label>
               <input
                 type="email"
@@ -252,17 +254,17 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                placeholder="ex: myname@example.com"
+                placeholder={t('memberForm.emailPlaceholder')}
                 className="modern-input"
                 autoComplete="email"
                 required
               />
-              <span className="field-hint">example@example.com</span>
+              <span className="field-hint">{t('memberForm.emailHint')}</span>
             </div>
 
             <div className="form-field-item">
               <label className="form-label" htmlFor="contactNO">
-                Contact Number <span className="req-star">*</span>
+                {t('memberForm.contactLabel')} <span className="req-star">*</span>
               </label>
               <input
                 type="tel"
@@ -270,11 +272,11 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
                 name="contactNO"
                 value={formData.contactNO}
                 onChange={handleInputChange}
-                placeholder="07X XXX XXXX"
+                placeholder={t('memberForm.contactPlaceholder')}
                 className="modern-input"
                 required
               />
-              <span className="field-hint">Phone / WhatsApp number</span>
+              <span className="field-hint">{t('memberForm.contactHint')}</span>
             </div>
           </div>
 
@@ -282,7 +284,7 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
           <div className="form-grid-2col">
             <div className="form-field-item">
               <label className="form-label" htmlFor="indexNo">
-                Student ID / Index No <span className="req-star">*</span>
+                {t('memberForm.indexNoLabel')} <span className="req-star">*</span>
               </label>
               <input
                 type="text"
@@ -290,16 +292,16 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
                 name="indexNo"
                 value={formData.indexNo}
                 onChange={handleInputChange}
-                placeholder="ex: 225513L"
+                placeholder={t('memberForm.indexNoPlaceholder')}
                 className="modern-input"
                 required
               />
-              <span className="field-hint">Unique student identity number</span>
+              <span className="field-hint">{t('memberForm.indexNoHint')}</span>
             </div>
 
             <div className="form-field-item">
               <label className="form-label" htmlFor="gender">
-                Gender <span className="req-star">*</span>
+                {t('memberForm.genderLabel')} <span className="req-star">*</span>
               </label>
               <div className="custom-select-wrapper">
                 <select
@@ -310,12 +312,12 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
                   className="modern-select"
                   required
                 >
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
+                  <option value="male">{t('memberForm.genderMale')}</option>
+                  <option value="female">{t('memberForm.genderFemale')}</option>
+                  <option value="other">{t('memberForm.genderOther')}</option>
                 </select>
               </div>
-              <span className="field-hint">Select gender</span>
+              <span className="field-hint">{t('memberForm.genderHint')}</span>
             </div>
           </div>
 
@@ -323,7 +325,7 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
           <div className="form-grid-2col">
             <div className="form-field-item">
               <label className="form-label" htmlFor="faculty">
-                Faculty / Department <span className="req-star">*</span>
+                {t('memberForm.facultyLabel')} <span className="req-star">*</span>
               </label>
               <div className="custom-select-wrapper">
                 <select
@@ -334,7 +336,7 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
                   className="modern-select"
                   required
                 >
-                  <option value="">Please Select Faculty</option>
+                  <option value="">{t('memberForm.facultySelectPlaceholder')}</option>
                   {FACULTIES.map((f) => (
                     <option key={f} value={f}>
                       {f}
@@ -342,12 +344,12 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
                   ))}
                 </select>
               </div>
-              <span className="field-hint">Select assigned faculty</span>
+              <span className="field-hint">{t('memberForm.facultyHint')}</span>
             </div>
 
             <div className="form-field-item">
               <label className="form-label" htmlFor="batch">
-                Academic Batch <span className="req-star">*</span>
+                {t('memberForm.batchLabel')} <span className="req-star">*</span>
               </label>
               <div className="custom-select-wrapper">
                 <select
@@ -358,15 +360,15 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
                   className="modern-select"
                   required
                 >
-                  <option value="">Please Select Batch</option>
+                  <option value="">{t('memberForm.batchSelectPlaceholder')}</option>
                   {BATCHES.map((b) => (
                     <option key={b} value={b}>
-                      Batch {b}
+                      {t('memberForm.batchOption', { n: b })}
                     </option>
                   ))}
                 </select>
               </div>
-              <span className="field-hint">Intake batch year</span>
+              <span className="field-hint">{t('memberForm.batchHint')}</span>
             </div>
           </div>
 
@@ -374,7 +376,7 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
           <div className="form-grid-2col">
             <div className="form-field-item">
               <label className="form-label" htmlFor="dob">
-                Date of Birth <span className="req-star">*</span>
+                {t('memberForm.dobLabel')} <span className="req-star">*</span>
               </label>
               <input
                 type="date"
@@ -385,12 +387,12 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
                 className="modern-input"
                 required
               />
-              <span className="field-hint">Date of birth</span>
+              <span className="field-hint">{t('memberForm.dobHint')}</span>
             </div>
 
             <div className="form-field-item">
               <label className="form-label" htmlFor="userRole">
-                System Role <span className="req-star">*</span>
+                {t('memberForm.roleLabel')} <span className="req-star">*</span>
               </label>
               <div className="custom-select-wrapper">
                 <select
@@ -403,12 +405,12 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
                 >
                   {ROLES.map((r) => (
                     <option key={r} value={r}>
-                      {r}
+                      {t(`enums.role.${r}`, { defaultValue: r })}
                     </option>
                   ))}
                 </select>
               </div>
-              <span className="field-hint">Access privileges</span>
+              <span className="field-hint">{t('memberForm.roleHint')}</span>
             </div>
           </div>
 
@@ -416,15 +418,15 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
           <div className="form-group-full temp-password-section">
             <div className="temp-password-header">
               <label className="form-label" htmlFor="tempPasswordInput">
-                <FaKey className="label-icon" /> Temporary Password <span className="req-star">*</span>
+                <FaKey className="label-icon" /> {t('memberForm.tempPasswordLabel')} <span className="req-star">*</span>
               </label>
               <button
                 type="button"
                 className="generate-pass-btn"
                 onClick={handleGeneratePassword}
-                title="Generate new random password"
+                title={t('memberForm.generateNewTitle')}
               >
-                <FaSyncAlt className="btn-icon-spin" /> Generate New
+                <FaSyncAlt className="btn-icon-spin" /> {t('memberForm.generateNew')}
               </button>
             </div>
 
@@ -435,7 +437,7 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
                 name="temporaryPassword"
                 value={formData.temporaryPassword}
                 onChange={handleInputChange}
-                placeholder="Temporary Password"
+                placeholder={t('memberForm.tempPasswordPlaceholder')}
                 className="modern-input temp-pass-input"
                 required
               />
@@ -445,7 +447,7 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
                   type="button"
                   className="action-icon-btn"
                   onClick={() => setShowPassword((prev) => !prev)}
-                  title={showPassword ? "Hide password" : "Show password"}
+                  title={showPassword ? t('memberForm.hidePassword') : t('memberForm.showPassword')}
                 >
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
@@ -454,14 +456,14 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
                   type="button"
                   className={`action-icon-btn copy-btn ${copied ? "copied" : ""}`}
                   onClick={handleCopyPassword}
-                  title="Copy password to clipboard"
+                  title={t('memberForm.copyPasswordTitle')}
                 >
                   {copied ? <FaCheck /> : <FaCopy />}
                 </button>
               </div>
             </div>
             <span className="field-hint">
-              This temporary password will be assigned to the member for their initial login.
+              {t('memberForm.tempPasswordHint')}
             </span>
           </div>
 
@@ -482,17 +484,17 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
               {loading ? (
                 <>
                   <FaSpinner className="btn-spinner" />
-                  <span>Registering Member...</span>
+                  <span>{t('memberForm.registering')}</span>
                 </>
               ) : (
                 <>
                   <FaUserCheck className="btn-icon" />
-                  <span>Submit</span>
+                  <span>{t('memberForm.submit')}</span>
                 </>
               )}
             </button>
             <p className="form-security-note">
-              The member can sign in using their Email or Index No and the generated temporary password.
+              {t('memberForm.securityNote')}
             </p>
           </div>
         </form>
@@ -506,22 +508,22 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
               <FaCheckCircle />
             </div>
 
-            <h2 className="modal-title">Account Created!</h2>
+            <h2 className="modal-title">{t('memberForm.successModal.title')}</h2>
             <p className="modal-desc">
-              Member <strong>{successModalData.name}</strong> has been registered successfully.
+              {t('memberForm.successModal.description', { name: successModalData.name })}
             </p>
 
             <div className="credentials-box">
               <div className="credential-row">
-                <span className="cred-label">Login Username:</span>
+                <span className="cred-label">{t('memberForm.successModal.loginUsername')}</span>
                 <span className="cred-value">{successModalData.email}</span>
               </div>
               <div className="credential-row">
-                <span className="cred-label">Index Number:</span>
+                <span className="cred-label">{t('memberForm.successModal.indexNumber')}</span>
                 <span className="cred-value">{successModalData.indexNo}</span>
               </div>
               <div className="credential-row">
-                <span className="cred-label">Temporary Password:</span>
+                <span className="cred-label">{t('memberForm.successModal.temporaryPassword')}</span>
                 <span className="cred-value password-tag">{successModalData.temporaryPassword}</span>
               </div>
             </div>
@@ -533,7 +535,7 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
                 onClick={handleCopyAllCredentials}
               >
                 {copied ? <FaCheck /> : <FaCopy />}
-                <span>{copied ? "Copied to Clipboard!" : "Copy Credentials"}</span>
+                <span>{copied ? t('memberForm.successModal.copiedToClipboard') : t('memberForm.successModal.copyCredentials')}</span>
               </button>
 
               <button
@@ -541,7 +543,7 @@ const MemberAddFormComponent = ({ onMemberAdded }) => {
                 className="continue-btn"
                 onClick={handleCloseSuccessModal}
               >
-                Done / View Directory
+                {t('memberForm.successModal.done')}
               </button>
             </div>
           </div>

@@ -1,0 +1,1099 @@
+{
+  "common": {
+    "save": "சேமி",
+    "cancel": "ரத்துசெய்",
+    "loading": "ஏற்றுகிறது...",
+    "yes": "ஆம்",
+    "no": "இல்லை"
+  },
+  "enums": {
+    "projectStatus": {
+      "UPCOMING": "வரவிருக்கும்",
+      "ACTIVE": "செயலில்",
+      "COMPLETED": "முடிந்தது"
+    },
+    "taskStatus": {
+      "TODO": "செய்ய வேண்டியவை",
+      "IN_PROGRESS": "நடைபெறுகிறது",
+      "COMPLETED": "முடிந்தது",
+      "OVERDUE": "காலாவதியானது"
+    },
+    "priority": {
+      "LOW": "குறைவு",
+      "MEDIUM": "நடுத்தரம்",
+      "HIGH": "அதிகம்"
+    },
+    "role": {
+      "CHAIRPERSON": "தலைவர்",
+      "COMMITTEE_LEAD": "குழுத் தலைவர்",
+      "MEMBER": "உறுப்பினர்",
+      "ADMIN": "நிர்வாகி"
+    }
+  },
+  "taskCountdown": {
+    "completed": "முடிந்தது",
+    "dueToday": "இன்று நிலுவை",
+    "dueTomorrow": "நாளை நிலுவை",
+    "overdue_one": "{{count}} நாள் தாமதமானது",
+    "overdue_other": "{{count}} நாட்கள் தாமதமானது",
+    "daysLeft_one": "{{count}} நாள் மீதம்",
+    "daysLeft_other": "{{count}} நாட்கள் மீதம்"
+  },
+  "login": {
+    "hero": {
+      "search": "செயல்திறனைத் தேடு…",
+      "engaged": "ஈடுபாடு",
+      "trend": "இந்த காலாண்டில் +24%"
+    },
+    "features": [
+      "நேரடி உறுப்பினர் பங்கேற்பு கண்காணிப்பு",
+      "நிகழ்வு மற்றும் குழு மேலாண்மையை எளிமைப்படுத்தல்",
+      "வெளிப்படையான செயல்திறன் நுண்ணறிவுகள்"
+    ],
+    "eyebrow": "மீண்டும் வரவேற்கிறோம்",
+    "heading": "உங்கள் கணக்கில் உள்நுழையவும்",
+    "subtitle": "உங்கள் டாஷ்போர்டை அணுக உங்கள் சான்றுகளை உள்ளிடவும்.",
+    "usernameLabel": "மின்னஞ்சல் அல்லது அட்டவணை எண்",
+    "usernamePlaceholder": "உங்கள் மின்னஞ்சல் அல்லது அட்டவணை எண்ணை உள்ளிடவும்",
+    "passwordLabel": "கடவுச்சொல்",
+    "passwordPlaceholder": "உங்கள் கடவுச்சொல்லை உள்ளிடவும்",
+    "errors": {
+      "missingFields": "பயனர்பெயர் மற்றும் கடவுச்சொல்லை உள்ளிடவும்.",
+      "loginFailed": "உள்நுழைவு தோல்வியடைந்தது. சான்றுகளைச் சரிபார்க்கவும்.",
+      "serverError": "சர்வர் பிழை. மீண்டும் முயற்சிக்கவும்."
+    },
+    "signingIn": "உள்நுழைகிறது...",
+    "signIn": "உள்நுழைக",
+    "forgotPassword": "கடவுச்சொல் மறந்துவிட்டதா?",
+    "showcaseTag": "பணியாளர் உற்பத்தித்திறன் மற்றும் ஈடுபாட்டை மேம்படுத்துங்கள்"
+  },
+  "shell": {
+    "logout": "வெளியேறு",
+    "header": {
+      "searchPlaceholder": "திட்டங்கள், உறுப்பினர்களைத் தேடு...",
+      "notifications": "அறிவிப்புகள்"
+    },
+    "memberHeader": {
+      "searchPlaceholder": "செயல்பாடுகள், திட்டங்கள் மற்றும் உறுப்பினர்களைத் தேடு...",
+      "defaultName": "உறுப்பினர்"
+    },
+    "nav": {
+      "overview": "மேலோட்டம்",
+      "management": "மேலாண்மை",
+      "dashboard": "டாஷ்போர்டு",
+      "myProjects": "எனது திட்டங்கள்",
+      "profile": "சுயவிவரம்",
+      "projects": "திட்டங்கள்",
+      "committees": "குழுக்கள்",
+      "members": "உறுப்பினர்கள்",
+      "reports": "அறிக்கைகள்",
+      "settings": "அமைப்புகள்"
+    }
+  },
+  "projects": {
+    "card": {
+      "progress": "முன்னேற்றம்",
+      "pendingTasks": "நிலுவையிலுள்ள பணிகள்",
+      "pending": "நிலுவையில்",
+      "manage": "நிர்வகி",
+      "view": "காண்க"
+    },
+    "overview": {
+      "edit": "திருத்து",
+      "progressLabel": "முன்னேற்றம் · {{completed}}/{{total}} பணிகள் முடிந்தன",
+      "unassigned": "நியமிக்கப்படவில்லை"
+    },
+    "committeeCard": {
+      "ledByPrefix": "வழிநடத்துபவர்",
+      "noLead": "தலைவர் நியமிக்கப்படவில்லை",
+      "emptyMembers": "இந்த குழுவில் இதுவரை யாரும் சேர்க்கப்படவில்லை.",
+      "addMember": "உறுப்பினரைச் சேர்"
+    },
+    "memberList": {
+      "makeLead": "தலைவராக்கு",
+      "assignedTasksTitle": "ஒதுக்கப்பட்ட பணிகள் {{count}}",
+      "lead": "தலைவர்",
+      "noMembersYet": "இதுவரை உறுப்பினர்கள் இல்லை."
+    },
+    "tasksWidget": {
+      "title": "நிலுவையிலுள்ள பணிகள்",
+      "loadError": "உங்கள் பணிகளை ஏற்ற முடியவில்லை.",
+      "updateError": "பணியைப் புதுப்பிக்க முடியவில்லை.",
+      "tabs": {
+        "all": "அனைத்தும்",
+        "today": "இன்று",
+        "upcoming": "வரவிருக்கும்",
+        "overdue": "காலாவதியானது"
+      },
+      "emptyOverdue": "காலாவதியானது ஏதுமில்லை — சிறப்பாக செய்துள்ளீர்கள்.",
+      "emptyToday": "இன்று நிலுவையில் பணிகள் இல்லை.",
+      "emptyUpcoming": "வரவிருக்கும் பணிகள் திட்டமிடப்படவில்லை.",
+      "emptyAll": "நிலுவையிலுள்ள பணிகள் இல்லை — அனைத்தும் முடிந்தது!"
+    },
+    "home": {
+      "loadError": "உங்கள் திட்டங்களை ஏற்ற முடியவில்லை.",
+      "eyebrow": "திட்டங்கள்",
+      "greeting": "வணக்கம், {{name}}",
+      "subtitle": "நீங்கள் தலைமை தாங்கும் மற்றும் பங்களிக்கும் உங்கள் அனைத்து சங்க செயல்பாடுகளும்",
+      "led": "நீங்கள் வழிநடத்தும் திட்டங்கள்",
+      "contributing": "நீங்கள் பங்களிக்கும் திட்டங்கள்",
+      "emptyTitle": "இதுவரை திட்டங்கள் இல்லை",
+      "emptyBody": "ஒரு நிர்வாகி உங்களை ஒரு திட்டத்தில் சேர்த்தவுடன், அல்லது அதன் தலைவராக நியமித்தவுடன், நீங்கள் இங்கே ஒரு திட்டத்தைக் காண்பீர்கள்."
+    },
+    "details": {
+      "loadError": "இந்த திட்டத்தை ஏற்ற முடியவில்லை.",
+      "backToProjects": "திட்டங்களுக்குத் திரும்பு",
+      "pageTitle": "திட்ட விவரங்கள்",
+      "unavailableTitle": "திட்டம் கிடைக்கவில்லை",
+      "unavailableBody": "இந்த திட்டம் கண்டறியப்படவில்லை, அல்லது நீங்கள் இதன் உறுப்பினராக இல்லை.",
+      "committeesHeading": "குழுக்கள்",
+      "addCommittee": "குழுவைச் சேர்",
+      "priorityTitle": "{{priority}} முன்னுரிமை",
+      "aria": {
+        "deleteTask": "{{title}} ஐ நீக்கு",
+        "changeStatusOf": "{{title}} இன் நிலையை மாற்று",
+        "editCommittee": "குழுவைத் திருத்து",
+        "deleteCommittee": "குழுவை நீக்கு",
+        "hideMembers": "உறுப்பினர்களை மறை",
+        "showMembers": "உறுப்பினர்களைக் காட்டு",
+        "removeMember": "{{name}} ஐ அகற்று",
+        "close": "மூடு"
+      },
+      "noCommitteeAssigned": "இந்த திட்டத்தில் நீங்கள் எந்த குழுவிற்கும் நியமிக்கப்படவில்லை.",
+      "noCommitteesYet": "இதுவரை குழுக்கள் இல்லை.",
+      "notOnCommittee": "எந்த குழுவிலும் இல்லை",
+      "addMemberToProject": "திட்டத்திற்கு உறுப்பினரைச் சேர்",
+      "tasksHeading": "பணிகள்",
+      "newTask": "புதிய பணி",
+      "noTasksInView": "இந்தப் பார்வையில் பணிகள் இல்லை.",
+      "taskFilters": {
+        "all": "அனைத்தும்",
+        "todo": "செய்ய வேண்டியவை",
+        "inProgress": "நடைபெறுகிறது",
+        "overdue": "காலாவதியானது",
+        "completed": "முடிந்தது"
+      },
+      "confirm": {
+        "deleteCommittee": "\"{{name}}\" ஐ நீக்கவா? அதன் உறுப்பினர்கள் திட்டத்தில் தொடர்வார்கள்.",
+        "removeMember": "{{name}} ஐ இந்த திட்டத்திலிருந்து அகற்றவா?",
+        "deleteTask": "\"{{title}}\" ஐ நீக்கவா?"
+      },
+      "errors": {
+        "committeeNameRequired": "குழு பெயர் தேவை.",
+        "somethingWrong": "ஏதோ தவறு நடந்தது.",
+        "loadMembersFailed": "உறுப்பினர் பட்டியலை ஏற்ற முடியவில்லை.",
+        "pickSomeone": "சேர்க்க ஒருவரைத் தேர்ந்தெடுக்கவும்.",
+        "taskTitleRequired": "பணியின் தலைப்பு தேவை.",
+        "assignTask": "பணியை ஒருவருக்கு ஒதுக்கவும்.",
+        "pickDueDate": "நிலுவைத் தேதியைத் தேர்ந்தெடுக்கவும்."
+      },
+      "modals": {
+        "committee": {
+          "editTitle": "குழுவைத் திருத்து",
+          "newTitle": "புதிய குழு",
+          "saving": "சேமிக்கிறது…",
+          "nameLabel": "குழு பெயர்",
+          "namePlaceholder": "எ.கா. தளவாடங்கள்",
+          "descriptionLabel": "விளக்கம்",
+          "optional": "விருப்பமானது"
+        },
+        "member": {
+          "addToTitle": "{{name}} இல் சேர்",
+          "addTitle": "திட்ட உறுப்பினரைச் சேர்",
+          "adding": "சேர்க்கிறது…",
+          "addMember": "உறுப்பினரைச் சேர்",
+          "personLabel": "நபர்",
+          "selectSomeone": "ஒருவரைத் தேர்ந்தெடுக்கவும்…",
+          "allAssigned": "கிடைக்கக்கூடிய அனைவரும் ஏற்கனவே இந்த திட்டத்தில் உள்ளனர்.",
+          "positionLabel": "பதவி",
+          "positionPlaceholder": "எ.கா. பொருளாளர்"
+        },
+        "task": {
+          "newTitle": "புதிய பணி",
+          "creating": "உருவாக்குகிறது…",
+          "createTask": "பணியை உருவாக்கு",
+          "titleLabel": "தலைப்பு",
+          "titlePlaceholder": "எ.கா. அரங்கை முன்பதிவு செய்யவும்",
+          "descriptionLabel": "விளக்கம்",
+          "assignToLabel": "யாருக்கு ஒதுக்குவது",
+          "selectMember": "உறுப்பினரைத் தேர்ந்தெடுக்கவும்…",
+          "committeeLabel": "குழு",
+          "none": "ஏதுமில்லை",
+          "dueDateLabel": "நிலுவைத் தேதி",
+          "dueTimeLabel": "நிலுவை நேரம்",
+          "priorityLabel": "முன்னுரிமை",
+          "priorityLow": "குறைவு",
+          "priorityMedium": "நடுத்தரம்",
+          "priorityHigh": "அதிகம்"
+        },
+        "editProject": {
+          "title": "திட்டத்தைத் திருத்து",
+          "saving": "சேமிக்கிறது…",
+          "saveChanges": "மாற்றங்களைச் சேமி",
+          "nameLabel": "திட்டப் பெயர்",
+          "descriptionLabel": "விளக்கம்",
+          "startDateLabel": "தொடக்க தேதி",
+          "endDateLabel": "முடிவு தேதி",
+          "statusLabel": "நிலை",
+          "statusUpcoming": "வரவிருக்கும்",
+          "statusActive": "செயலில்",
+          "statusCompleted": "முடிந்தது"
+        }
+      }
+    }
+  },
+  "admin": {
+    "committees": {
+      "addTitle": "புதிய குழுக்களைச் சேர்",
+      "searchTitle": "குழுவைத் தேடு"
+    },
+    "addMember": {
+      "toastCreated": "உறுப்பினர் கணக்கு வெற்றிகரமாக உருவாக்கப்பட்டது!",
+      "toastAccountCreated": "கணக்கு வெற்றிகரமாக உருவாக்கப்பட்டது!",
+      "navLabel": "உறுப்பினர் வழிசெலுத்தல்",
+      "addNewMember": "புதிய உறுப்பினரைச் சேர்",
+      "viewMembers": "உறுப்பினர்களைக் காண்க",
+      "loadFailed": "உறுப்பினர்களை ஏற்ற முடியவில்லை",
+      "serverError": "உறுப்பினர்களை ஏற்றும்போது சர்வர் பிழை"
+    },
+    "addProject": {
+      "addTitle": "புதிய திட்டத்தைச் சேர்",
+      "viewTitle": "திட்டங்களைக் காண்க",
+      "formHeading": "திட்ட படிவம்",
+      "selectedDate": "தேர்ந்தெடுக்கப்பட்ட தேதி: {{date}}",
+      "toastCreated": "திட்டம் வெற்றிகரமாக உருவாக்கப்பட்டது!",
+      "fallbackDepartment": "பொது",
+      "fallbackChair": "முடிவு செய்யப்படவில்லை"
+    },
+    "projects": {
+      "eyebrow": "மேலாண்மை",
+      "subtitle": "சங்கத் திட்டங்களை உருவாக்கி ஒவ்வொன்றிற்கும் தலைவரை நியமிக்கவும்",
+      "createProject": "திட்டத்தை உருவாக்கு",
+      "loadError": "திட்டங்களை ஏற்ற முடியவில்லை.",
+      "loadMembersError": "உறுப்பினர் பட்டியலை ஏற்ற முடியவில்லை.",
+      "searchPlaceholder": "திட்டம், சங்கம் அல்லது தலைவர் மூலம் தேடு…",
+      "table": {
+        "project": "திட்டம்",
+        "status": "நிலை",
+        "startDate": "தொடக்க தேதி"
+      },
+      "emptyNoProjects": "இதுவரை திட்டங்கள் இல்லை",
+      "emptyNoMatches": "பொருத்தங்கள் இல்லை",
+      "emptyNoProjectsBody": "தொடங்க முதல் திட்டத்தை உருவாக்கி அதற்கு ஒரு தலைவரை நியமிக்கவும்.",
+      "emptyNoMatchesBody": "வேறு தேடல் சொல்லை முயற்சிக்கவும்.",
+      "modal": {
+        "nameLabel": "திட்டப் பெயர்",
+        "namePlaceholder": "எ.கா. வணக்கம் 2026",
+        "descriptionPlaceholder": "இந்த திட்டம் எதைப் பற்றியது?",
+        "selectChairperson": "இந்த திட்டத்தை யார் வழிநடத்துவார்கள் எனத் தேர்ந்தெடுக்கவும்…",
+        "creating": "உருவாக்குகிறது…"
+      },
+      "errors": {
+        "nameRequired": "திட்டத்திற்கு ஒரு பெயரைக் கொடுக்கவும்.",
+        "startDateRequired": "தொடக்க தேதியைத் தேர்ந்தெடுக்கவும்.",
+        "chairpersonRequired": "ஒரு தலைவரை நியமிக்கவும்.",
+        "createFailed": "திட்டத்தை உருவாக்க முடியவில்லை."
+      }
+    },
+    "dashboard": {
+      "roleLabels": {
+        "CHAIRPERSON": "தலைவர்",
+        "COMMITTEE_LEAD": "குழுத் தலைவர்",
+        "MEMBER": "உறுப்பினர்"
+      },
+      "defaultName": "நிர்வாக பயனர்",
+      "defaultRole": "கணினி நிர்வாகி",
+      "photoTooShort": "5MB க்கும் குறைவான படத்தைத் தேர்ந்தெடுக்கவும்.",
+      "editProfile": "சுயவிவரத்தைத் திருத்து",
+      "uploadPhotoTitle": "சுயவிவரப் படத்தைப் பதிவேற்று / மாற்று",
+      "memberSince": "{{date}} முதல் உறுப்பினர்",
+      "overview": {
+        "title": "டாஷ்போர்டு மேலோட்டம்",
+        "allTime": "எல்லா காலத்தின் செயல்திறன்",
+        "projectsDone": "முடிக்கப்பட்ட திட்டங்கள்",
+        "committeesHeaded": "தலைமை தாங்கிய குழுக்கள்",
+        "tasksCompleted": "முடிக்கப்பட்ட பணிகள்",
+        "contributionScore": "பங்களிப்பு மதிப்பெண்"
+      },
+      "myProjects": {
+        "title": "எனது திட்டங்கள் மற்றும் பங்களிப்புகள்",
+        "subtitle": "என்னால் தலைமை தாங்கப்பட்ட அல்லது பங்களிக்கப்பட்ட சங்கத் திட்டங்கள்",
+        "empty": "இதுவரை திட்டங்கள் இல்லை — நீங்கள் எந்த திட்டத்திலும் சேர்க்கப்படவில்லை.",
+        "year": "ஆண்டு",
+        "contribution": "பங்களிப்பு {{value}}"
+      },
+      "committees": {
+        "title": "குழுக்கள் மற்றும் தலைமைத்துவம்",
+        "subtitle": "தலைமைத்துவம் மற்றும் உறுப்பினர் நியமனங்கள்",
+        "empty": "இதுவரை குழு நியமனங்கள் இல்லை.",
+        "membersCount": "{{count}} உறுப்பினர்கள்",
+        "head": "குழுத் தலைவர்"
+      },
+      "recentActivity": {
+        "title": "சமீபத்திய செயல்பாடு",
+        "subtitle": "சமீபத்திய மைல்கற்கள் மற்றும் பங்களிப்புகள்",
+        "empty": "சமீபத்திய செயல்பாடு இல்லை."
+      },
+      "time": {
+        "justNow": "இப்போதுதான்",
+        "minutesAgo_one": "{{count}} நிமிடம் முன்பு",
+        "minutesAgo_other": "{{count}} நிமிடங்களுக்கு முன்பு",
+        "hoursAgo_one": "{{count}} மணி நேரத்திற்கு முன்பு",
+        "hoursAgo_other": "{{count}} மணி நேரங்களுக்கு முன்பு",
+        "yesterday": "நேற்று",
+        "daysAgo_other": "{{count}} நாட்களுக்கு முன்பு"
+      },
+      "editModal": {
+        "title": "சுயவிவரத் தகவலைத் திருத்து",
+        "changePhoto": "படத்தை மாற்று",
+        "uploadPhoto": "படத்தைப் பதிவேற்று",
+        "remove": "அகற்று",
+        "fullName": "முழுப் பெயர்",
+        "roleTitle": "பதவி / பாத்திரத் தலைப்பு",
+        "email": "மின்னஞ்சல் முகவரி",
+        "contactNumber": "தொடர்பு எண்",
+        "faculty": "பீடம் / நிறுவனம்",
+        "saveChanges": "மாற்றங்களைச் சேமி"
+      }
+    },
+    "home": {
+      "defaultName": "நிர்வாகி",
+      "defaultProjectName": "திட்டம்",
+      "loadError": "டாஷ்போர்டை ஏற்ற முடியவில்லை.",
+      "projectDeadlineTitle": "{{name}} காலக்கெடு",
+      "organizationProject": "நிறுவனத் திட்டம்",
+      "projectDeadlineDescription": "{{name}} க்கான அதிகாரப்பூர்வ திட்டக் காலக்கெடு",
+      "eventTypes": {
+        "EVENT": "நிகழ்வு",
+        "SPECIAL_TASK": "சிறப்புப் பணி",
+        "MEETING": "கூட்டம்",
+        "DEADLINE": "காலக்கெடு"
+      },
+      "quickActions": {
+        "newProject": "புதிய திட்டம்",
+        "addMember": "உறுப்பினரைச் சேர்"
+      },
+      "hero": {
+        "welcome": "மீண்டும் வரவேற்கிறோம், {{name}}",
+        "subtitle": "வணக்கம் {{name}}, இது உங்கள் செயல்திறன் கண்காணிப்பு டாஷ்போர்டு.",
+        "newEvent": "புதிய நிகழ்வு"
+      },
+      "widgets": {
+        "dailyActivity": "தினசரி செயல்பாடு",
+        "statistics": "புள்ளிவிவரங்கள்",
+        "performanceRate": "செயல்திறன் விகிதம்",
+        "totalProjectsSub": "மொத்த திட்டங்கள் ({{count}} முடிந்தது)",
+        "ongoingProjectsSub": "நடைபெறும் திட்டங்கள் ({{count}} உறுப்பினர்கள் செயலில்)",
+        "legendOngoing": "நடைபெறுகிறது",
+        "legendActive": "செயலில்",
+        "legendDone": "முடிந்தது"
+      },
+      "panels": {
+        "projectProgress": "திட்ட முன்னேற்றம்",
+        "quickActions": "விரைவு செயல்கள்",
+        "upcoming": "வரவிருக்கும்",
+        "organizationCalendar": "நிறுவன நாட்காட்டி"
+      },
+      "progressLegend": {
+        "ongoing": "நடைபெறுகிறது",
+        "completed": "முடிந்தது"
+      },
+      "emptyProjects": {
+        "title": "இதுவரை திட்டங்கள் இல்லை",
+        "body": "உங்கள் முதல் திட்டத்தை உருவாக்குங்கள், இந்த புள்ளிவிவரங்கள் தானாகவே புதுப்பிக்கப்படும்.",
+        "cta": "திட்டத்தைச் சேர்"
+      },
+      "emptyUpcoming": {
+        "title": "எதுவும் திட்டமிடப்படவில்லை",
+        "body": "ஒரு நிகழ்வைச் சேர்க்கவும், அது இங்கும் நாட்காட்டியிலும் தோன்றும்."
+      },
+      "calendarAdd": "சேர்",
+      "today": "இன்று",
+      "entries_one": "{{count}} உள்ளீடு",
+      "entries_other": "{{count}} உள்ளீடுகள்",
+      "noEntries": "இந்த நாளுக்கு உள்ளீடுகள் இல்லை.",
+      "remove": "அகற்று",
+      "modal": {
+        "addTitle": "நாட்காட்டியில் சேர்",
+        "titleLabel": "தலைப்பு",
+        "titlePlaceholder": "எ.கா. வருடாந்திர பொதுக்கூட்டம்",
+        "typeLabel": "வகை",
+        "startDateLabel": "தொடக்க தேதி",
+        "endDateLabel": "முடிவு தேதி",
+        "optional": "விருப்பமானது",
+        "locationLabel": "இடம்",
+        "locationPlaceholder": "எ.கா. சுமனதாச மண்டபம்",
+        "descriptionLabel": "விளக்கம்",
+        "descriptionPlaceholder": "உறுப்பினர்கள் அறிந்திருக்க வேண்டிய விவரங்கள்",
+        "saving": "சேமிக்கிறது…",
+        "addEvent": "நிகழ்வைச் சேர்"
+      },
+      "errors": {
+        "titleRequired": "நிகழ்வுக்கு ஒரு தலைப்பு கொடுக்கவும்.",
+        "startDateRequired": "தொடக்க தேதியைத் தேர்ந்தெடுக்கவும்.",
+        "saveEventFailed": "நிகழ்வைச் சேமிக்க முடியவில்லை.",
+        "removeEventFailed": "நிகழ்வை அகற்ற முடியவில்லை."
+      }
+    }
+  },
+  "chair": {
+    "dashboard": {
+      "editProfile": "சுயவிவரத்தைத் திருத்து",
+      "viewMore": "மேலும் காண்க",
+      "personalDetails": "தனிப்பட்ட விவரங்கள்",
+      "joined": "இணைந்தது: {{date}}",
+      "noCommittees": "— குழுக்கள் இல்லை",
+      "performanceReview": "2025 செயல்திறன் மதிப்பாய்வு",
+      "performanceRating": "செயல்திறன் மதிப்பீடு",
+      "contribution": "பங்களிப்பு",
+      "experienceAndPerformance": "அனுபவம் மற்றும் செயல்திறன்",
+      "yearsOfExperience": "அனுபவ ஆண்டுகள்",
+      "workedProjects": "பணியாற்றிய திட்டங்கள்",
+      "table": {
+        "project": "திட்டம்",
+        "year": "ஆண்டு",
+        "role": "பங்கு"
+      },
+      "noProjectsFound": "— திட்டங்கள் எதுவும் இல்லை"
+    },
+    "manageCommittees": {
+      "addTitle": "குழுவைச் சேர்",
+      "viewTitle": "குழுக்களைக் காண்க"
+    },
+    "manageTask": {
+      "addTitle": "பணிகளைச் சேர்",
+      "viewTitle": "பணிகளைக் காண்க"
+    },
+    "myProject": {
+      "notFound": "திட்டம் கிடைக்கவில்லை",
+      "loadFailed": "திட்டத்தை ஏற்ற முடியவில்லை",
+      "loading": "திட்டம் ஏற்றப்படுகிறது...",
+      "retry": "மீண்டும் முயற்சிக்கவும்",
+      "defaultTitle": "திட்டம்",
+      "noDescription": "விளக்கம் இல்லை",
+      "statusLabel": "நிலை:",
+      "startDateLabel": "தொடக்க தேதி:",
+      "endDateLabel": "முடிவு தேதி:",
+      "unknownStatus": "தெரியவில்லை",
+      "chairPersons": "தலைவர்கள்",
+      "chairPersonRole": "தலைவர்",
+      "noChairPersons": "தலைவர்கள் நியமிக்கப்படவில்லை"
+    }
+  },
+  "member": {
+    "dashboard": {
+      "loadError": "டாஷ்போர்டு தரவை ஏற்ற முடியவில்லை.",
+      "sidebarTeams": "குழுக்கள்",
+      "sidebarCalendar": "நாட்காட்டி",
+      "hero": {
+        "eyebrow": "உறுப்பினர் டாஷ்போர்டு",
+        "welcome": "மீண்டும் வரவேற்கிறோம், {{name}} 👋",
+        "subtitle": "உங்கள் திட்டப் பங்களிப்புகள், சங்க நிகழ்வுகள் மற்றும் முன்னேற்றத்தை நேரடியாகக் கண்காணிக்கவும்."
+      },
+      "stats": {
+        "totalWorkedTitle": "மொத்த பணியாற்றிய திட்டங்கள்",
+        "allParticipated": "அனைத்திலும் பங்கேற்றது",
+        "contributingSub": "{{count}} பங்களிப்புத் திட்டங்கள்",
+        "chairedTitle": "தலைமை தாங்கிய திட்டங்கள்",
+        "chairpersonBadge": "👑 தலைவர்",
+        "chairedSub": "நீங்கள் தலைவராக வழிநடத்தும் திட்டங்கள்",
+        "ongoingTitle": "நடைபெறும் திட்டங்கள்",
+        "currentlyActive": "தற்போது செயலில்",
+        "completedSub": "{{count}} திட்டங்கள் முடிந்தன"
+      },
+      "progressPanel": {
+        "title": "திட்ட முன்னேற்றம்",
+        "subtitle": "நியமிக்கப்பட்ட திட்டங்களில் மொத்த நிறைவு விகிதம்"
+      },
+      "upcomingPanel": {
+        "title": "வரவிருக்கும் நிகழ்வுகள் மற்றும் காலக்கெடுக்கள்",
+        "subtitle": "திட்டமிடப்பட்ட சங்கக் கூட்டங்கள், நிகழ்வுகள் மற்றும் திட்டக் காலக்கெடுக்கள்",
+        "emptyTitle": "வரவிருக்கும் நிகழ்வுகள் அல்லது காலக்கெடுக்கள் இல்லை",
+        "emptyBody": "சங்க செயல்பாடுகள், கூட்டங்கள் மற்றும் திட்டக் காலக்கெடுக்களுக்கு பின்னர் மீண்டும் பாருங்கள்."
+      },
+      "calendar": {
+        "noEventsForDate": "இந்த தேதிக்கு நிகழ்வுகள் திட்டமிடப்படவில்லை."
+      },
+      "deadline": {
+        "chairedLocation": "தலைமை தாங்கும் திட்டம்",
+        "memberLocation": "உறுப்பினர் திட்டம்"
+      },
+      "roles": {
+        "chairPerson": "தலைவர்",
+        "contributor": "பங்களிப்பாளர்"
+      }
+    }
+  },
+  "auth": {
+    "setPassword": {
+      "invalidToken": "தவறான அல்லது காணாமல் போன டோக்கன்.",
+      "passwordTooShort": "கடவுச்சொல் குறைந்தது 6 எழுத்துகளாக இருக்க வேண்டும்.",
+      "passwordMismatch": "கடவுச்சொற்கள் பொருந்தவில்லை.",
+      "setFailed": "கடவுச்சொல்லை அமைக்க முடியவில்லை.",
+      "serverError": "சர்வர் பிழை. மீண்டும் முயற்சிக்கவும்.",
+      "successAlert": "கடவுச்சொல் வெற்றிகரமாக அமைக்கப்பட்டது. இப்போது உள்நுழையலாம்.",
+      "heading": "உங்கள் கடவுச்சொல்லை அமைக்கவும்",
+      "subtitle": "உங்கள் கணக்கைச் செயல்படுத்த ஒரு கடவுச்சொல்லை உருவாக்கவும்.",
+      "newPasswordPlaceholder": "புதிய கடவுச்சொல்",
+      "confirmPasswordPlaceholder": "கடவுச்சொல்லை உறுதிப்படுத்தவும்",
+      "settingButton": "அமைக்கிறது...",
+      "setPasswordButton": "கடவுச்சொல்லை அமை"
+    }
+  },
+  "memberForm": {
+    "heading": "பதிவுப் படிவம்",
+    "subtitle": "பதிவுக்காக படிவத்தை கவனமாக பூர்த்தி செய்யவும். உறுப்பினருக்கு தானியங்கி தற்காலிக கடவுச்சொல் உருவாக்கப்படும்.",
+    "fullNameLabel": "உறுப்பினரின் முழுப் பெயர்",
+    "firstNamePlaceholder": "முதற்பெயர்",
+    "lastNamePlaceholder": "கடைசிப் பெயர்",
+    "emailLabel": "மாணவர் மின்னஞ்சல்",
+    "emailPlaceholder": "எ.கா: myname@example.com",
+    "emailHint": "example@example.com",
+    "contactLabel": "தொடர்பு எண்",
+    "contactPlaceholder": "07X XXX XXXX",
+    "contactHint": "தொலைபேசி / WhatsApp எண்",
+    "indexNoLabel": "மாணவர் அடையாள எண் / அட்டவணை எண்",
+    "indexNoPlaceholder": "எ.கா: 225513L",
+    "indexNoHint": "தனித்துவமான மாணவர் அடையாள எண்",
+    "genderLabel": "பாலினம்",
+    "genderMale": "ஆண்",
+    "genderFemale": "பெண்",
+    "genderOther": "மற்றவை",
+    "genderHint": "பாலினத்தைத் தேர்ந்தெடுக்கவும்",
+    "facultyLabel": "பீடம் / துறை",
+    "facultySelectPlaceholder": "பீடத்தைத் தேர்ந்தெடுக்கவும்",
+    "facultyHint": "நியமிக்கப்பட்ட பீடத்தைத் தேர்ந்தெடுக்கவும்",
+    "batchLabel": "கல்வி தொகுதி",
+    "batchSelectPlaceholder": "தொகுதியைத் தேர்ந்தெடுக்கவும்",
+    "batchOption": "தொகுதி {{n}}",
+    "batchHint": "சேர்க்கை தொகுதி ஆண்டு",
+    "dobLabel": "பிறந்த தேதி",
+    "dobHint": "பிறந்த தேதி",
+    "roleLabel": "கணினி பங்கு",
+    "roleHint": "அணுகல் அதிகாரங்கள்",
+    "tempPasswordLabel": "தற்காலிக கடவுச்சொல்",
+    "generateNew": "புதிதாக உருவாக்கு",
+    "generateNewTitle": "புதிய சீரற்ற கடவுச்சொல்லை உருவாக்கு",
+    "tempPasswordPlaceholder": "தற்காலிக கடவுச்சொல்",
+    "hidePassword": "கடவுச்சொல்லை மறை",
+    "showPassword": "கடவுச்சொல்லைக் காட்டு",
+    "copyPasswordTitle": "கடவுச்சொல்லை கிளிப்போர்டுக்கு நகலெடு",
+    "tempPasswordHint": "இந்த தற்காலிக கடவுச்சொல் உறுப்பினரின் முதல் உள்நுழைவிற்காக ஒதுக்கப்படும்.",
+    "registering": "உறுப்பினரைப் பதிவு செய்கிறது...",
+    "submit": "சமர்ப்பி",
+    "securityNote": "உறுப்பினர் தங்கள் மின்னஞ்சல் அல்லது அட்டவணை எண் மற்றும் உருவாக்கப்பட்ட தற்காலிக கடவுச்சொல்லைப் பயன்படுத்தி உள்நுழையலாம்.",
+    "errors": {
+      "nameRequired": "முதற்பெயர் மற்றும் கடைசிப் பெயர் இரண்டையும் வழங்கவும்.",
+      "requiredFields": "* குறியிடப்பட்ட அனைத்து தேவையான புலங்களையும் நிரப்பவும்.",
+      "createFailed": "கணக்கை உருவாக்க முடியவில்லை. விவரங்களைச் சரிபார்க்கவும்.",
+      "serverError": "சர்வர் பிழை. உங்கள் நெட்வொர்க் இணைப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்."
+    },
+    "successModal": {
+      "title": "கணக்கு உருவாக்கப்பட்டது!",
+      "description": "உறுப்பினர் {{name}} வெற்றிகரமாக பதிவு செய்யப்பட்டார்.",
+      "loginUsername": "உள்நுழைவு பயனர்பெயர்:",
+      "indexNumber": "அட்டவணை எண்:",
+      "temporaryPassword": "தற்காலிக கடவுச்சொல்:",
+      "copyCredentials": "சான்றுகளை நகலெடு",
+      "copiedToClipboard": "கிளிப்போர்டுக்கு நகலெடுக்கப்பட்டது!",
+      "done": "முடிந்தது / அடைவைக் காண்க"
+    }
+  },
+  "memberView": {
+    "deleteDialog": {
+      "title": "உறுப்பினர் கணக்கை நீக்கு",
+      "message": "{{name}} ஐ அகற்ற விரும்புகிறீர்களா? இந்த செயல் அவர்களின் அணுகலை நிரந்தரமாக அகற்றும்.",
+      "confirm": "உறுப்பினரை நீக்கு"
+    },
+    "listTitle": "உறுப்பினர் பட்டியல்",
+    "tabs": {
+      "all": "அனைத்து உறுப்பினர்கள்",
+      "chairpersons": "தலைவர்கள்",
+      "members": "உறுப்பினர்கள்"
+    },
+    "searchPlaceholder": "உறுப்பினர்களைத் தேடு...",
+    "loadingDirectory": "உறுப்பினர் அடைவு ஏற்றப்படுகிறது...",
+    "table": {
+      "indexId": "அட்டவணை எண்",
+      "joinedDate": "இணைந்த தேதி",
+      "memberName": "உறுப்பினர் பெயர்",
+      "faculty": "பீடம்",
+      "batch": "தொகுதி",
+      "role": "பங்கு",
+      "actions": "செயல்கள்",
+      "notApplicable": "பொருந்தாது",
+      "generalFaculty": "பொது",
+      "batchValue": "தொகுதி {{n}}"
+    },
+    "actions": {
+      "viewDetails": "விவரங்களைக் காண்க",
+      "editMember": "உறுப்பினரைத் திருத்து",
+      "deleteMember": "உறுப்பினரை நீக்கு"
+    },
+    "emptyResults": {
+      "title": "உறுப்பினர்கள் இல்லை",
+      "body": "உங்கள் தற்போதைய வடிகட்டலுக்குப் பொருந்தும் உறுப்பினர்கள் இல்லை."
+    },
+    "detail": {
+      "indexId": "அட்டவணை எண் / மாணவர் அடையாள எண்",
+      "email": "மின்னஞ்சல் முகவரி",
+      "contact": "தொடர்பு எண்",
+      "faculty": "பீடம் / துறை",
+      "batch": "கல்வி தொகுதி",
+      "batchValue": "தொகுதி {{n}}",
+      "registrationDate": "பதிவு தேதி"
+    },
+    "editForm": {
+      "fullName": "முழுப் பெயர்",
+      "email": "மின்னஞ்சல் முகவரி",
+      "contact": "தொடர்பு எண்",
+      "faculty": "பீடம்",
+      "batch": "தொகுதி",
+      "role": "கணினி பங்கு"
+    },
+    "editMemberButton": "உறுப்பினரைத் திருத்து"
+  },
+  "projectAddForm": {
+    "heading": "புதிய திட்டத்தைச் சேர்",
+    "subtitle": "விரிவான தகவலுடன் புதிய திட்டத்தை உருவாக்கவும்",
+    "fillRequired": "தேவையான அனைத்து புலங்களையும் நிரப்பவும்",
+    "nameLabel": "திட்டப் பெயர்",
+    "namePlaceholder": "திட்டப் பெயரை உள்ளிடவும்",
+    "descriptionLabel": "விளக்கம்",
+    "descriptionPlaceholder": "திட்ட விளக்கத்தை உள்ளிடவும்...",
+    "startDateLabel": "தொடக்க தேதி",
+    "endDateLabel": "முடிவு தேதி",
+    "departmentLabel": "துறை",
+    "chairPersonLabel": "தலைவர்",
+    "chairPersonPlaceholder": "தலைவரின் பெயர்",
+    "departments": {
+      "general": "பொது",
+      "engineering": "பொறியியல்",
+      "science": "அறிவியல்",
+      "arts": "கலை"
+    },
+    "clear": "அழி"
+  },
+  "projectsTable": {
+    "deleteDialog": {
+      "title": "திட்டத்தை நீக்கு",
+      "message": "\"{{name}}\" ஐ நீக்க விரும்புகிறீர்களா? இந்த செயலை மீட்க முடியாது.",
+      "confirm": "நீக்கு"
+    },
+    "notApplicable": "பொருந்தாது",
+    "editTitle": "திட்டத்தைத் திருத்து",
+    "detailsTitle": "திட்ட விவரங்கள்",
+    "detail": {
+      "projectName": "திட்டப் பெயர்:",
+      "description": "விளக்கம்:",
+      "startDate": "தொடக்க தேதி:",
+      "endDate": "முடிவு தேதி:",
+      "department": "துறை:",
+      "chairPerson": "தலைவர்:",
+      "memberCount": "உறுப்பினர் எண்ணிக்கை:",
+      "status": "நிலை:"
+    },
+    "editButton": "திருத்து",
+    "addMembersTitle": "{{name}} இல் உறுப்பினர்களைச் சேர்",
+    "addedMembers": "சேர்க்கப்பட்ட உறுப்பினர்கள்:",
+    "addButton": "சேர்",
+    "columns": {
+      "projectName": "திட்டப் பெயர்",
+      "department": "துறை",
+      "chairPerson": "தலைவர்",
+      "members": "உறுப்பினர்கள்",
+      "startDate": "தொடக்க தேதி",
+      "status": "நிலை",
+      "actions": "செயல்கள்"
+    },
+    "actionTitles": {
+      "view": "விவரங்களைக் காண்க",
+      "addMembers": "உறுப்பினர்களைச் சேர்",
+      "edit": "திட்டத்தைத் திருத்து",
+      "delete": "திட்டத்தை நீக்கு"
+    },
+    "viewButton": "காண்க"
+  },
+  "reports": {
+    "loadError": "அறிக்கை தரவை ஏற்ற முடியவில்லை.",
+    "feedbackSubmitError": "கருத்தை சமர்ப்பிக்க முடியவில்லை.",
+    "complaintSubmitError": "புகாரை சமர்ப்பிக்க முடியவில்லை.",
+    "anonymous": "பெயர் தெரியாத உறுப்பினர்",
+    "hero": {
+      "eyebrow": "பகுப்பாய்வு மற்றும் நிர்வாகம்",
+      "title": "அறிக்கைகள் மற்றும் கருத்துகள்",
+      "subtitle": "நிறுவன செயல்திறன், திட்ட வழங்கல் அளவீடுகள் மற்றும் உறுப்பினர் கருத்துகளை நேரடியாகக் கண்காணிக்கவும்.",
+      "reportIssue": "சிக்கலைப் புகாரளி",
+      "exportCsv": "CSV ஏற்றுமதி"
+    },
+    "kpi": {
+      "avgPerformance": "சராசரி செயல்திறன்",
+      "liveScore": "நேரடி மதிப்பெண்",
+      "avgPerformanceCaption": "பணி காலக்கெடு இணக்கத்திலிருந்து கணக்கிடப்பட்டது",
+      "activeMembers": "செயலில் உள்ள உறுப்பினர்கள்",
+      "activeRoster": "செயலில் உள்ள பட்டியல்",
+      "activeMembersCaption": "செயலில் உள்ள தலைவர்கள் மற்றும் குழு உறுப்பினர்கள்",
+      "projectHealth": "திட்ட ஆரோக்கியம்",
+      "onTrack": "சரியான பாதையில்",
+      "projectHealthCaption": "நோக்கத்தில் {{count}} திட்டங்கள்",
+      "taskVelocity": "பணி வேகம்",
+      "completion": "நிறைவு",
+      "taskVelocityCaption": "{{total}} இல் {{completed}} பணிகள் முடிந்தன"
+    },
+    "tabs": {
+      "performance": "செயல்திறன் மதிப்பெண் அட்டை",
+      "projects": "திட்டச் சுருக்கங்கள்",
+      "feedback": "கருத்து மையம்",
+      "complaints": "சிக்கல் கண்காணிப்பு"
+    },
+    "searchPlaceholder": "{{tab}} இல் தேடு...",
+    "clearSearch": "தேடலை அழி",
+    "filters": {
+      "statusLabel": "நிலை:",
+      "periodLabel": "காலம்:",
+      "allStatuses": "அனைத்து நிலைகள்",
+      "excellent": "சிறப்பானது",
+      "good": "நல்லது",
+      "needsAttention": "கவனம் தேவை",
+      "active": "செயலில்",
+      "completed": "முடிந்தது",
+      "upcoming": "வரவிருக்கும்",
+      "resolved": "தீர்க்கப்பட்டது",
+      "inProgress": "நடைபெறுகிறது",
+      "open": "திறந்திருக்கிறது",
+      "allTime": "எல்லா காலமும் (இணைந்ததிலிருந்து)",
+      "thisMonth": "இந்த மாதம்",
+      "thisQuarter": "இந்த காலாண்டு",
+      "currentYear": "நடப்பு ஆண்டு",
+      "reset": "மீட்டமை"
+    },
+    "performancePane": {
+      "title": "உறுப்பினர் செயல்திறன் மதிப்பெண் அட்டை",
+      "subtitle": "தனிப்பட்ட பணி நிறைவேற்றம், காலக்கெடு இணக்கம் மற்றும் வழங்கல் அளவீடுகள்",
+      "exportScorecard": "மதிப்பெண் அட்டையை ஏற்றுமதி செய்",
+      "loadingText": "தரவுத்தளத்திலிருந்து நேரடி உறுப்பினர் மதிப்பெண்களைப் பெறுகிறது...",
+      "emptyTitle": "செயல்திறன் பதிவுகள் இல்லை",
+      "emptyBody": "உங்கள் தேடல் அளவுகோல்களை சரிசெய்யவும் அல்லது செயலில் உள்ள வடிகட்டிகளை அழிக்கவும்.",
+      "columns": {
+        "memberDetails": "உறுப்பினர் விவரங்கள்",
+        "assignedProjects": "ஒதுக்கப்பட்ட திட்டங்கள்",
+        "tasksCompleted": "முடிக்கப்பட்ட பணிகள்",
+        "performanceScore": "செயல்திறன் மதிப்பெண்",
+        "rating": "மதிப்பீடு",
+        "deadlineAdherence": "காலக்கெடு இணக்கம்"
+      },
+      "tasksDoneRatio": "{{total}} இல் {{done}} முடிந்தது",
+      "onTimeCount": "{{count}} சரியான நேரத்தில்",
+      "overdueCount": "{{count}} தாமதமானது"
+    },
+    "projectsPane": {
+      "title": "திட்ட வழங்கல் மற்றும் ஆரோக்கியம்",
+      "subtitle": "மைல்கல் கண்காணிப்பு, குழு ஒதுக்கீடுகள் மற்றும் பணி முன்னேற்றம்",
+      "exportSummary": "சுருக்கத்தை ஏற்றுமதி செய்",
+      "loadingText": "தரவுத்தளத்திலிருந்து நேரடி திட்டச் சுருக்கங்களைப் பெறுகிறது...",
+      "emptyTitle": "உங்கள் வடிகட்டிக்குப் பொருந்தும் திட்டப் பதிவுகள் இல்லை",
+      "emptyBody": "தேடல் சொற்கள் அல்லது நிலை வடிகட்டிகளை மீட்டமைக்கவும்.",
+      "ledBy": "வழிநடத்துபவர் {{name}}",
+      "overallProgress": "மொத்த முன்னேற்றம்",
+      "tasksMetric": "பணிகள்",
+      "health": "ஆரோக்கியம்: {{value}}",
+      "tasksDonePercent": "{{pct}}% பணிகள் முடிந்தன"
+    },
+    "feedbackPane": {
+      "title": "உறுப்பினர் கருத்து மற்றும் உணர்வு",
+      "subtitle": "செயலில் உள்ள பயனர்களிடமிருந்து நேரடி எண்ணங்கள், அம்சக் கருத்துகள் மற்றும் பரிந்துரைகள்",
+      "submitNew": "புதிய கருத்தைச் சமர்ப்பி",
+      "emptyTitle": "கருத்துகள் இல்லை",
+      "emptyBody": "கருத்தைச் சமர்ப்பிக்கவும் அல்லது உங்கள் தேடல் வடிகட்டியை சரிசெய்யவும்.",
+      "ratedOf5": "5 இல் {{rating}} மதிப்பிடப்பட்டது",
+      "submittedOn": "{{date}} அன்று சமர்ப்பிக்கப்பட்டது"
+    },
+    "complaintsPane": {
+      "title": "புகாரளிக்கப்பட்ட சிக்கல்கள் மற்றும் விசாரணைகள்",
+      "subtitle": "தொழில்நுட்ப டிக்கெட்டுகள், செயல்பாட்டு கவலைகள் மற்றும் தீர்வு முன்னேற்றத்தைக் கண்காணிக்கவும்",
+      "fileIssue": "சிக்கலைப் பதிவு செய்",
+      "emptyTitle": "உங்கள் அளவுகோலுக்குப் பொருந்தும் புகாரளிக்கப்பட்ட சிக்கல்கள் இல்லை",
+      "emptyBody": "அனைத்து செயல்பாட்டு டிக்கெட்டுகளும் தற்போது ஒழுங்காக உள்ளன.",
+      "priority": "முன்னுரிமை: {{value}}",
+      "reportedBy": "புகாரளித்தவர்: {{name}}"
+    },
+    "feedbackModal": {
+      "title": "பயனர் கருத்தை அனுப்பு",
+      "successTitle": "நன்றி!",
+      "successBody": "உங்கள் கருத்து சேமிக்கப்பட்டு நிர்வாகத்துடன் பகிரப்பட்டுள்ளது.",
+      "nameLabel": "உங்கள் பெயர் / பங்கு",
+      "namePlaceholder": "எ.கா. அலெக்ஸ் ஜான்சன் (விருப்பமானது)",
+      "categoryLabel": "கருத்து வகை",
+      "categories": {
+        "suggestion": "பரிந்துரை / மேம்பாடு",
+        "featureRequest": "அம்சக் கோரிக்கை",
+        "general": "பொது அனுபவம்",
+        "bugReport": "UI / பயன்பாட்டுப் பிழை"
+      },
+      "ratingLabel": "மொத்த அனுபவ மதிப்பீடு",
+      "starsOf5": "5 இல் {{n}} நட்சத்திரங்கள்",
+      "messageLabel": "கருத்துச் செய்தி *",
+      "messagePlaceholder": "உங்கள் கருத்து அல்லது எண்ணங்களை விரிவாக விவரிக்கவும்...",
+      "submit": "கருத்தைச் சமர்ப்பி"
+    },
+    "complaintModal": {
+      "title": "சிக்கல் அல்லது டிக்கெட்டைப் புகாரளி",
+      "successTitle": "டிக்கெட் உருவாக்கப்பட்டது",
+      "successBody": "உங்கள் சிக்கல் டிக்கெட் பதிவு செய்யப்பட்டு மதிப்பாய்வுக்கு ஒதுக்கப்பட்டுள்ளது.",
+      "reporterLabel": "புகாரளிப்பவர் பெயர்",
+      "reporterPlaceholder": "எ.கா. ஜான் டோ",
+      "categoryLabel": "வகை",
+      "categories": {
+        "technical": "தொழில்நுட்ப சிக்கல்",
+        "dataEntry": "தரவு உள்ளீட்டுத் திருத்தம்",
+        "access": "அணுகல் மற்றும் அனுமதிகள்",
+        "performance": "கணினி செயல்திறன்",
+        "other": "மற்ற விசாரணை"
+      },
+      "titleLabel": "சிக்கல் தலைப்பு *",
+      "titlePlaceholder": "சிக்கலின் சுருக்கமான சுருக்கம்",
+      "priorityLabel": "முன்னுரிமை நிலை",
+      "priorities": {
+        "low": "குறைவு",
+        "medium": "நடுத்தரம்",
+        "high": "அதிகம்",
+        "critical": "மிக முக்கியமானது"
+      },
+      "descriptionLabel": "விரிவான விளக்கம் *",
+      "descriptionPlaceholder": "சிக்கலை மீண்டும் உருவாக்க விவரங்கள் அல்லது படிகளை வழங்கவும்...",
+      "submit": "சிக்கல் டிக்கெட்டைச் சமர்ப்பி"
+    }
+  },
+  "memberProjects": {
+    "filters": {
+      "all": "அனைத்து திட்டங்கள்",
+      "chaired": "தலைமை தாங்கியவை",
+      "member": "உறுப்பினர்"
+    },
+    "subtitle": "நீங்கள் வழிநடத்தும் அல்லது பங்களிக்கும் திட்டங்கள்",
+    "searchPlaceholder": "திட்டங்களைத் தேடு...",
+    "empty": {
+      "title": "திட்டங்கள் இல்லை",
+      "body": "உங்கள் தேர்ந்தெடுக்கப்பட்ட வடிகட்டி அல்லது தேடல் அளவுகோலுக்குப் பொருந்தும் திட்டங்களைக் கண்டறிய முடியவில்லை. அனைத்து ஒதுக்கப்பட்ட திட்டங்களையும் ஆராய உங்கள் வடிகட்டிகளை அழிக்கவும்.",
+      "reset": "வடிகட்டிகளை மீட்டமை"
+    },
+    "card": {
+      "untitled": "தலைப்பிடப்படாத திட்டம்",
+      "members": "உறுப்பினர்கள்",
+      "committees": "குழுக்கள்",
+      "pending": "நிலுவையில்"
+    },
+    "avatarGroup": {
+      "teamMember": "குழு உறுப்பினர்",
+      "member": "உறுப்பினர்"
+    },
+    "taskSidebar": {
+      "markCompleted": "முடிந்ததாகக் குறி",
+      "tasksToComplete_one": "முடிக்க {{count}} பணி",
+      "tasksToComplete_other": "முடிக்க {{count}} பணிகள்",
+      "dueToday": "இன்று நிலுவை",
+      "priority": {
+        "high": "அதிகம்",
+        "medium": "நடுத்தரம்",
+        "low": "குறைவு"
+      },
+      "allCaughtUp": "அனைத்தும் முடிந்தது! 🎉",
+      "noPendingTasks": "தற்போது உங்களுக்கு ஒதுக்கப்பட்ட நிலுவைப் பணிகள் இல்லை."
+    }
+  },
+  "chairNav": {
+    "home": "முகப்பு",
+    "manage": "நிர்வகி",
+    "tasks": "பணிகள்"
+  },
+  "addCommitteeForm": {
+    "connectFailed": "சர்வருடன் இணைக்க முடியவில்லை",
+    "alreadyAdded": "{{name}} ஏற்கனவே சேர்க்கப்பட்டுள்ளது",
+    "removed": "{{name}} குழுவிலிருந்து அகற்றப்பட்டது",
+    "selectProjectRequired": "இந்த குழுவிற்கு ஒரு திட்டத்தைத் தேர்ந்தெடுக்கவும்",
+    "nameRequired": "ஒரு குழு பெயரை உள்ளிடவும்",
+    "descriptionRequired": "ஒரு விளக்கத்தை உள்ளிடவும்",
+    "membersRequired": "குழுவிற்கு குறைந்தது ஒரு உறுப்பினரையாவது சேர்க்கவும்",
+    "createdSuccess": "குழு வெற்றிகரமாக உருவாக்கப்பட்டது!",
+    "createFailed": "குழுவை உருவாக்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.",
+    "heading": "புதிய குழுவை உருவாக்கு",
+    "subtitle": "ஒரு திட்டத்தைத் தேர்ந்தெடுத்து, விவரங்களைக் குறிப்பிட்டு, உறுப்பினர்களை நியமிக்கவும்.",
+    "selectProjectLabel": "திட்டத்தைத் தேர்ந்தெடுக்கவும் *",
+    "selectProjectPlaceholder": "-- ஒரு திட்டத்தைத் தேர்ந்தெடுக்கவும் --",
+    "nameLabel": "குழு பெயர் *",
+    "namePlaceholder": "எ.கா. தொழில்நுட்ப செயல்பாட்டுக் குழு",
+    "descriptionLabel": "விளக்கம் *",
+    "descriptionPlaceholder": "இந்த குழுவின் பொறுப்புகள் மற்றும் நோக்கத்தை விவரிக்கவும்...",
+    "searchMembersLabel": "உறுப்பினர்களைத் தேடி சேர்க்கவும் *",
+    "searchPlaceholder": "பெயர் அல்லது மின்னஞ்சல் மூலம் உறுப்பினர்களைத் தேடு...",
+    "noResults": "\"{{query}}\" க்குப் பொருந்தும் உறுப்பினர்கள் இல்லை",
+    "selectedMembers": "தேர்ந்தெடுக்கப்பட்ட உறுப்பினர்கள் ({{count}})",
+    "creating": "உருவாக்குகிறது...",
+    "addCommittee": "குழுவைச் சேர்"
+  },
+  "viewCommittees": {
+    "loadFailed": "குழுக்களை ஏற்ற முடியவில்லை",
+    "memberAdded": "{{name}} குழுவில் சேர்க்கப்பட்டது",
+    "addMemberFailed": "உறுப்பினரைச் சேர்க்க முடியவில்லை",
+    "memberRemoved": "உறுப்பினர் குழுவிலிருந்து அகற்றப்பட்டார்",
+    "removeMemberFailed": "உறுப்பினரை அகற்ற முடியவில்லை",
+    "deletedSuccess": "குழு வெற்றிகரமாக நீக்கப்பட்டது",
+    "deleteFailed": "குழுவை நீக்க முடியவில்லை",
+    "deleteDialog": {
+      "title": "குழுவை நீக்கவா?",
+      "message": "\"{{name}}\" ஐ நீக்க விரும்புகிறீர்களா? இந்த செயலை மீட்க முடியாது, இந்த குழுவிலிருந்து அனைத்து உறுப்பினர்களும் அகற்றப்படுவார்கள்."
+    },
+    "loading": "குழுக்கள் ஏற்றப்படுகிறது...",
+    "noCommittees": "குழுக்கள் இல்லை. தொடங்க ஒன்றை உருவாக்கவும்!",
+    "deleteCommitteeTitle": "குழுவை நீக்கு",
+    "membersHeader": "உறுப்பினர்கள் ({{count}})",
+    "addMemberBtn": "உறுப்பினரைச் சேர்",
+    "removeMemberTitle": "உறுப்பினரை அகற்று"
+  },
+  "addTask": {
+    "fetchCommitteesFailed": "குழுக்களைப் பெற முடியவில்லை",
+    "fetchMembersFailed": "குழு உறுப்பினர்களைப் பெற முடியவில்லை",
+    "endDateError": "முடிவு தேதி தொடக்க தேதிக்குப் பிறகு இருக்க வேண்டும்.",
+    "selectCommitteeFirst": "முதலில் ஒரு குழுவைத் தேர்ந்தெடுக்கவும்!",
+    "fixDateErrors": "சமர்ப்பிக்கும் முன் தேதி பிழைகளைச் சரிசெய்யவும்.",
+    "addedSuccess": "பணிகள் வெற்றிகரமாகச் சேர்க்கப்பட்டன!",
+    "saveError": "பணிகளைச் சேமிப்பதில் பிழை",
+    "selectCommitteeLabel": "குழுவைத் தேர்ந்தெடுக்கவும் *",
+    "selectCommitteePlaceholder": "-- குழுவைத் தேர்ந்தெடுக்கவும் --",
+    "columns": {
+      "taskName": "பணியின் பெயர்",
+      "description": "விளக்கம்",
+      "assignedMembers": "ஒதுக்கப்பட்ட உறுப்பினர்கள்",
+      "action": "செயல்"
+    },
+    "taskNamePlaceholder": "பணியின் பெயரை உள்ளிடவும்",
+    "descriptionPlaceholder": "விளக்கத்தை உள்ளிடவும்",
+    "selectMemberPlaceholder": "உறுப்பினரைத் தேர்ந்தெடுக்கவும்...",
+    "addTaskBtn": "பணியைச் சேர்"
+  },
+  "viewTasks": {
+    "loadFailed": "பணிகளை ஏற்ற முடியவில்லை",
+    "fetchMembersFailed": "குழு உறுப்பினர்களைப் பெற முடியவில்லை",
+    "assignedUpdated": "ஒதுக்கப்பட்ட உறுப்பினர் புதுப்பிக்கப்பட்டார்",
+    "updateAssignedFailed": "ஒதுக்கப்பட்ட உறுப்பினரைப் புதுப்பிக்க முடியவில்லை",
+    "assignedMembersUpdated": "ஒதுக்கப்பட்ட உறுப்பினர்கள் புதுப்பிக்கப்பட்டனர்",
+    "updateMembersFailed": "உறுப்பினர்களைப் புதுப்பிக்க முடியவில்லை",
+    "deletedAllTasks": "{{name}} இன் கீழுள்ள அனைத்து பணிகளும் நீக்கப்பட்டன",
+    "taskDeleted": "பணி வெற்றிகரமாக நீக்கப்பட்டது",
+    "deleteFailed": "நீக்க முடியவில்லை",
+    "deleteDialog": {
+      "committeeTitle": "\"{{name}}\" குழுவை நீக்கவா?",
+      "taskTitle": "பணியை நீக்கவா?",
+      "committeeMessage": "இது {{name}} இன் கீழுள்ள அனைத்து பணிகளையும் அகற்றும்.",
+      "taskMessage": "இந்த பணியை நீக்க விரும்புகிறீர்களா?"
+    },
+    "noTasks": "பணிகள் இல்லை",
+    "deleteAllTasksTitle": "இந்த குழுவின் அனைத்து பணிகளையும் நீக்கு",
+    "deleteTaskTitle": "பணியை நீக்கு",
+    "startLabel": "தொடக்கம்:",
+    "dueLabel": "நிலுவை:",
+    "assignedToLabel": "ஒதுக்கப்பட்டவர்",
+    "editAssignedTitle": "ஒதுக்கப்பட்ட உறுப்பினரைத் திருத்து",
+    "noneOption": "-- ஏதுமில்லை --"
+  },
+  "settings": {
+    "title": "அமைப்புகள்",
+    "subtitle": "உங்கள் விருப்பங்களையும் கணக்கு அமைப்புகளையும் நிர்வகிக்கவும்",
+    "tabs": {
+      "general": "பொது",
+      "notifications": "அறிவிப்புகள்",
+      "security": "பாதுகாப்பு",
+      "display": "காட்சி"
+    },
+    "actions": {
+      "save": "மாற்றங்களைச் சேமி",
+      "reset": "இயல்புநிலைக்கு மீட்டமை",
+      "saveSuccess": "அமைப்புகள் வெற்றிகரமாகச் சேமிக்கப்பட்டன"
+    },
+    "general": {
+      "title": "பொது அமைப்புகள்",
+      "systemPreferences": "கணினி விருப்பங்கள்",
+      "theme": {
+        "label": "தீம்",
+        "description": "உங்களுக்கு விருப்பமான வண்ணத் தீமைத் தேர்ந்தெடுக்கவும்",
+        "light": "வெளிர்",
+        "dark": "அடர்",
+        "auto": "தானியங்கி (கணினி)"
+      },
+      "language": {
+        "label": "மொழி",
+        "description": "உங்களுக்கு விருப்பமான மொழியைத் தேர்ந்தெடுக்கவும்"
+      },
+      "timezone": {
+        "label": "நேர மண்டலம்",
+        "description": "நிகழ்வுகள் மற்றும் அறிவிப்புகளுக்கான உங்கள் நேர மண்டலத்தை அமைக்கவும்"
+      }
+    },
+    "notifications": {
+      "title": "அறிவிப்பு அமைப்புகள்",
+      "emailGroup": "மின்னஞ்சல் அறிவிப்புகள்",
+      "email": {
+        "label": "மின்னஞ்சல் அறிவிப்புகள்",
+        "description": "முக்கியமான நிகழ்வுகளுக்கு மின்னஞ்சல் அறிவிப்புகளைப் பெறுங்கள்"
+      },
+      "taskReminders": {
+        "label": "பணி நினைவூட்டல்கள்",
+        "description": "வரவிருக்கும் பணிகள் மற்றும் காலக்கெடுக்கள் குறித்து அறிவிப்பு பெறுங்கள்"
+      },
+      "committeeMeetings": {
+        "label": "குழுக் கூட்டங்கள்",
+        "description": "குழுக் கூட்டங்கள் மற்றும் அறிவிப்புகளுக்கான தகவல்கள்"
+      },
+      "projectUpdates": {
+        "label": "திட்டப் புதுப்பிப்புகள்",
+        "description": "திட்ட முன்னேற்றம் மற்றும் மைல்கற்கள் குறித்து புதுப்பித்த நிலையில் இருங்கள்"
+      },
+      "performanceAlerts": {
+        "label": "செயல்திறன் எச்சரிக்கைகள்",
+        "description": "உங்கள் செயல்திறன் அளவீடுகள் குறித்த எச்சரிக்கைகளைப் பெறுங்கள்"
+      }
+    },
+    "security": {
+      "title": "பாதுகாப்பு மற்றும் தனியுரிமை",
+      "accountGroup": "கணக்குப் பாதுகாப்பு",
+      "privacyGroup": "தனியுரிமை அமைப்புகள்",
+      "twoFactor": {
+        "label": "இரு-படி அங்கீகாரம்",
+        "description": "உங்கள் கணக்கிற்கு கூடுதல் பாதுகாப்பு அடுக்கைச் சேர்க்கவும்"
+      },
+      "sessionTimeout": {
+        "label": "அமர்வு காலாவதி (நிமிடங்கள்)",
+        "description": "செயலற்ற காலத்திற்குப் பிறகு தானாக வெளியேறுதல்"
+      },
+      "activityLog": {
+        "label": "செயல்பாட்டுப் பதிவு",
+        "description": "உங்கள் கணக்குச் செயல்பாட்டின் பதிவை வைத்திருங்கள்"
+      },
+      "dataBackup": {
+        "label": "தரவு காப்புப்பிரதி",
+        "description": "உங்கள் தரவைத் தானாகவே காப்புப் பிரதி எடுக்கவும்"
+      }
+    },
+    "display": {
+      "title": "காட்சி அமைப்புகள்",
+      "layoutGroup": "தளவமைப்பு மற்றும் காட்சி",
+      "itemsPerPage": {
+        "label": "பக்கத்திற்கான உருப்படிகள்",
+        "description": "ஒரு பக்கத்தில் காட்டப்படும் உருப்படிகளின் எண்ணிக்கையை அமைக்கவும்",
+        "option": "{{n}} உருப்படிகள்"
+      },
+      "compactMode": {
+        "label": "சுருக்கப் பயன்முறை",
+        "description": "குறைந்த இடைவெளியுடன் மிகவும் சுருக்கமான தளவமைப்பைப் பயன்படுத்தவும்"
+      },
+      "autoRefresh": {
+        "label": "தானியங்கி புதுப்பிப்பு",
+        "description": "வழக்கமான இடைவெளியில் தரவைத் தானாகவே புதுப்பிக்கவும்"
+      },
+      "showCompletedTasks": {
+        "label": "முடிக்கப்பட்ட பணிகளைக் காட்டு",
+        "description": "உங்கள் பணிப்பட்டியலில் முடிக்கப்பட்ட பணிகளைக் காட்டவும்"
+      }
+    }
+  }
+}

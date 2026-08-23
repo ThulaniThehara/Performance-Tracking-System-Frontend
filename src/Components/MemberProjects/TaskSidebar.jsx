@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { apiFetch } from "../../utils/api";
 import {
   FaRegCalendarCheck,
@@ -16,6 +17,7 @@ import {
  * Excludes completed tasks for a clean pending-focused workspace.
  */
 const TaskSidebar = () => {
+  const { t } = useTranslation();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -29,11 +31,11 @@ const TaskSidebar = () => {
       if (!res) return;
       setData(res.data);
     } catch (e) {
-      setError(e.message || "Could not load your tasks.");
+      setError(e.message || t('projects.tasksWidget.loadError'));
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     load();
@@ -48,7 +50,7 @@ const TaskSidebar = () => {
       });
       await load();
     } catch (e) {
-      setError(e.message || "Could not update the task.");
+      setError(e.message || t('projects.tasksWidget.updateError'));
     } finally {
       setBusyId(null);
     }
@@ -63,12 +65,12 @@ const TaskSidebar = () => {
   const getPriorityBadge = (p) => {
     const priority = (p || "").toUpperCase();
     if (priority === "HIGH" || priority === "URGENT") {
-      return { label: "High", color: "#ef4444", bg: "#fef2f2" };
+      return { label: t('memberProjects.taskSidebar.priority.high'), color: "#ef4444", bg: "#fef2f2" };
     }
     if (priority === "MEDIUM") {
-      return { label: "Med", color: "#f59e0b", bg: "#fffbeb" };
+      return { label: t('memberProjects.taskSidebar.priority.medium'), color: "#f59e0b", bg: "#fffbeb" };
     }
-    return { label: "Low", color: "#10b981", bg: "#ecfdf5" };
+    return { label: t('memberProjects.taskSidebar.priority.low'), color: "#10b981", bg: "#ecfdf5" };
   };
 
   const renderTaskItem = (task) => {
@@ -100,7 +102,7 @@ const TaskSidebar = () => {
               markCompleted(task);
             }
           }}
-          title="Mark as completed"
+          title={t('memberProjects.taskSidebar.markCompleted')}
           style={{
             marginTop: 2,
             width: 22,
@@ -317,7 +319,7 @@ const TaskSidebar = () => {
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <h3 style={{ margin: 0, fontSize: "1.3rem", fontWeight: 800, color: "#1d1545" }}>
-                Pending Tasks
+                {t('projects.tasksWidget.title')}
               </h3>
               <span
                 style={{
@@ -333,7 +335,7 @@ const TaskSidebar = () => {
               </span>
             </div>
             <p style={{ margin: "2px 0 0", fontSize: "0.82rem", color: "#5b5575" }}>
-              {pendingTasksCount} task{pendingTasksCount === 1 ? "" : "s"} to complete
+              {t('memberProjects.taskSidebar.tasksToComplete', { count: pendingTasksCount })}
             </p>
           </div>
         </div>
@@ -361,19 +363,19 @@ const TaskSidebar = () => {
         <>
           {renderSection(
             <FaExclamationTriangle />,
-            "Overdue",
+            t('projects.details.taskFilters.overdue'),
             data?.overdue,
             "#ef4444"
           )}
           {renderSection(
             <FaCalendarDay />,
-            "Due Today",
+            t('memberProjects.taskSidebar.dueToday'),
             data?.today,
             "#f59e0b"
           )}
           {renderSection(
             <FaCalendarAlt />,
-            "Upcoming",
+            t('admin.home.panels.upcoming'),
             data?.upcoming,
             "#6b52d1"
           )}
@@ -405,10 +407,10 @@ const TaskSidebar = () => {
                 <FaCheckCircle />
               </div>
               <p style={{ margin: 0, fontSize: "0.95rem", fontWeight: 800, color: "#1d1545" }}>
-                All caught up! 🎉
+                {t('memberProjects.taskSidebar.allCaughtUp')}
               </p>
               <p style={{ margin: "6px 0 0", fontSize: "0.82rem", color: "#5b5575" }}>
-                No pending tasks assigned to you right now.
+                {t('memberProjects.taskSidebar.noPendingTasks')}
               </p>
             </div>
           )}

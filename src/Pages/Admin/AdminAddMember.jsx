@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Header from "../../Components/Header/Header";
 import LeftNavigationBar from "../../Components/LeftNavigationBar/LeftNavigationBar";
 import Toast from "../../Components/Toast/Toast";
@@ -9,6 +10,7 @@ import MemberViewAccountComponent from "../../Components/AdminComponents/MemberV
 import { FaUserPlus, FaUsers } from "react-icons/fa";
 
 const AdminAddMember = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const [activeView, setActiveView] = useState("add");
@@ -75,7 +77,7 @@ const AdminAddMember = () => {
       const data = text ? JSON.parse(text) : null;
 
       if (!res.ok) {
-        setMembersError(data?.message || "Failed to load members");
+        setMembersError(data?.message || t('admin.addMember.loadFailed'));
         setMembers([]);
         return;
       }
@@ -83,7 +85,7 @@ const AdminAddMember = () => {
       const list = Array.isArray(data) ? data : data?.data || [];
       setMembers(list);
     } catch (e) {
-      setMembersError("Server error while loading members");
+      setMembersError(t('admin.addMember.serverError'));
       setMembers([]);
     } finally {
       setLoadingMembers(false);
@@ -110,20 +112,20 @@ const AdminAddMember = () => {
     <div className="admin-add-member-page">
       <Header />
       <LeftNavigationBar />
-      <Toast message="Member account created successfully!" isVisible={showToast} duration={2200} />
+      <Toast message={t('admin.addMember.toastCreated')} isVisible={showToast} duration={2200} />
 
       <main className="admin-add-member-main">
         <div className={`admin-member-container ${activeView === "view" ? "view-mode-active" : ""}`}>
           {/* Top Underline Indicator Navigation Bar (Matching second reference image) */}
           <header className="member-navigation-header">
-            <nav className="underline-tab-bar" aria-label="Member navigation">
+            <nav className="underline-tab-bar" aria-label={t('admin.addMember.navLabel')}>
               <button
                 type="button"
                 className={`underline-tab ${activeView === "add" ? "active" : ""}`}
                 onClick={() => handleViewChange("add")}
               >
                 <FaUserPlus className="tab-icon" />
-                <span className="tab-text">Add New Member</span>
+                <span className="tab-text">{t('admin.addMember.addNewMember')}</span>
                 {activeView === "add" && <span className="active-underline" />}
               </button>
 
@@ -133,7 +135,7 @@ const AdminAddMember = () => {
                 onClick={() => handleViewChange("view")}
               >
                 <FaUsers className="tab-icon" />
-                <span className="tab-text">View Members</span>
+                <span className="tab-text">{t('admin.addMember.viewMembers')}</span>
                 {members.length > 0 && <span className="tab-count-pill">{members.length}</span>}
                 {activeView === "view" && <span className="active-underline" />}
               </button>

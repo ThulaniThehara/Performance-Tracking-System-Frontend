@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "../../SCSS/AdminStyles/AdminHome/AdminHome.scss";
@@ -23,14 +24,7 @@ import {
   FaArrowRight,
 } from "react-icons/fa";
 
-const EVENT_TYPES = [
-  { value: "EVENT", label: "Event" },
-  { value: "SPECIAL_TASK", label: "Special Task" },
-  { value: "MEETING", label: "Meeting" },
-  { value: "DEADLINE", label: "Deadline" },
-];
-
-const typeLabel = (t) => EVENT_TYPES.find((x) => x.value === t)?.label || "Event";
+const EVENT_TYPE_VALUES = ["EVENT", "SPECIAL_TASK", "MEETING", "DEADLINE"];
 
 /** Calendar comparisons must ignore the time component. */
 const startOfDay = (d) => {
@@ -76,19 +70,22 @@ const emptyForm = () => ({
   description: "",
 });
 
-const QUICK_ACTIONS = [
-  { to: "/AdminAddProjects", label: "New Project", icon: <FaPlus /> },
-  { to: "/AdminAddMember", label: "Add Member", icon: <FaUserPlus /> },
-  { to: "/AdminCommittees", label: "Committees", icon: <FaLayerGroup /> },
-  { to: "/Reports", label: "Reports", icon: <FaChartLine /> },
+const QUICK_ACTION_DEFS = [
+  { to: "/AdminAddProjects", labelKey: "admin.home.quickActions.newProject", icon: <FaPlus /> },
+  { to: "/AdminAddMember", labelKey: "admin.home.quickActions.addMember", icon: <FaUserPlus /> },
+  { to: "/AdminCommittees", labelKey: "shell.nav.committees", icon: <FaLayerGroup /> },
+  { to: "/Reports", labelKey: "shell.nav.reports", icon: <FaChartLine /> },
 ];
 
 const AdminHome = () => {
+  const { t } = useTranslation();
+  const typeLabel = (type) => t(`admin.home.eventTypes.${type}`, { defaultValue: t('admin.home.eventTypes.EVENT') });
   const user = getUser();
-  const firstName = (user?.name || "Admin").split(" ")[0];
+  const firstName = (user?.name || t('admin.home.defaultName')).split(" ")[0];
 
   const [stats, setStats] = useState(null);
   const [events, setEvents] = useState([]);
+  const [adminProjects, setAdminProjects] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -103,38 +100,66 @@ const AdminHome = () => {
       setLoading(true);
       setError("");
 
-      const [statsRes, eventsRes] = await Promise.all([
-        apiFetch("/admin/stats"),
-        apiFetch("/event/get"),
+      const [statsRes, eventsRes, projectsRes] = await Promise.all([
+        apiFetch("/admin/stats").catch(() => null),
+        apiFetch("/event/get").catch(() => null),
+        apiFetch("/pm/admin/projects").catch(() => null),
       ]);
 
-      // apiFetch returns undefined after it force-logs-out on a 401.
-      if (!statsRes || !eventsRes) return;
-
-      setStats(statsRes.data);
-      setEvents(eventsRes.data || []);
+      if (statsRes?.data) setStats(statsRes.data);
+      if (eventsRes?.data) setEvents(eventsRes.data || []);
+      if (projectsRes?.data) setAdminProjects(projectsRes.data || []);
     } catch (e) {
-      setError(e.message || "Could not load the dashboard.");
+      setError(e.message || t('admin.home.loadError'));
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     loadAll();
   }, [loadAll]);
 
+  // Combine society events + project deadlines for Admin
+  const allCalendarEntries = useMemo(() => {
+    const projectDeadlines = [];
+    const seen = new Set();
+
+    (adminProjects || []).forEach((p) => {
+      const d = p.EndDate || p.endDate || p.StartDate || p.startDate;
+      if (d && !seen.has(p._id || p.id)) {
+        seen.add(p._id || p.id);
+        const projectName = p.PName || t('admin.home.defaultProjectName');
+        projectDeadlines.push({
+          _id: `proj-dl-${p._id || p.id}`,
+          title: `📌 ${t('admin.home.projectDeadlineTitle', { name: projectName })}`,
+          type: "DEADLINE",
+          startDate: d,
+          endDate: d,
+          location: p.society || p.department || t('admin.home.organizationProject'),
+          description: t('admin.home.projectDeadlineDescription', { name: projectName }),
+          isProjectDeadline: true,
+          projectName: p.PName,
+        });
+      }
+    });
+
+    return [...events, ...projectDeadlines].sort(
+      (a, b) => new Date(a.startDate) - new Date(b.startDate)
+    );
+  }, [events, adminProjects, t]);
+
   const eventsOnSelected = useMemo(
-    () => events.filter((e) => coversDay(e, selectedDate)),
-    [events, selectedDate]
+    () => allCalendarEntries.filter((e) => coversDay(e, selectedDate)),
+    [allCalendarEntries, selectedDate]
   );
 
   const upcoming = useMemo(() => {
     const today = startOfDay(new Date()).getTime();
-    return events
+    return allCalendarEntries
       .filter((e) => startOfDay(e.endDate || e.startDate).getTime() >= today)
       .slice(0, 4);
-  }, [events]);
+  }, [allCalendarEntries]);
 
   const onFormChange = (e) => {
     setFormError("");
@@ -145,11 +170,11 @@ const AdminHome = () => {
     e.preventDefault();
 
     if (!form.title.trim()) {
-      setFormError("Please give the event a title.");
+      setFormError(t('admin.home.errors.titleRequired'));
       return;
     }
     if (!form.startDate) {
-      setFormError("Please pick a start date.");
+      setFormError(t('admin.home.errors.startDateRequired'));
       return;
     }
 
@@ -180,7 +205,7 @@ const AdminHome = () => {
       setForm(emptyForm());
       setShowForm(false);
     } catch (err) {
-      setFormError(err.message || "Could not save the event.");
+      setFormError(err.message || t('admin.home.errors.saveEventFailed'));
     } finally {
       setSaving(false);
     }
@@ -193,34 +218,35 @@ const AdminHome = () => {
       await apiFetch(`/event/${id}`, { method: "DELETE" });
     } catch (err) {
       setEvents(previous); // put it back if the server refused
-      setError(err.message || "Could not remove the event.");
+      setError(err.message || t('admin.home.errors.removeEventFailed'));
     }
   };
 
   // Marks days that carry at least one calendar entry.
   const tileContent = ({ date, view }) => {
     if (view !== "month") return null;
-    const hits = events.filter((e) => coversDay(e, date));
-    if (!hits.length) return null;
+    const hits = allCalendarEntries.filter((e) => coversDay(e, date));
+    const nonDeadlineHits = hits.filter((e) => (e.type || "").toUpperCase() !== "DEADLINE");
+    if (!nonDeadlineHits.length) return null;
 
     return (
-      <>
-        <span className="tile-dots" aria-hidden="true">
-          {hits.slice(0, 3).map((h) => (
-            <i key={h._id} className={`dot ${h.type.toLowerCase()}`} />
-          ))}
-        </span>
-        {/* The markers are visual only, so name them for screen readers. */}
-        <span className="sr-only">
-          {hits.length} {hits.length === 1 ? "entry" : "entries"}
-        </span>
-      </>
+      <span className="tile-dots" aria-hidden="true">
+        {nonDeadlineHits.slice(0, 3).map((h) => (
+          <i key={h._id} className={`dot ${(h.type || "event").toLowerCase()}`} />
+        ))}
+      </span>
     );
   };
 
   const tileClassName = ({ date, view }) => {
     if (view !== "month") return null;
-    return events.some((e) => coversDay(e, date)) ? "has-event" : null;
+    const hits = allCalendarEntries.filter((e) => coversDay(e, date));
+    const classes = [];
+    if (hits.length) classes.push("has-event");
+    if (hits.some((e) => (e.type || "").toUpperCase() === "DEADLINE")) {
+      classes.push("has-deadline");
+    }
+    return classes.join(" ");
   };
 
   const ongoingPct =
@@ -263,8 +289,8 @@ const AdminHome = () => {
           <section className="hero-banner-card">
             <div className="hero-banner-content">
               <div className="hero-banner-text">
-                <h1>Welcome back, {firstName}</h1>
-                <p>Hi {firstName}, this is your performance tracking dashboard.</p>
+                <h1>{t('admin.home.hero.welcome', { name: firstName })}</h1>
+                <p>{t('admin.home.hero.subtitle', { name: firstName })}</p>
               </div>
 
               <div className="hero-banner-actions">
@@ -276,7 +302,7 @@ const AdminHome = () => {
                     setShowForm(true);
                   }}
                 >
-                  <FaPlus /> New Event
+                  <FaPlus /> {t('admin.home.hero.newEvent')}
                 </button>
               </div>
             </div>
@@ -286,7 +312,7 @@ const AdminHome = () => {
               {/* Card 1: Daily Activity */}
               <article className="stat-widget-card">
                 <div className="widget-head">
-                  <span className="widget-title">Daily Activity</span>
+                  <span className="widget-title">{t('admin.home.widgets.dailyActivity')}</span>
                   <span className="widget-dots">•••</span>
                 </div>
                 <div className="widget-body">
@@ -295,7 +321,7 @@ const AdminHome = () => {
                     <h3 className="widget-value">
                       {loading ? <span className="skeleton" /> : (stats?.totalProjects ?? 0)}
                     </h3>
-                    <p className="widget-sub">Total Projects ({stats?.completedProjects ?? 0} completed)</p>
+                    <p className="widget-sub">{t('admin.home.widgets.totalProjectsSub', { count: stats?.completedProjects ?? 0 })}</p>
                   </div>
                   <div className="widget-chart bar-chart">
                     <svg viewBox="0 0 100 40" className="chart-svg">
@@ -315,14 +341,14 @@ const AdminHome = () => {
               {/* Card 2: Completion Statistics Donut */}
               <article className="stat-widget-card Donut-card">
                 <div className="widget-head">
-                  <span className="widget-title">Statistics</span>
+                  <span className="widget-title">{t('admin.home.widgets.statistics')}</span>
                   <span className="widget-dots">•••</span>
                 </div>
                 <div className="donut-widget-content">
                   <div className="donut-legend-row">
-                    <span><i className="dot-swatch primary" /> Ongoing</span>
-                    <span><i className="dot-swatch secondary" /> Active</span>
-                    <span><i className="dot-swatch tertiary" /> Done</span>
+                    <span><i className="dot-swatch primary" /> {t('admin.home.widgets.legendOngoing')}</span>
+                    <span><i className="dot-swatch secondary" /> {t('admin.home.widgets.legendActive')}</span>
+                    <span><i className="dot-swatch tertiary" /> {t('admin.home.widgets.legendDone')}</span>
                   </div>
                   <div className="donut-ring-box">
                     <svg viewBox="0 0 130 130" className="donut-svg">
@@ -342,7 +368,7 @@ const AdminHome = () => {
               {/* Card 3: Performance Rate Sparkline */}
               <article className="stat-widget-card">
                 <div className="widget-head">
-                  <span className="widget-title">Performance Rate</span>
+                  <span className="widget-title">{t('admin.home.widgets.performanceRate')}</span>
                   <span className="widget-dots">•••</span>
                 </div>
                 <div className="widget-body">
@@ -351,7 +377,7 @@ const AdminHome = () => {
                     <h3 className="widget-value">
                       {loading ? <span className="skeleton" /> : (stats?.ongoingProjects ?? 0)}
                     </h3>
-                    <p className="widget-sub">Ongoing Projects ({stats?.activeMembers ?? 0} members active)</p>
+                    <p className="widget-sub">{t('admin.home.widgets.ongoingProjectsSub', { count: stats?.activeMembers ?? 0 })}</p>
                   </div>
                   <div className="widget-chart area-chart">
                     <svg viewBox="0 0 120 45" className="chart-svg">
@@ -378,7 +404,7 @@ const AdminHome = () => {
             <section className="home-left">
               <article className="panel">
                 <div className="panel-head">
-                  <h2>Project Progress</h2>
+                  <h2>{t('admin.home.panels.projectProgress')}</h2>
                   {stats?.totalProjects > 0 && (
                     <span className="panel-figure">{ongoingPct}%</span>
                   )}
@@ -395,23 +421,22 @@ const AdminHome = () => {
                     <div className="progress-legend">
                       <span>
                         <i className="swatch ongoing" aria-hidden="true" />
-                        Ongoing <strong>{stats.ongoingProjects}</strong>
+                        {t('admin.home.progressLegend.ongoing')} <strong>{stats.ongoingProjects}</strong>
                       </span>
                       <span>
                         <i className="swatch done" aria-hidden="true" />
-                        Completed <strong>{stats.completedProjects}</strong>
+                        {t('admin.home.progressLegend.completed')} <strong>{stats.completedProjects}</strong>
                       </span>
                     </div>
                   </div>
                 ) : (
                   <div className="empty-state">
-                    <p>No projects yet</p>
+                    <p>{t('admin.home.emptyProjects.title')}</p>
                     <span>
-                      Create your first project and these figures update
-                      automatically.
+                      {t('admin.home.emptyProjects.body')}
                     </span>
                     <Link to="/AdminAddProjects" className="empty-link">
-                      Add a project <FaArrowRight />
+                      {t('admin.home.emptyProjects.cta')} <FaArrowRight />
                     </Link>
                   </div>
                 )}
@@ -419,13 +444,13 @@ const AdminHome = () => {
 
               <article className="panel">
                 <div className="panel-head">
-                  <h2>Quick Actions</h2>
+                  <h2>{t('admin.home.panels.quickActions')}</h2>
                 </div>
                 <nav className="action-grid">
-                  {QUICK_ACTIONS.map((a) => (
+                  {QUICK_ACTION_DEFS.map((a) => (
                     <Link key={a.to} to={a.to} className="action-tile">
                       <span className="action-icon">{a.icon}</span>
-                      <span className="action-label">{a.label}</span>
+                      <span className="action-label">{t(a.labelKey)}</span>
                     </Link>
                   ))}
                 </nav>
@@ -433,14 +458,14 @@ const AdminHome = () => {
 
               <article className="panel">
                 <div className="panel-head">
-                  <h2>Upcoming</h2>
+                  <h2>{t('admin.home.panels.upcoming')}</h2>
                   <span className="pill">{upcoming.length}</span>
                 </div>
 
                 {upcoming.length === 0 ? (
                   <div className="empty-state">
-                    <p>Nothing scheduled</p>
-                    <span>Add an event and it will appear here and on the calendar.</span>
+                    <p>{t('admin.home.emptyUpcoming.title')}</p>
+                    <span>{t('admin.home.emptyUpcoming.body')}</span>
                   </div>
                 ) : (
                   <ul className="upcoming-list">
@@ -471,7 +496,7 @@ const AdminHome = () => {
             <section className="home-right">
               <article className="panel calendar-panel">
                 <div className="panel-head">
-                  <h2>Organization Calendar</h2>
+                  <h2>{t('admin.home.panels.organizationCalendar')}</h2>
                   <button
                     className="btn btn-ghost btn-sm"
                     onClick={() => {
@@ -482,7 +507,7 @@ const AdminHome = () => {
                       setShowForm(true);
                     }}
                   >
-                    <FaPlus /> Add
+                    <FaPlus /> {t('admin.home.calendarAdd')}
                   </button>
                 </div>
 
@@ -497,10 +522,10 @@ const AdminHome = () => {
 
                 {/* Shapes carry the meaning; the legend makes them readable. */}
                 <div className="cal-legend">
-                  {EVENT_TYPES.map((t) => (
-                    <span key={t.value}>
-                      <i className={`dot ${t.value.toLowerCase()}`} aria-hidden="true" />
-                      {t.label}
+                  {EVENT_TYPE_VALUES.map((typeValue) => (
+                    <span key={typeValue}>
+                      <i className={`dot ${typeValue.toLowerCase()}`} aria-hidden="true" />
+                      {typeLabel(typeValue)}
                     </span>
                   ))}
                 </div>
@@ -508,16 +533,15 @@ const AdminHome = () => {
                 <div className="day-detail">
                   <p className="day-detail-head">
                     {isSameDay(selectedDate, new Date())
-                      ? "Today"
+                      ? t('admin.home.today')
                       : shortDate(selectedDate)}
                     <span>
-                      {eventsOnSelected.length}{" "}
-                      {eventsOnSelected.length === 1 ? "entry" : "entries"}
+                      {t('admin.home.entries', { count: eventsOnSelected.length })}
                     </span>
                   </p>
 
                   {eventsOnSelected.length === 0 ? (
-                    <p className="day-empty">No entries for this day.</p>
+                    <p className="day-empty">{t('admin.home.noEntries')}</p>
                   ) : (
                     <ul className="day-list">
                       {eventsOnSelected.map((ev) => (
@@ -540,7 +564,7 @@ const AdminHome = () => {
                           </div>
                           <button
                             className="btn-icon"
-                            title="Remove"
+                            title={t('admin.home.remove')}
                             onClick={() => removeEvent(ev._id)}
                           >
                             <FaTrashAlt />
@@ -561,7 +585,7 @@ const AdminHome = () => {
         <div className="modal-backdrop" onClick={() => setShowForm(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-head">
-              <h3>Add to Calendar</h3>
+              <h3>{t('admin.home.modal.addTitle')}</h3>
               <button className="btn-icon" onClick={() => setShowForm(false)}>
                 <FaTimes />
               </button>
@@ -569,21 +593,21 @@ const AdminHome = () => {
 
             <form onSubmit={submitEvent} className="modal-form">
               <label>
-                Title
+                {t('admin.home.modal.titleLabel')}
                 <input
                   name="title"
                   value={form.title}
                   onChange={onFormChange}
-                  placeholder="e.g. Annual General Meeting"
+                  placeholder={t('admin.home.modal.titlePlaceholder')}
                 />
               </label>
 
               <label>
-                Type
+                {t('admin.home.modal.typeLabel')}
                 <select name="type" value={form.type} onChange={onFormChange}>
-                  {EVENT_TYPES.map((t) => (
-                    <option key={t.value} value={t.value}>
-                      {t.label}
+                  {EVENT_TYPE_VALUES.map((typeValue) => (
+                    <option key={typeValue} value={typeValue}>
+                      {typeLabel(typeValue)}
                     </option>
                   ))}
                 </select>
@@ -591,7 +615,7 @@ const AdminHome = () => {
 
               <div className="row-2">
                 <label>
-                  <span>Start date</span>
+                  <span>{t('admin.home.modal.startDateLabel')}</span>
                   <input
                     type="date"
                     name="startDate"
@@ -600,7 +624,7 @@ const AdminHome = () => {
                   />
                 </label>
                 <label>
-                  <span>End date <span className="opt">optional</span></span>
+                  <span>{t('admin.home.modal.endDateLabel')} <span className="opt">{t('admin.home.modal.optional')}</span></span>
                   <input
                     type="date"
                     name="endDate"
@@ -611,23 +635,23 @@ const AdminHome = () => {
               </div>
 
               <label>
-                Location <span className="opt">optional</span>
+                {t('admin.home.modal.locationLabel')} <span className="opt">{t('admin.home.modal.optional')}</span>
                 <input
                   name="location"
                   value={form.location}
                   onChange={onFormChange}
-                  placeholder="e.g. Sumanadasa Auditorium"
+                  placeholder={t('admin.home.modal.locationPlaceholder')}
                 />
               </label>
 
               <label>
-                Description <span className="opt">optional</span>
+                {t('admin.home.modal.descriptionLabel')} <span className="opt">{t('admin.home.modal.optional')}</span>
                 <textarea
                   name="description"
                   rows={3}
                   value={form.description}
                   onChange={onFormChange}
-                  placeholder="Any details members should know"
+                  placeholder={t('admin.home.modal.descriptionPlaceholder')}
                 />
               </label>
 
@@ -639,10 +663,10 @@ const AdminHome = () => {
                   className="btn btn-ghost"
                   onClick={() => setShowForm(false)}
                 >
-                  Cancel
+                  {t('common.cancel')}
                 </button>
                 <button type="submit" className="btn btn-primary" disabled={saving}>
-                  {saving ? "Saving…" : "Add Event"}
+                  {saving ? t('admin.home.modal.saving') : t('admin.home.modal.addEvent')}
                 </button>
               </div>
             </form>

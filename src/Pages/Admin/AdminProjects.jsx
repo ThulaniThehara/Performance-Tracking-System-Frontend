@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaPlus, FaSearch, FaCrown, FaArrowRight, FaFolderOpen } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 import Header from "../../Components/Header/Header";
 import LeftNavigationBar from "../../Components/LeftNavigationBar/LeftNavigationBar";
@@ -29,6 +30,7 @@ const emptyForm = () => ({
  * on the project's details page; this admin page only creates and oversees.
  */
 const AdminProjects = () => {
+  const { t } = useTranslation();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -48,11 +50,11 @@ const AdminProjects = () => {
       if (!res) return;
       setProjects(res.data || []);
     } catch (e) {
-      setError(e.message || "Could not load projects.");
+      setError(e.message || t('admin.projects.loadError'));
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     load();
@@ -67,7 +69,7 @@ const AdminProjects = () => {
       const list = (res?.data || []).filter((u) => u.status === "ACTIVE");
       setUsers(list);
     } catch (e) {
-      setFormError(e.message || "Could not load the member list.");
+      setFormError(e.message || t('admin.projects.loadMembersError'));
     }
   };
 
@@ -78,9 +80,9 @@ const AdminProjects = () => {
 
   const submitProject = async (e) => {
     e.preventDefault();
-    if (!form.title.trim()) return setFormError("Please give the project a name.");
-    if (!form.startDate) return setFormError("Please pick a start date.");
-    if (!form.chairpersonId) return setFormError("Please assign a chairperson.");
+    if (!form.title.trim()) return setFormError(t('admin.projects.errors.nameRequired'));
+    if (!form.startDate) return setFormError(t('admin.projects.errors.startDateRequired'));
+    if (!form.chairpersonId) return setFormError(t('admin.projects.errors.chairpersonRequired'));
 
     try {
       setSaving(true);
@@ -100,7 +102,7 @@ const AdminProjects = () => {
       setShowCreate(false);
       await load();
     } catch (err) {
-      setFormError(err.message || "Could not create the project.");
+      setFormError(err.message || t('admin.projects.errors.createFailed'));
     } finally {
       setSaving(false);
     }
@@ -126,15 +128,15 @@ const AdminProjects = () => {
         <div className="pm-wrapper">
           <header className="pm-hero">
             <div>
-              <p className="pm-eyebrow">Management</p>
-              <h1>Projects</h1>
+              <p className="pm-eyebrow">{t('admin.projects.eyebrow')}</p>
+              <h1>{t('shell.nav.projects')}</h1>
               <p className="pm-hero-sub">
-                Create society projects and assign each one a chairperson
+                {t('admin.projects.subtitle')}
               </p>
             </div>
 
             <button className="pm-btn pm-btn-primary" onClick={openCreate}>
-              <FaPlus aria-hidden="true" /> Create Project
+              <FaPlus aria-hidden="true" /> {t('admin.projects.createProject')}
             </button>
           </header>
 
@@ -144,7 +146,7 @@ const AdminProjects = () => {
             <div className="pm-search-box">
               <FaSearch aria-hidden="true" />
               <input
-                placeholder="Search by project, society, or chairperson…"
+                placeholder={t('admin.projects.searchPlaceholder')}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -158,15 +160,15 @@ const AdminProjects = () => {
           ) : filtered.length === 0 ? (
             <div className="pm-empty-state">
               <span className="empty-icon" aria-hidden="true"><FaFolderOpen /></span>
-              <h3>{projects.length === 0 ? "No projects yet" : "No matches"}</h3>
+              <h3>{projects.length === 0 ? t('admin.projects.emptyNoProjects') : t('admin.projects.emptyNoMatches')}</h3>
               <p>
                 {projects.length === 0
-                  ? "Create the first project and assign it a chairperson to get started."
-                  : "Try a different search term."}
+                  ? t('admin.projects.emptyNoProjectsBody')
+                  : t('admin.projects.emptyNoMatchesBody')}
               </p>
               {projects.length === 0 && (
                 <button className="pm-btn pm-btn-primary" onClick={openCreate}>
-                  <FaPlus aria-hidden="true" /> Create Project
+                  <FaPlus aria-hidden="true" /> {t('admin.projects.createProject')}
                 </button>
               )}
             </div>
@@ -175,18 +177,20 @@ const AdminProjects = () => {
               <table className="pm-admin-table">
                 <thead>
                   <tr>
-                    <th>Project</th>
-                    <th>Chairperson</th>
-                    <th>Status</th>
-                    <th>Members</th>
-                    <th>Committees</th>
-                    <th>Progress</th>
-                    <th>Start date</th>
+                    <th>{t('admin.projects.table.project')}</th>
+                    <th>{t('enums.role.CHAIRPERSON')}</th>
+                    <th>{t('admin.projects.table.status')}</th>
+                    <th>{t('shell.nav.members')}</th>
+                    <th>{t('shell.nav.committees')}</th>
+                    <th>{t('projects.card.progress')}</th>
+                    <th>{t('admin.projects.table.startDate')}</th>
                     <th aria-hidden="true"></th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filtered.map((p) => (
+                  {filtered.map((p) => {
+                    const statusKey = String(p.status || "").toUpperCase();
+                    return (
                     <tr key={p._id}>
                       <td>
                         <div className="pm-table-title">
@@ -201,12 +205,12 @@ const AdminProjects = () => {
                             <span>{p.chairpersonId.name}</span>
                           </div>
                         ) : (
-                          <span className="pm-muted">Unassigned</span>
+                          <span className="pm-muted">{t('projects.overview.unassigned')}</span>
                         )}
                       </td>
                       <td>
-                        <span className={`pm-project-status is-${String(p.status || "").toLowerCase()}`}>
-                          {humanise(p.status)}
+                        <span className={`pm-project-status is-${statusKey.toLowerCase()}`}>
+                          {t(`enums.projectStatus.${statusKey}`, { defaultValue: humanise(p.status) })}
                         </span>
                       </td>
                       <td>{p.memberCount ?? 0}</td>
@@ -222,11 +226,12 @@ const AdminProjects = () => {
                       <td className="pm-muted">{formatDate(p.StartDate)}</td>
                       <td>
                         <Link to={`/projects/${p._id}`} className="pm-btn pm-btn-ghost pm-btn-xs">
-                          Manage <FaArrowRight aria-hidden="true" />
+                          {t('projects.card.manage')} <FaArrowRight aria-hidden="true" />
                         </Link>
                       </td>
                     </tr>
-                  ))}
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -236,70 +241,70 @@ const AdminProjects = () => {
 
       <Modal
         open={showCreate}
-        title="Create Project"
+        title={t('admin.projects.createProject')}
         onClose={() => setShowCreate(false)}
         footer={
           <>
             <button className="pm-btn pm-btn-ghost" onClick={() => setShowCreate(false)}>
-              Cancel
+              {t('common.cancel')}
             </button>
             <button className="pm-btn pm-btn-primary" onClick={submitProject} disabled={saving}>
-              {saving ? "Creating…" : "Create Project"}
+              {saving ? t('admin.projects.modal.creating') : t('admin.projects.createProject')}
             </button>
           </>
         }
       >
         <form className="pm-form" onSubmit={submitProject}>
           <label>
-            Project name
+            {t('admin.projects.modal.nameLabel')}
             <input
               name="title"
               value={form.title}
               onChange={onFormChange}
-              placeholder="e.g. Wanakkam 2026"
+              placeholder={t('admin.projects.modal.namePlaceholder')}
             />
           </label>
 
           <label>
-            <span>Description <span className="opt">optional</span></span>
+            <span>{t('projects.details.modals.editProject.descriptionLabel')} <span className="opt">{t('projects.details.modals.committee.optional')}</span></span>
             <textarea
               name="description"
               rows={3}
               value={form.description}
               onChange={onFormChange}
-              placeholder="What is this project about?"
+              placeholder={t('admin.projects.modal.descriptionPlaceholder')}
             />
           </label>
 
           <div className="pm-form-row">
             <label>
-              <span>Start date</span>
+              <span>{t('projects.details.modals.editProject.startDateLabel')}</span>
               <input type="date" name="startDate" value={form.startDate} onChange={onFormChange} />
             </label>
             <label>
-              <span>End date <span className="opt">optional</span></span>
+              <span>{t('projects.details.modals.editProject.endDateLabel')} <span className="opt">{t('projects.details.modals.committee.optional')}</span></span>
               <input type="date" name="endDate" value={form.endDate} onChange={onFormChange} />
             </label>
           </div>
 
           <label>
-            Status
+            {t('projects.details.modals.editProject.statusLabel')}
             <select name="status" value={form.status} onChange={onFormChange}>
-              <option value="UPCOMING">Upcoming</option>
-              <option value="ACTIVE">Active</option>
-              <option value="COMPLETED">Completed</option>
+              <option value="UPCOMING">{t('projects.details.modals.editProject.statusUpcoming')}</option>
+              <option value="ACTIVE">{t('projects.details.modals.editProject.statusActive')}</option>
+              <option value="COMPLETED">{t('projects.details.modals.editProject.statusCompleted')}</option>
             </select>
           </label>
 
           <label>
             <span className="pm-chair-label">
-              <FaCrown aria-hidden="true" /> Chairperson
+              <FaCrown aria-hidden="true" /> {t('enums.role.CHAIRPERSON')}
             </span>
             <select name="chairpersonId" value={form.chairpersonId} onChange={onFormChange}>
-              <option value="">Select who will lead this project…</option>
+              <option value="">{t('admin.projects.modal.selectChairperson')}</option>
               {users.map((u) => (
                 <option key={u._id} value={u._id}>
-                  {u.name} — {u.indexNo} ({humanise(u.userRole)})
+                  {u.name} — {u.indexNo} ({t(`enums.role.${String(u.userRole || '').toUpperCase()}`, { defaultValue: humanise(u.userRole) })})
                 </option>
               ))}
             </select>

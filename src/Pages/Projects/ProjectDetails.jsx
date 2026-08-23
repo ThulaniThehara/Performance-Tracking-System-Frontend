@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { FaArrowLeft, FaPlus, FaSitemap, FaTasks, FaUsers } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 import Header from "../../Components/Header/Header";
 import LeftNavigationBar from "../../Components/LeftNavigationBar/LeftNavigationBar";
+import MemberTopHeader from "../../Components/Header/MemberTopHeader";
 import ProjectOverviewCard from "../../Components/Projects/ProjectOverviewCard";
 import CommitteeCard from "../../Components/Projects/CommitteeCard";
 import CommitteeMemberList from "../../Components/Projects/CommitteeMemberList";
@@ -15,12 +17,12 @@ import { getUser, getRole } from "../../utils/auth";
 import { byDeadline, displayStatusOf } from "../../utils/projectUtils";
 import "../../SCSS/Projects/Projects.scss";
 
-const TASK_FILTERS = [
-  { key: "ALL", label: "All" },
-  { key: "TODO", label: "To Do" },
-  { key: "IN_PROGRESS", label: "In Progress" },
-  { key: "OVERDUE", label: "Overdue" },
-  { key: "COMPLETED", label: "Completed" },
+const TASK_FILTER_KEYS = [
+  { key: "ALL", labelKey: "all" },
+  { key: "TODO", labelKey: "todo" },
+  { key: "IN_PROGRESS", labelKey: "inProgress" },
+  { key: "OVERDUE", labelKey: "overdue" },
+  { key: "COMPLETED", labelKey: "completed" },
 ];
 
 const emptyTask = () => ({
@@ -34,10 +36,11 @@ const emptyTask = () => ({
 });
 
 const ProjectDetails = () => {
+  const { t } = useTranslation();
   const { projectId } = useParams();
   const viewerId = getUser()?.id;
   const isAdmin = getRole() === "ADMIN";
-  const backLink = isAdmin ? "/AdminProjects" : "/member/dashboard";
+  const backLink = isAdmin ? "/AdminProjects" : "/member/dashboard?tab=projects";
 
   const renderNavigation = () => {
     if (isAdmin) {
@@ -48,44 +51,7 @@ const ProjectDetails = () => {
         </>
       );
     }
-    return (
-      <header
-        style={{
-          backgroundColor: "#ffffff",
-          borderBottom: "1px solid #eae2f8",
-          padding: "16px 32px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          position: "sticky",
-          top: 0,
-          zIndex: 100,
-          boxShadow: "0 2px 12px rgba(29, 21, 69, 0.04)",
-        }}
-      >
-        <Link
-          to={backLink}
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "8px",
-            fontSize: "0.88rem",
-            fontWeight: 700,
-            color: "#6b52d1",
-            textDecoration: "none",
-            backgroundColor: "#f4effa",
-            padding: "8px 18px",
-            borderRadius: 999,
-            transition: "all 0.2s ease",
-          }}
-        >
-          <FaArrowLeft style={{ fontSize: "0.78rem" }} /> Back to Dashboard
-        </Link>
-        <span style={{ fontWeight: 800, fontSize: "1.1rem", color: "#1d1545" }}>
-          Project Details
-        </span>
-      </header>
-    );
+    return <MemberTopHeader />;
   };
 
   const [data, setData] = useState(null);
@@ -117,11 +83,11 @@ const ProjectDetails = () => {
       if (!res) return;
       setData(res.data);
     } catch (e) {
-      setError(e.message || "Could not load this project.");
+      setError(e.message || t('projects.details.loadError'));
     } finally {
       setLoading(false);
     }
-  }, [projectId]);
+  }, [projectId, t]);
 
   useEffect(() => {
     load();
@@ -180,7 +146,7 @@ const ProjectDetails = () => {
       onDone?.();
       await load();
     } catch (e) {
-      setModalError(e.message || "Something went wrong.");
+      setModalError(e.message || t('projects.details.errors.somethingWrong'));
       throw e;
     } finally {
       setSaving(false);
@@ -189,7 +155,7 @@ const ProjectDetails = () => {
 
   const submitCommittee = async (e) => {
     e.preventDefault();
-    if (!committeeForm.name.trim()) return setModalError("Committee name is required.");
+    if (!committeeForm.name.trim()) return setModalError(t('projects.details.errors.committeeNameRequired'));
 
     const editing = committeeModal?.mode === "edit";
     try {
@@ -210,7 +176,7 @@ const ProjectDetails = () => {
   };
 
   const deleteCommittee = async (committee) => {
-    if (!window.confirm(`Delete "${committee.name}"? Its members stay on the project.`)) return;
+    if (!window.confirm(t('projects.details.confirm.deleteCommittee', { name: committee.name }))) return;
     setBusyId(committee._id);
     try {
       await call(`/pm/projects/${projectId}/committees/${committee._id}`, { method: "DELETE" });
@@ -225,13 +191,13 @@ const ProjectDetails = () => {
       const res = await apiFetch(`/pm/projects/${projectId}/assignable`);
       if (res) setAssignable(res.data || []);
     } catch (e) {
-      setModalError(e.message || "Could not load the member list.");
+      setModalError(e.message || t('projects.details.errors.loadMembersFailed'));
     }
   };
 
   const submitMember = async (e) => {
     e.preventDefault();
-    if (!memberForm.userId) return setModalError("Pick someone to add.");
+    if (!memberForm.userId) return setModalError(t('projects.details.errors.pickSomeone'));
     try {
       await call(
         `/pm/projects/${projectId}/members`,
@@ -249,7 +215,7 @@ const ProjectDetails = () => {
   };
 
   const removeMember = async (m) => {
-    if (!window.confirm(`Remove ${m.user?.name} from this project?`)) return;
+    if (!window.confirm(t('projects.details.confirm.removeMember', { name: m.user?.name }))) return;
     try {
       await call(`/pm/projects/${projectId}/members/${m.user._id}`, { method: "DELETE" });
     } catch { /* surfaced */ }
@@ -266,9 +232,9 @@ const ProjectDetails = () => {
 
   const submitTask = async (e) => {
     e.preventDefault();
-    if (!taskForm.title.trim()) return setModalError("Task title is required.");
-    if (!taskForm.assignedTo) return setModalError("Assign the task to someone.");
-    if (!taskForm.dueDate) return setModalError("Pick a due date.");
+    if (!taskForm.title.trim()) return setModalError(t('projects.details.errors.taskTitleRequired'));
+    if (!taskForm.assignedTo) return setModalError(t('projects.details.errors.assignTask'));
+    if (!taskForm.dueDate) return setModalError(t('projects.details.errors.pickDueDate'));
 
     try {
       await call(
@@ -301,7 +267,7 @@ const ProjectDetails = () => {
   };
 
   const deleteTask = async (task) => {
-    if (!window.confirm(`Delete "${task.title}"?`)) return;
+    if (!window.confirm(t('projects.details.confirm.deleteTask', { title: task.title }))) return;
     setBusyId(task._id);
     try {
       await call(`/pm/projects/${projectId}/tasks/${task._id}`, { method: "DELETE" });
@@ -327,6 +293,13 @@ const ProjectDetails = () => {
         {renderNavigation()}
         <div className="pm-page" style={!isAdmin ? { marginLeft: 0 } : undefined}>
           <div className="pm-wrapper">
+            <div className="pm-page-header-block">
+              <Link to={backLink} className="pm-back-pill">
+                <FaArrowLeft className="back-arrow-icon" aria-hidden="true" />
+                <span>{t('projects.details.backToProjects')}</span>
+              </Link>
+              <h1 className="pm-page-heading">{t('projects.details.pageTitle')}</h1>
+            </div>
             <div className="pm-skeleton-card is-tall" />
           </div>
         </div>
@@ -340,12 +313,16 @@ const ProjectDetails = () => {
         {renderNavigation()}
         <div className="pm-page" style={!isAdmin ? { marginLeft: 0 } : undefined}>
           <div className="pm-wrapper">
-            <Link to={backLink} className="pm-back">
-              <FaArrowLeft aria-hidden="true" /> Back to Dashboard
-            </Link>
+            <div className="pm-page-header-block">
+              <Link to={backLink} className="pm-back-pill">
+                <FaArrowLeft className="back-arrow-icon" aria-hidden="true" />
+                <span>{t('projects.details.backToProjects')}</span>
+              </Link>
+              <h1 className="pm-page-heading">{t('projects.details.pageTitle')}</h1>
+            </div>
             <div className="pm-empty-state">
-              <h3>Project unavailable</h3>
-              <p>{error || "This project could not be found, or you are not a member of it."}</p>
+              <h3>{t('projects.details.unavailableTitle')}</h3>
+              <p>{error || t('projects.details.unavailableBody')}</p>
             </div>
           </div>
         </div>
@@ -361,9 +338,13 @@ const ProjectDetails = () => {
 
       <div className="pm-page" style={!isAdmin ? { marginLeft: 0 } : undefined}>
         <div className="pm-wrapper">
-          <Link to={backLink} className="pm-back">
-            <FaArrowLeft aria-hidden="true" /> Back to Dashboard
-          </Link>
+          <div className="pm-page-header-block">
+            <Link to={backLink} className="pm-back-pill">
+              <FaArrowLeft className="back-arrow-icon" aria-hidden="true" />
+              <span>Back to Projects</span>
+            </Link>
+            <h1 className="pm-page-heading">Project Details</h1>
+          </div>
 
           <ProjectOverviewCard
             project={data.project}
@@ -387,7 +368,7 @@ const ProjectDetails = () => {
             {/* ---------------- committees ---------------- */}
             <section className="pm-panel">
               <header className="pm-panel-head">
-                <h2><FaSitemap aria-hidden="true" /> Committees</h2>
+                <h2><FaSitemap aria-hidden="true" /> {t('projects.details.committeesHeading')}</h2>
                 {myRole === 'CHAIRPERSON' && perms.canManageCommittees && (
                   <button
                     className="pm-btn pm-btn-ghost pm-btn-sm"
@@ -397,16 +378,16 @@ const ProjectDetails = () => {
                       setCommitteeModal({ mode: "create" });
                     }}
                   >
-                    <FaPlus aria-hidden="true" /> Add committee
+                    <FaPlus aria-hidden="true" /> {t('projects.details.addCommittee')}
                   </button>
                 )}
               </header>
 
               {visibleCommittees.length === 0 ? (
                 <p className="pm-empty-inline">
-                  {myRole !== 'CHAIRPERSON' && !myCommitteeId 
-                    ? "You are not assigned to any committee in this project." 
-                    : "No committees yet."}
+                  {myRole !== 'CHAIRPERSON' && !myCommitteeId
+                    ? t('projects.details.noCommitteeAssigned')
+                    : t('projects.details.noCommitteesYet')}
                 </p>
               ) : (
                 <div className="pm-committee-list">
@@ -435,7 +416,7 @@ const ProjectDetails = () => {
 
               {myRole === 'CHAIRPERSON' && unassigned.length > 0 && (
                 <div className="pm-unassigned">
-                  <h4><FaUsers aria-hidden="true" /> Not on a committee</h4>
+                  <h4><FaUsers aria-hidden="true" /> {t('projects.details.notOnCommittee')}</h4>
                   <CommitteeMemberList
                     members={unassigned}
                     canManage={myRole === 'CHAIRPERSON' && perms.canManageMembers}
@@ -449,7 +430,7 @@ const ProjectDetails = () => {
                   className="pm-btn pm-btn-ghost pm-btn-sm pm-add-member-btn"
                   onClick={() => openMemberModal(null)}
                 >
-                  <FaPlus aria-hidden="true" /> Add member to project
+                  <FaPlus aria-hidden="true" /> {t('projects.details.addMemberToProject')}
                 </button>
               )}
             </section>
@@ -457,7 +438,7 @@ const ProjectDetails = () => {
             {/* ---------------- tasks ---------------- */}
             <section className="pm-panel">
               <header className="pm-panel-head">
-                <h2><FaTasks aria-hidden="true" /> Tasks</h2>
+                <h2><FaTasks aria-hidden="true" /> {t('projects.details.tasksHeading')}</h2>
                 {myRole === 'CHAIRPERSON' && perms.canCreateTasks && (
                   <button
                     className="pm-btn pm-btn-primary pm-btn-sm"
@@ -467,25 +448,25 @@ const ProjectDetails = () => {
                       setTaskModal(true);
                     }}
                   >
-                    <FaPlus aria-hidden="true" /> New task
+                    <FaPlus aria-hidden="true" /> {t('projects.details.newTask')}
                   </button>
                 )}
               </header>
 
               <div className="pm-tabs">
-                {TASK_FILTERS.map((f) => (
+                {TASK_FILTER_KEYS.map((f) => (
                   <button
                     key={f.key}
                     className={`pm-tab ${taskFilter === f.key ? "is-active" : ""}`}
                     onClick={() => setTaskFilter(f.key)}
                   >
-                    {f.label}
+                    {t(`projects.details.taskFilters.${f.labelKey}`)}
                   </button>
                 ))}
               </div>
 
               {visibleTasks.length === 0 ? (
-                <p className="pm-empty-inline">No tasks in this view.</p>
+                <p className="pm-empty-inline">{t('projects.details.noTasksInView')}</p>
               ) : (
                 <div className="pm-task-list">
                   {visibleTasks.map((t) => (
@@ -510,28 +491,28 @@ const ProjectDetails = () => {
       {/* ---------------- committee modal ---------------- */}
       <Modal
         open={!!committeeModal}
-        title={committeeModal?.mode === "edit" ? "Edit Committee" : "New Committee"}
+        title={committeeModal?.mode === "edit" ? t('projects.details.modals.committee.editTitle') : t('projects.details.modals.committee.newTitle')}
         onClose={() => setCommitteeModal(null)}
         footer={
           <>
-            <button className="pm-btn pm-btn-ghost" onClick={() => setCommitteeModal(null)}>Cancel</button>
+            <button className="pm-btn pm-btn-ghost" onClick={() => setCommitteeModal(null)}>{t('common.cancel')}</button>
             <button className="pm-btn pm-btn-primary" onClick={submitCommittee} disabled={saving}>
-              {saving ? "Saving…" : "Save"}
+              {saving ? t('projects.details.modals.committee.saving') : t('common.save')}
             </button>
           </>
         }
       >
         <form className="pm-form" onSubmit={submitCommittee}>
           <label>
-            Committee name
+            {t('projects.details.modals.committee.nameLabel')}
             <input
               value={committeeForm.name}
               onChange={(e) => setCommitteeForm((p) => ({ ...p, name: e.target.value }))}
-              placeholder="e.g. Logistics"
+              placeholder={t('projects.details.modals.committee.namePlaceholder')}
             />
           </label>
           <label>
-            Description <span className="opt">optional</span>
+            {t('projects.details.modals.committee.descriptionLabel')} <span className="opt">{t('projects.details.modals.committee.optional')}</span>
             <textarea
               rows={3}
               value={committeeForm.description}
@@ -545,25 +526,25 @@ const ProjectDetails = () => {
       {/* ---------------- add member modal ---------------- */}
       <Modal
         open={!!memberModal}
-        title={memberModal?.committee ? `Add to ${memberModal.committee.name}` : "Add Project Member"}
+        title={memberModal?.committee ? t('projects.details.modals.member.addToTitle', { name: memberModal.committee.name }) : t('projects.details.modals.member.addTitle')}
         onClose={() => setMemberModal(null)}
         footer={
           <>
-            <button className="pm-btn pm-btn-ghost" onClick={() => setMemberModal(null)}>Cancel</button>
+            <button className="pm-btn pm-btn-ghost" onClick={() => setMemberModal(null)}>{t('common.cancel')}</button>
             <button className="pm-btn pm-btn-primary" onClick={submitMember} disabled={saving}>
-              {saving ? "Adding…" : "Add member"}
+              {saving ? t('projects.details.modals.member.adding') : t('projects.details.modals.member.addMember')}
             </button>
           </>
         }
       >
         <form className="pm-form" onSubmit={submitMember}>
           <label>
-            Person
+            {t('projects.details.modals.member.personLabel')}
             <select
               value={memberForm.userId}
               onChange={(e) => setMemberForm((p) => ({ ...p, userId: e.target.value }))}
             >
-              <option value="">Select someone…</option>
+              <option value="">{t('projects.details.modals.member.selectSomeone')}</option>
               {assignable.map((u) => (
                 <option key={u._id} value={u._id}>
                   {u.name} — {u.indexNo}
@@ -573,15 +554,15 @@ const ProjectDetails = () => {
           </label>
 
           {assignable.length === 0 && (
-            <p className="pm-empty-inline">Everyone available is already on this project.</p>
+            <p className="pm-empty-inline">{t('projects.details.modals.member.allAssigned')}</p>
           )}
 
           <label>
-            Position <span className="opt">optional</span>
+            {t('projects.details.modals.member.positionLabel')} <span className="opt">{t('projects.details.modals.committee.optional')}</span>
             <input
               value={memberForm.position}
               onChange={(e) => setMemberForm((p) => ({ ...p, position: e.target.value }))}
-              placeholder="e.g. Treasurer"
+              placeholder={t('projects.details.modals.member.positionPlaceholder')}
             />
           </label>
           {modalError && <p className="pm-form-error">{modalError}</p>}
@@ -591,30 +572,30 @@ const ProjectDetails = () => {
       {/* ---------------- task modal ---------------- */}
       <Modal
         open={taskModal}
-        title="New Task"
+        title={t('projects.details.modals.task.newTitle')}
         onClose={() => setTaskModal(false)}
         width={540}
         footer={
           <>
-            <button className="pm-btn pm-btn-ghost" onClick={() => setTaskModal(false)}>Cancel</button>
+            <button className="pm-btn pm-btn-ghost" onClick={() => setTaskModal(false)}>{t('common.cancel')}</button>
             <button className="pm-btn pm-btn-primary" onClick={submitTask} disabled={saving}>
-              {saving ? "Creating…" : "Create task"}
+              {saving ? t('projects.details.modals.task.creating') : t('projects.details.modals.task.createTask')}
             </button>
           </>
         }
       >
         <form className="pm-form" onSubmit={submitTask}>
           <label>
-            Title
+            {t('projects.details.modals.task.titleLabel')}
             <input
               value={taskForm.title}
               onChange={(e) => setTaskForm((p) => ({ ...p, title: e.target.value }))}
-              placeholder="e.g. Book the auditorium"
+              placeholder={t('projects.details.modals.task.titlePlaceholder')}
             />
           </label>
 
           <label>
-            Description <span className="opt">optional</span>
+            {t('projects.details.modals.task.descriptionLabel')} <span className="opt">{t('projects.details.modals.committee.optional')}</span>
             <textarea
               rows={3}
               value={taskForm.description}
@@ -624,12 +605,12 @@ const ProjectDetails = () => {
 
           <div className="pm-form-row">
             <label>
-              Assign to
+              {t('projects.details.modals.task.assignToLabel')}
               <select
                 value={taskForm.assignedTo}
                 onChange={(e) => setTaskForm((p) => ({ ...p, assignedTo: e.target.value }))}
               >
-                <option value="">Select member…</option>
+                <option value="">{t('projects.details.modals.task.selectMember')}</option>
                 {members.map((m) => (
                   <option key={m._id} value={m.user?._id}>{m.user?.name}</option>
                 ))}
@@ -637,12 +618,12 @@ const ProjectDetails = () => {
             </label>
 
             <label>
-              Committee <span className="opt">optional</span>
+              {t('projects.details.modals.task.committeeLabel')} <span className="opt">{t('projects.details.modals.committee.optional')}</span>
               <select
                 value={taskForm.committeeId}
                 onChange={(e) => setTaskForm((p) => ({ ...p, committeeId: e.target.value }))}
               >
-                <option value="">None</option>
+                <option value="">{t('projects.details.modals.task.none')}</option>
                 {committees.map((c) => (
                   <option key={c._id} value={c._id}>{c.name}</option>
                 ))}
@@ -652,7 +633,7 @@ const ProjectDetails = () => {
 
           <div className="pm-form-row">
             <label>
-              Due date
+              {t('projects.details.modals.task.dueDateLabel')}
               <input
                 type="date"
                 value={taskForm.dueDate}
@@ -660,7 +641,7 @@ const ProjectDetails = () => {
               />
             </label>
             <label>
-              Due time <span className="opt">optional</span>
+              {t('projects.details.modals.task.dueTimeLabel')} <span className="opt">{t('projects.details.modals.committee.optional')}</span>
               <input
                 type="time"
                 value={taskForm.dueTime}
@@ -670,14 +651,14 @@ const ProjectDetails = () => {
           </div>
 
           <label>
-            Priority
+            {t('projects.details.modals.task.priorityLabel')}
             <select
               value={taskForm.priority}
               onChange={(e) => setTaskForm((p) => ({ ...p, priority: e.target.value }))}
             >
-              <option value="LOW">Low</option>
-              <option value="MEDIUM">Medium</option>
-              <option value="HIGH">High</option>
+              <option value="LOW">{t('projects.details.modals.task.priorityLow')}</option>
+              <option value="MEDIUM">{t('projects.details.modals.task.priorityMedium')}</option>
+              <option value="HIGH">{t('projects.details.modals.task.priorityHigh')}</option>
             </select>
           </label>
 
@@ -688,13 +669,13 @@ const ProjectDetails = () => {
       {/* ---------------- edit project modal ---------------- */}
       <Modal
         open={editModal}
-        title="Edit Project"
+        title={t('projects.details.modals.editProject.title')}
         onClose={() => setEditModal(false)}
         footer={
           <>
-            <button className="pm-btn pm-btn-ghost" onClick={() => setEditModal(false)}>Cancel</button>
+            <button className="pm-btn pm-btn-ghost" onClick={() => setEditModal(false)}>{t('common.cancel')}</button>
             <button className="pm-btn pm-btn-primary" onClick={submitProjectEdit} disabled={saving}>
-              {saving ? "Saving…" : "Save changes"}
+              {saving ? t('projects.details.modals.editProject.saving') : t('projects.details.modals.editProject.saveChanges')}
             </button>
           </>
         }
@@ -702,14 +683,14 @@ const ProjectDetails = () => {
         {editForm && (
           <form className="pm-form" onSubmit={submitProjectEdit}>
             <label>
-              Project name
+              {t('projects.details.modals.editProject.nameLabel')}
               <input
                 value={editForm.title}
                 onChange={(e) => setEditForm((p) => ({ ...p, title: e.target.value }))}
               />
             </label>
             <label>
-              Description
+              {t('projects.details.modals.editProject.descriptionLabel')}
               <textarea
                 rows={3}
                 value={editForm.description}
@@ -718,7 +699,7 @@ const ProjectDetails = () => {
             </label>
             <div className="pm-form-row">
               <label>
-                Start date
+                {t('projects.details.modals.editProject.startDateLabel')}
                 <input
                   type="date"
                   value={editForm.startDate}
@@ -726,7 +707,7 @@ const ProjectDetails = () => {
                 />
               </label>
               <label>
-                End date
+                {t('projects.details.modals.editProject.endDateLabel')}
                 <input
                   type="date"
                   value={editForm.endDate}
@@ -735,14 +716,14 @@ const ProjectDetails = () => {
               </label>
             </div>
             <label>
-              Status
+              {t('projects.details.modals.editProject.statusLabel')}
               <select
                 value={editForm.status}
                 onChange={(e) => setEditForm((p) => ({ ...p, status: e.target.value }))}
               >
-                <option value="UPCOMING">Upcoming</option>
-                <option value="ACTIVE">Active</option>
-                <option value="COMPLETED">Completed</option>
+                <option value="UPCOMING">{t('projects.details.modals.editProject.statusUpcoming')}</option>
+                <option value="ACTIVE">{t('projects.details.modals.editProject.statusActive')}</option>
+                <option value="COMPLETED">{t('projects.details.modals.editProject.statusCompleted')}</option>
               </select>
             </label>
             {modalError && <p className="pm-form-error">{modalError}</p>}

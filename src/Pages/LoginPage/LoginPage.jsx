@@ -2,15 +2,10 @@ import React, { useState } from "react";
 import "../../SCSS/LoginPage/LoginPage.scss";
 import { FaUser, FaLock, FaCheckCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const baseURL = import.meta.env.VITE_API_URL; // ex: http://localhost:5000/api
 const API_URL = `${baseURL}/auth/login`;
-
-const FEATURES = [
-  "Real-time member participation tracking",
-  "Streamlined event & committee management",
-  "Transparent performance insights",
-];
 
 // Placeholder marketing data for the hero illustration — purely decorative.
 const WEEK_DAYS = ["S", "M", "T", "W", "T", "F", "S"];
@@ -20,14 +15,17 @@ const RING_RADIUS = 32;
 const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 const RING_OFFSET = RING_CIRCUMFERENCE * (1 - ENGAGEMENT_PERCENT / 100);
 
-const HeroVisual = () => (
+const HeroVisual = () => {
+  const { t } = useTranslation();
+
+  return (
   <div className="hero-visual" aria-hidden="true">
     <div className="hero-card hero-card--main">
       <div className="hero-card-head">
         <span className="hero-dot" />
         <span className="hero-dot" />
         <span className="hero-dot" />
-        <span className="hero-search">Search performance…</span>
+        <span className="hero-search">{t('login.hero.search')}</span>
       </div>
 
       <div className="hero-bars">
@@ -56,7 +54,7 @@ const HeroVisual = () => (
       </svg>
       <div className="ring-label">
         <strong>{ENGAGEMENT_PERCENT}%</strong>
-        <span>engaged</span>
+        <span>{t('login.hero.engaged')}</span>
       </div>
     </div>
 
@@ -64,10 +62,11 @@ const HeroVisual = () => (
       <svg viewBox="0 0 100 40" className="trend-line">
         <polyline points="0,32 15,26 30,28 45,18 60,20 75,8 100,4" />
       </svg>
-      <span className="trend-label">+24% this term</span>
+      <span className="trend-label">{t('login.hero.trend')}</span>
     </div>
   </div>
-);
+  );
+};
 
 const Ambient = ({ variant, children }) => (
   <div className={`ambient ambient-${variant}`} aria-hidden="true">
@@ -76,7 +75,9 @@ const Ambient = ({ variant, children }) => (
 );
 
 const LoginPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
+  const features = t('login.features', { returnObjects: true });
 
   const [form, setForm] = useState({ username: "", password: "" });
   const [loading, setLoading] = useState(false);
@@ -103,7 +104,7 @@ const LoginPage = () => {
     e.preventDefault();
 
     if (!form.username.trim() || !form.password.trim()) {
-      setError("Please enter username and password.");
+      setError(t('login.errors.missingFields'));
       return;
     }
 
@@ -125,7 +126,7 @@ const LoginPage = () => {
       const data = text ? JSON.parse(text) : null;
 
       if (!res.ok) {
-        setError(data?.message || "Login failed. Check credentials.");
+        setError(data?.message || t('login.errors.loginFailed'));
         return;
       }
 
@@ -163,13 +164,13 @@ const LoginPage = () => {
           <span className="brand-mark">Performance Tracking System</span>
 
           <div className="login-panel-content">
-            <p className="eyebrow">Welcome back</p>
-            <h1 className="heading">Sign in to your account</h1>
-            <p className="subtitle">Enter your credentials to access your dashboard.</p>
+            <p className="eyebrow">{t('login.eyebrow')}</p>
+            <h1 className="heading">{t('login.heading')}</h1>
+            <p className="subtitle">{t('login.subtitle')}</p>
 
             <form className="login-form" onSubmit={handleLogin} noValidate>
               <label className="field">
-                <span className="field-label">Email or Index No</span>
+                <span className="field-label">{t('login.usernameLabel')}</span>
                 <div className="field-control">
                   <span className="field-icon-badge">
                     <FaUser className="field-icon" />
@@ -179,14 +180,14 @@ const LoginPage = () => {
                     name="username"
                     value={form.username}
                     onChange={onChange}
-                    placeholder="Enter your email or index number"
+                    placeholder={t('login.usernamePlaceholder')}
                     autoComplete="username"
                   />
                 </div>
               </label>
 
               <label className="field">
-                <span className="field-label">Password</span>
+                <span className="field-label">{t('login.passwordLabel')}</span>
                 <div className="field-control">
                   <span className="field-icon-badge">
                     <FaLock className="field-icon" />
@@ -196,7 +197,7 @@ const LoginPage = () => {
                     name="password"
                     value={form.password}
                     onChange={onChange}
-                    placeholder="Enter your password"
+                    placeholder={t('login.passwordPlaceholder')}
                     autoComplete="current-password"
                   />
                 </div>
@@ -205,14 +206,14 @@ const LoginPage = () => {
               {error && <p className="form-error">{error}</p>}
 
               <button className="submit-button" type="submit" disabled={loading}>
-                {loading ? "Signing in..." : "Sign In"}
+                {loading ? t('login.signingIn') : t('login.signIn')}
               </button>
 
               <p
                 className="forgot-link"
                 onClick={() => navigate("/forgot-password")}
               >
-                Forgot password?
+                {t('login.forgotPassword')}
               </p>
             </form>
           </div>
@@ -227,7 +228,7 @@ const LoginPage = () => {
 
           <div className="showcase-content">
             <span className="showcase-tag">
-              Improve WorkForce Productivity & Engagement
+              {t('login.showcaseTag')}
             </span>
 
             <div className="showcase-heading">
@@ -239,7 +240,7 @@ const LoginPage = () => {
             <HeroVisual />
 
             <ul className="showcase-features">
-              {FEATURES.map((feature) => (
+              {features.map((feature) => (
                 <li key={feature}>
                   <FaCheckCircle />
                   <span>{feature}</span>

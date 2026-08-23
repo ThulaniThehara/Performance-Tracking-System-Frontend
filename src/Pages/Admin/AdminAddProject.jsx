@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import LeftNavigationBar from '../../Components/LeftNavigationBar/LeftNavigationBar'
 import Header from '../../Components/Header/Header'
 import 'react-calendar/dist/Calendar.css';
@@ -13,6 +14,7 @@ import ProjectsTable from '../../Components/AdminComponents/ProjectsTable';
 
 
 const AdminAddProject = () => {
+    const { t } = useTranslation();
     const [date, setDate] = useState(new Date());
     const navigate = useNavigate()
     const [activeView, setActiveView] = useState('add');
@@ -34,8 +36,8 @@ const AdminAddProject = () => {
         description: formData.description,
         startDate: formData.startDate,
         endDate: formData.endDate,
-        department: formData.department || 'General',
-        chairPerson: formData.chairPerson || 'TBD',
+        department: formData.department || t('admin.addProject.fallbackDepartment'),
+        chairPerson: formData.chairPerson || t('admin.addProject.fallbackChair'),
         memberCount: 0,
         status: 'upcoming'
       };
@@ -58,11 +60,11 @@ const AdminAddProject = () => {
     <div>
       <LeftNavigationBar/>
       <Header/>
-      <Toast message="Project created successfully!" isVisible={showToast} duration={2000} />
-    
+      <Toast message={t('admin.addProject.toastCreated')} isVisible={showToast} duration={2000} />
+
       <TaskBar
-        title1="Add New Project"
-        title2="View Projects"
+        title1={t('admin.addProject.addTitle')}
+        title2={t('admin.addProject.viewTitle')}
         onAddClick={() => handleViewChange('add')}
         onViewClick={() => handleViewChange('view')}
         activeView={activeView}     
@@ -73,16 +75,16 @@ const AdminAddProject = () => {
           {/* layout wrapper: form on left, calendar on right */}
           <div className="admin-add-layout">
             <div className="project-card">
-              <h1>Project Form</h1>
+              <h1>{t('admin.addProject.formHeading')}</h1>
               <ProjectAddForm onProjectAdded={handleProjectAdded}/>
             </div>
 
             <div className="calendar-container">
-              <Calendar 
-                onChange={setDate} 
-                value={date} 
+              <Calendar
+                onChange={setDate}
+                value={date}
               />
-              <p className="selected-date">Selected date: {date.toDateString()}</p>
+              <p className="selected-date">{t('admin.addProject.selectedDate', { date: date.toDateString() })}</p>
             </div>
           </div>
         </>

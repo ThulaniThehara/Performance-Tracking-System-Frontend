@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import TaskSidebar from "./TaskSidebar";
 import ProjectCard from "./ProjectCard";
 import EmptyProjectsState from "./EmptyProjectsState";
@@ -17,6 +18,7 @@ const ProjectsDashboardView = ({
   contributingProjects = [],
   initialFilter = "all",
 }) => {
+  const { t } = useTranslation();
   const [activeFilter, setActiveFilter] = useState(initialFilter);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -27,9 +29,9 @@ const ProjectsDashboardView = ({
   }, [initialFilter]);
 
   const filters = [
-    { key: "all", label: "All Projects", count: allWorkedProjects.length, icon: FaLayerGroup },
-    { key: "chaired", label: "Chaired", count: ledProjects.length, icon: FaCrown },
-    { key: "member", label: "Member", count: contributingProjects.length, icon: FaUserCheck },
+    { key: "all", label: t('memberProjects.filters.all'), count: allWorkedProjects.length, icon: FaLayerGroup },
+    { key: "chaired", label: t('memberProjects.filters.chaired'), count: ledProjects.length, icon: FaCrown },
+    { key: "member", label: t('memberProjects.filters.member'), count: contributingProjects.length, icon: FaUserCheck },
   ];
 
   const filteredProjects = useMemo(() => {
@@ -118,7 +120,7 @@ const ProjectsDashboardView = ({
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <h2 style={{ margin: 0, fontSize: "1.3rem", fontWeight: 800, color: "#1d1545" }}>
-                  My Projects
+                  {t('shell.nav.myProjects')}
                 </h2>
                 <span
                   style={{
@@ -134,7 +136,7 @@ const ProjectsDashboardView = ({
                 </span>
               </div>
               <p style={{ margin: 0, fontSize: "0.82rem", color: "#5b5575" }}>
-                Projects you lead or contribute to
+                {t('memberProjects.subtitle')}
               </p>
             </div>
           </div>
@@ -146,7 +148,7 @@ const ProjectsDashboardView = ({
             />
             <input
               type="text"
-              placeholder="Search projects..."
+              placeholder={t('memberProjects.searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{

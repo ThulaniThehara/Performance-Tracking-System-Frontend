@@ -3,8 +3,10 @@ import axios from "axios";
 import "../../SCSS/ChairStyle/AddTask.scss";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useTranslation } from "react-i18next";
 
 const AddTask = () => {
+  const { t } = useTranslation();
   const [selectedCommittee, setSelectedCommittee] = useState("");
   const [committees, setCommittees] = useState([]);
   const [committeeMembers, setCommitteeMembers] = useState([]);
@@ -41,7 +43,7 @@ const AddTask = () => {
       setCommittees(res.data.data || []);
     } catch (err) {
       console.error("Error fetching committees:", err);
-      toast.error("Failed to fetch committees");
+      toast.error(t('addTask.fetchCommitteesFailed'));
     }
   };
 
@@ -53,7 +55,7 @@ const AddTask = () => {
       setCommitteeMembers(res.data.data?.Members || []);
     } catch (err) {
       console.error("Error fetching committee members:", err);
-      toast.error("Failed to fetch committee members");
+      toast.error(t('addTask.fetchMembersFailed'));
     }
   };
 
@@ -88,7 +90,7 @@ const handleMemberSelect = (index, memberName) => {
   if (!selectedList.includes(memberName)) {
     updatedTasks[index].AssignedTo = [...selectedList, memberName];
   } else {
-    toast.info(`${memberName} is already added`);
+    toast.info(t('addCommitteeForm.alreadyAdded', { name: memberName }));
   }
   setTasks(updatedTasks);
 };
@@ -108,7 +110,7 @@ const validateRowDates = (index, task) => {
 
   if (start && end) {
     if (end.getTime() <= start.getTime()) {
-     newErrors[index] = "End date must be after Start date.";
+     newErrors[index] = t('addTask.endDateError');
     } else {
       newErrors[index] = "";
     }
@@ -125,7 +127,7 @@ const validateTasks = () => {
     const end = t.EndDate ? new Date(t.EndDate) : null;
     if (start && end) {
       if (end.getTime() <= start.getTime()) {
-        return "End date must be after Start date.";
+        return t('addTask.endDateError');
       }
     }
     return "";
@@ -139,11 +141,11 @@ const validateTasks = () => {
     e.preventDefault();
 
     if (!selectedCommittee) {
-      toast.error("Please select a committee first!");
+      toast.error(t('addTask.selectCommitteeFirst'));
       return;
     }
      if (!validateTasks()) {
-     toast.error("Please fix date errors before submitting.");
+     toast.error(t('addTask.fixDateErrors'));
       return;
     }
 
@@ -168,7 +170,7 @@ EndDate: task.EndDate ? new Date(task.EndDate) : new Date(),
 );
 
 
-      toast.success("Tasks added successfully!");
+      toast.success(t('addTask.addedSuccess'));
       setTasks([
         {
           TName: "",
@@ -183,7 +185,7 @@ EndDate: task.EndDate ? new Date(task.EndDate) : new Date(),
       setSelectedCommittee("");
     } catch (err) {
       console.error("Error saving tasks:", err);
-      toast.error("Error saving tasks");
+      toast.error(t('addTask.saveError'));
     }
   };
 
