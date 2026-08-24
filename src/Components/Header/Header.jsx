@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
-import { FaSearch, FaBell, FaChevronDown, FaSignOutAlt, FaBars } from 'react-icons/fa'
+import React, { useEffect, useRef, useState } from 'react'
+import { FaSearch, FaBell, FaChevronDown, FaSignOutAlt } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { getUser, logout } from '../../utils/auth'
+import useNotifications from '../../hooks/useNotifications'
+import { NOTIF_ICON, timeAgo } from '../../utils/notificationDisplay'
 import '../../SCSS/Header.scss'
 
 function Header() {
@@ -10,6 +12,25 @@ function Header() {
   const navigate = useNavigate();
   const user = getUser();
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showNotifs, setShowNotifs] = useState(false);
+  const notifRef = useRef(null);
+  const { items, unreadCount, markRead, markAllRead } = useNotifications();
+
+  useEffect(() => {
+    function onClickOutside(e) {
+      if (notifRef.current && !notifRef.current.contains(e.target)) {
+        setShowNotifs(false);
+      }
+    }
+    document.addEventListener('mousedown', onClickOutside);
+    return () => document.removeEventListener('mousedown', onClickOutside);
+  }, []);
+
+  const handleNotifClick = (n) => {
+    if (!n.isRead) markRead(n.id);
+    setShowNotifs(false);
+    if (n.link) navigate(n.link);
+  };
 
   const userName = user?.name || user?.username || user?.userRole || "User";
   const userAvatar =
@@ -49,10 +70,49 @@ function Header() {
       </div>
 
       <div className="header-right">
-        <button className="notif-btn" aria-label={t('shell.header.notifications')}>
-          <FaBell />
-          <span className="notif-badge" />
-        </button>
+        <div className="notif-menu" ref={notifRef} style={{ position: 'relative' }}>
+          <button
+            className="notif-btn"
+            aria-label="Notifications"
+            onClick={() => setShowNotifs((v) => !v)}
+          >
+            <FaBell />
+            {unreadCount > 0 && <span className="notif-badge" />}
+          </button>
+
+          {showNotifs && (
+            <div className="notif-dropdown">
+              <div className="notif-dropdown-header">
+                <span>Notifications</span>
+                {unreadCount > 0 && (
+                  <button className="notif-mark-all" onClick={markAllRead}>
+                    Mark all read
+                  </button>
+                )}
+              </div>
+
+              <div className="notif-list">
+                {items.length === 0 && (
+                  <div className="notif-empty">You're all caught up</div>
+                )}
+                {items.map((n) => (
+                  <div
+                    key={n.id}
+                    className={`notif-item${n.isRead ? '' : ' is-unread'}${n.type.startsWith('DEADLINE') ? ` is-${n.type.toLowerCase().replace('_', '-')}` : ''}`}
+                    onClick={() => handleNotifClick(n)}
+                  >
+                    <span className="notif-icon">{NOTIF_ICON[n.type] || '🔔'}</span>
+                    <div className="notif-body">
+                      <p className="notif-message">{n.message}</p>
+                      <span className="notif-time">{timeAgo(n.createdAt)}</span>
+                    </div>
+                    {!n.isRead && <span className="notif-dot" />}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
 
         <div className="header-divider" />
 

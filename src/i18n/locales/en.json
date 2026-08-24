@@ -379,11 +379,12 @@
         "newEvent": "New Event"
       },
       "widgets": {
-        "dailyActivity": "Daily Activity",
-        "statistics": "Statistics",
-        "performanceRate": "Performance Rate",
-        "totalProjectsSub": "Total Projects ({{count}} completed)",
-        "ongoingProjectsSub": "Ongoing Projects ({{count}} members active)",
+        "ongoingProjects": "Ongoing Projects",
+        "completedProjects": "Total Projects Completed",
+        "totalMembership": "Total Membership",
+        "ongoingProjectsSub": "Active projects currently in progress",
+        "completedProjectsSub": "{{pct}}% completion rate ({{total}} total)",
+        "totalMembershipSub": "{{count}} active members registered",
         "legendOngoing": "Ongoing",
         "legendActive": "Active",
         "legendDone": "Done"

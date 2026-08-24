@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { FaArrowLeft, FaPlus, FaSitemap, FaTasks, FaUsers, FaPen, FaTrashAlt, FaUserPlus } from "react-icons/fa";
 import {
   FaArrowLeft,
   FaPlus,
@@ -50,7 +51,9 @@ const emptyTask = () => ({
 
 const ProjectDetails = () => {
   const { t } = useTranslation();
-  const { projectId } = useParams();
+  const params = useParams();
+  const rawId = params.projectId || params["*"] || "";
+  const projectId = (rawId.split("/")[0] || "").trim();
   const viewerId = getUser()?.id;
   const isAdmin = getRole() === "ADMIN";
   const backLink = isAdmin ? "/AdminProjects" : "/member/dashboard?tab=projects";
@@ -176,6 +179,19 @@ const ProjectDetails = () => {
     if (!myCommitteeId) return [];
     return committees.filter((c) => String(c._id) === String(myCommitteeId));
   }, [committees, myRole, myCommitteeId]);
+
+  const [activeCommitteeId, setActiveCommitteeId] = useState(null);
+
+  const activeCommittee = useMemo(() => {
+    if (!visibleCommittees.length) return null;
+    return visibleCommittees.find((c) => String(c._id) === String(activeCommitteeId)) || visibleCommittees[0];
+  }, [visibleCommittees, activeCommitteeId]);
+
+  useEffect(() => {
+    if (visibleCommittees.length > 0 && (!activeCommitteeId || !visibleCommittees.some((c) => String(c._id) === String(activeCommitteeId)))) {
+      setActiveCommitteeId(visibleCommittees[0]._id);
+    }
+  }, [visibleCommittees, activeCommitteeId]);
 
   const visibleTasks = useMemo(() => {
     let list = [...tasks].sort(byDeadline);
@@ -462,72 +478,152 @@ const ProjectDetails = () => {
 
               <div className="pm-detail-grid">
             {/* ---------------- committees ---------------- */}
-            <section className="pm-panel">
+            {/* ---------------- committees ---------------- */}
+            <section className="pm-panel pm-committees-panel">
               <header className="pm-panel-head">
                 <h2><FaSitemap aria-hidden="true" /> {t('projects.details.committeesHeading')}</h2>
-                {myRole === 'CHAIRPERSON' && perms.canManageCommittees && (
-                  <button
-                    className="pm-btn pm-btn-ghost pm-btn-sm"
-                    onClick={() => {
-                      setCommitteeForm({ name: "", description: "" });
-                      setModalError("");
-                      setCommitteeModal({ mode: "create" });
-                    }}
-                  >
-                    <FaPlus aria-hidden="true" /> {t('projects.details.addCommittee')}
-                  </button>
-                )}
               </header>
 
               {visibleCommittees.length === 0 ? (
-                <p className="pm-empty-inline">
-                  {myRole !== 'CHAIRPERSON' && !myCommitteeId
-                    ? t('projects.details.noCommitteeAssigned')
-                    : t('projects.details.noCommitteesYet')}
-                </p>
-              ) : (
-                <div className="pm-committee-list">
-                  {visibleCommittees.map((c) => (
-                    <CommitteeCard
-                      key={c._id}
-                      committee={c}
-                      members={membersByCommittee[String(c._id)] || []}
-                      canManage={myRole === 'CHAIRPERSON' && perms.canManageMembers}
-                      onEdit={(committee) => {
-                        setCommitteeForm({
-                          name: committee.name,
-                          description: committee.description || "",
-                        });
+                <div className="pm-empty-committee-box">
+                  <p className="pm-empty-inline">
+                    {myRole !== 'CHAIRPERSON' && !myCommitteeId
+                      ? t('projects.details.noCommitteeAssigned')
+                      : t('projects.details.noCommitteesYet')}
+                  </p>
+                  {myRole === 'CHAIRPERSON' && perms.canManageCommittees && (
+                    <button
+                      className="pm-btn pm-btn-primary pm-btn-sm"
+                      onClick={() => {
+                        setCommitteeForm({ name: "", description: "" });
                         setModalError("");
-                        setCommitteeModal({ mode: "edit", committee });
+                        setCommitteeModal({ mode: "create" });
                       }}
-                      onDelete={deleteCommittee}
-                      onAddMember={openMemberModal}
-                      onRemoveMember={removeMember}
-                      onMakeLead={(userId) => makeLead(c._id, userId)}
-                    />
-                  ))}
+                    >
+                      <FaPlus aria-hidden="true" /> {t('projects.details.addCommittee')}
+                    </button>
+                  )}
                 </div>
-              )}
+              ) : (
+                <div className="pm-committee-tabs-wrapper">
+                  {/* Upper Committee Tabs Bar */}
+                  <div className="pm-committee-tabs-bar">
+                    <div className="pm-tabs-scroll">
+                      {visibleCommittees.map((c) => {
+                        const count = (membersByCommittee[String(c._id)] || []).length;
+                        const isActive = activeCommittee && String(c._id) === String(activeCommittee._id);
+                        return (
+                          <button
+                            key={c._id}
+                            type="button"
+                            className={`pm-committee-tab ${isActive ? "is-active" : ""}`}
+                            onClick={() => setActiveCommitteeId(c._id)}
+                          >
+                            <FaSitemap className="tab-icon" />
+                            <span className="tab-name">{c.name}</span>
+                            <span className="tab-pill">{count}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
 
-              {myRole === 'CHAIRPERSON' && unassigned.length > 0 && (
-                <div className="pm-unassigned">
-                  <h4><FaUsers aria-hidden="true" /> {t('projects.details.notOnCommittee')}</h4>
-                  <CommitteeMemberList
-                    members={unassigned}
-                    canManage={myRole === 'CHAIRPERSON' && perms.canManageMembers}
-                    onRemove={removeMember}
-                  />
+                    {myRole === 'CHAIRPERSON' && perms.canManageCommittees && (
+                      <button
+                        type="button"
+                        className="pm-add-committee-tab-btn"
+                        onClick={() => {
+                          setCommitteeForm({ name: "", description: "" });
+                          setModalError("");
+                          setCommitteeModal({ mode: "create" });
+                        }}
+                        title={t('projects.details.addCommittee')}
+                      >
+                        <FaPlus aria-hidden="true" />
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Active Committee Details Below */}
+                  {activeCommittee && (
+                    <div className="pm-committee-details-box">
+                      <div className="committee-details-header">
+                        <div className="committee-main-info">
+                          <div className="committee-title-row">
+                            <h3>{activeCommittee.name}</h3>
+                            <span className="committee-members-badge">
+                              <FaUsers /> {(membersByCommittee[String(activeCommittee._id)] || []).length} {t('shell.nav.members')}
+                            </span>
+                          </div>
+
+                          <p className="committee-lead-text">
+                            {activeCommittee.lead ? (
+                              <>
+                                {t('projects.committeeCard.ledByPrefix')} <strong>{activeCommittee.lead.name}</strong>
+                              </>
+                            ) : (
+                              <em>{t('projects.committeeCard.noLead')}</em>
+                            )}
+                          </p>
+
+                          {activeCommittee.description && (
+                            <p className="committee-description-text">{activeCommittee.description}</p>
+                          )}
+                        </div>
+
+                        {myRole === 'CHAIRPERSON' && perms.canManageCommittees && (
+                          <div className="committee-header-actions">
+                            <button
+                              className="pm-icon-btn"
+                              onClick={() => {
+                                setCommitteeForm({
+                                  name: activeCommittee.name,
+                                  description: activeCommittee.description || "",
+                                });
+                                setModalError("");
+                                setCommitteeModal({ mode: "edit", committee: activeCommittee });
+                              }}
+                              aria-label={t('projects.details.aria.editCommittee')}
+                              title={t('projects.details.aria.editCommittee')}
+                            >
+                              <FaPen />
+                            </button>
+                            <button
+                              className="pm-icon-btn is-danger"
+                              onClick={() => deleteCommittee(activeCommittee)}
+                              aria-label={t('projects.details.aria.deleteCommittee')}
+                              title={t('projects.details.aria.deleteCommittee')}
+                            >
+                              <FaTrashAlt />
+                            </button>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Committee Roster */}
+                      <div className="committee-roster-body">
+                        <CommitteeMemberList
+                          members={membersByCommittee[String(activeCommittee._id)] || []}
+                          leadId={activeCommittee.lead?._id}
+                          canManage={myRole === 'CHAIRPERSON' && perms.canManageMembers}
+                          onRemove={removeMember}
+                          onMakeLead={(userId) => makeLead(activeCommittee._id, userId)}
+                          emptyText={t('projects.committeeCard.emptyMembers')}
+                        />
+                      </div>
+
+                      {myRole === 'CHAIRPERSON' && perms.canManageMembers && (
+                        <div className="committee-roster-footer">
+                          <button
+                            className="pm-btn pm-btn-ghost pm-btn-sm add-to-committee-btn"
+                            onClick={() => openMemberModal(activeCommittee)}
+                          >
+                            <FaUserPlus aria-hidden="true" /> {t('projects.committeeCard.addMember')}
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
-              )}
-
-              {myRole === 'CHAIRPERSON' && perms.canManageMembers && (
-                <button
-                  className="pm-btn pm-btn-ghost pm-btn-sm pm-add-member-btn"
-                  onClick={() => openMemberModal(null)}
-                >
-                  <FaPlus aria-hidden="true" /> {t('projects.details.addMemberToProject')}
-                </button>
               )}
             </section>
 
