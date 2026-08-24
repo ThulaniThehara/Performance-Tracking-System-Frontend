@@ -144,7 +144,7 @@ const router = createBrowserRouter([
     ),
     errorElement: <RouteErrorBoundary />,
   },
-  { path: "/AdminAddProjects", element: <AdminAddProject />, errorElement: <div>Page Not Found</div> },
+  { path: "/AdminAddProjects", element: <AdminProjects />, errorElement: <RouteErrorBoundary /> },
   { path: "/AdminAddMember", element: <AdminAddMember />, errorElement: <div>Page Not Found</div> },
   { path: "/AdminCommittees", element: <AdminCommittees />, errorElement: <div>Page Not Found</div> },
   { path: "/AdminViewAccount", element: <AdminViewAccount />, errorElement: <div>Page Not Found</div> },
