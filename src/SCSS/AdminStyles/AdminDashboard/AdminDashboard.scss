@@ -448,11 +448,17 @@
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     .admin-dashboard-main {
       margin-left: 0;
       width: 100%;
-      padding: 20px 16px;
+      padding: 24px 20px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .admin-dashboard-main {
+      padding: 16px 14px;
     }
 
     .form-card-header {

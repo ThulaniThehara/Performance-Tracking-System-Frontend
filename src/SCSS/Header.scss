@@ -279,6 +279,7 @@ body {
       font-size: 0.88rem;
       font-weight: 600;
       color: var(--purple-900);
+      white-space: nowrap;
     }
 
     .dropdown-arrow {
@@ -288,17 +289,54 @@ body {
     }
   }
 
-  @media (max-width: 980px) {
-    padding-left: 216px;
-    padding-right: 20px;
+  .mobile-menu-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    border: 1px solid var(--purple-100);
+    background: #ffffff;
+    color: #6b52d1;
+    font-size: 1.15rem;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: var(--purple-50);
+      transform: scale(1.04);
+    }
+    &:active {
+      transform: scale(0.96);
+    }
   }
 
-  @media (max-width: 768px) {
-    padding-left: 16px;
-    padding-right: 16px;
+  @media (max-width: 1024px) {
+    padding-left: 20px;
+    padding-right: 20px;
+
+    .mobile-menu-toggle {
+      display: flex;
+    }
 
     .header-search {
-      max-width: 240px;
+      max-width: 320px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    padding-left: 14px;
+    padding-right: 14px;
+    height: 64px;
+
+    .header-search {
+      display: none;
+    }
+
+    .user-profile-menu .user-name {
+      display: none;
     }
   }
 }

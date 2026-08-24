@@ -620,3 +620,14 @@ $pt-900: #1d1545; // Deep dark midnight indigo text
     font-size: 26px;
   }
 }
+
+@media (max-width: 480px) {
+  .LoginPage {
+    padding: 12px 8px;
+  }
+
+  .login-panel,
+  .showcase-panel {
+    padding: 24px 16px;
+  }
+}
