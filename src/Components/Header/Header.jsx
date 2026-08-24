@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { FaSearch, FaBell, FaChevronDown, FaSignOutAlt } from 'react-icons/fa'
+import { FaSearch, FaBell, FaChevronDown, FaSignOutAlt, FaBars } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { getUser, logout } from '../../utils/auth'

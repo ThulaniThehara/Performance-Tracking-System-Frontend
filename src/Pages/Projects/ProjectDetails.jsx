@@ -1,20 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { FaArrowLeft, FaPlus, FaSitemap, FaTasks, FaUsers, FaPen, FaTrashAlt, FaUserPlus } from "react-icons/fa";
-import {
-  FaArrowLeft,
-  FaPlus,
-  FaSitemap,
-  FaTasks,
-  FaUsers,
-  FaCommentDots,
-  FaExclamationTriangle,
-  FaStar,
-  FaProjectDiagram,
-  FaTrashAlt,
-  FaSpinner,
-  FaUser,
-} from "react-icons/fa";
+import { FaArrowLeft, FaPlus, FaSitemap, FaTasks, FaUsers, FaCommentDots, FaExclamationTriangle, FaStar, FaPen, FaProjectDiagram, FaTrashAlt, FaUserPlus } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 
 import Header from "../../Components/Header/Header";
