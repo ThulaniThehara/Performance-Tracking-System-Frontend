@@ -26,7 +26,6 @@ const AdminFeedbackPage = () => {
 
   // Right-side filters
   const [scopeFilter, setScopeFilter] = useState("ALL"); // 'ALL' | 'PROJECT' | 'GENERAL'
-  const [selectedProjectFilter, setSelectedProjectFilter] = useState("ALL_PROJECTS");
   const [searchQuery, setSearchQuery] = useState("");
 
   const loadData = async () => {
@@ -88,20 +87,10 @@ const AdminFeedbackPage = () => {
     }
   };
 
-  // Unique projects list
-  const projectNames = Array.from(
-    new Set(
-      [...feedbacks, ...complaints]
-        .map((item) => item.projectName)
-        .filter(Boolean)
-    )
-  );
-
   // Filtered lists
   const filteredFeedbacks = feedbacks.filter((fb) => {
     if (scopeFilter === "PROJECT" && !fb.projectName) return false;
     if (scopeFilter === "GENERAL" && fb.projectName) return false;
-    if (selectedProjectFilter !== "ALL_PROJECTS" && fb.projectName !== selectedProjectFilter) return false;
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       const matchMsg = fb.message?.toLowerCase().includes(q);
@@ -115,7 +104,6 @@ const AdminFeedbackPage = () => {
   const filteredComplaints = complaints.filter((c) => {
     if (scopeFilter === "PROJECT" && !c.projectName) return false;
     if (scopeFilter === "GENERAL" && c.projectName) return false;
-    if (selectedProjectFilter !== "ALL_PROJECTS" && c.projectName !== selectedProjectFilter) return false;
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       const matchTitle = c.title?.toLowerCase().includes(q);
@@ -198,24 +186,6 @@ const AdminFeedbackPage = () => {
                   <option value="GENERAL">General Platform</option>
                 </select>
               </div>
-
-              {/* Project filter (when projects exist) */}
-              {projectNames.length > 0 && scopeFilter !== "GENERAL" && (
-                <div className="project-select-wrap">
-                  <select
-                    value={selectedProjectFilter}
-                    onChange={(e) => setSelectedProjectFilter(e.target.value)}
-                    className="filter-select"
-                  >
-                    <option value="ALL_PROJECTS">All Projects</option>
-                    {projectNames.map((name) => (
-                      <option key={name} value={name}>
-                        📁 {name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
 
               {/* Search Bar */}
               <div className="search-wrap">
