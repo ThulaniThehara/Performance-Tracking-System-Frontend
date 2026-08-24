@@ -71,7 +71,7 @@ const emptyForm = () => ({
 });
 
 const QUICK_ACTION_DEFS = [
-  { to: "/AdminAddProjects", labelKey: "admin.home.quickActions.newProject", icon: <FaPlus /> },
+  { to: "/AdminProjects?create=true", labelKey: "admin.home.quickActions.newProject", icon: <FaPlus /> },
   { to: "/AdminAddMember", labelKey: "admin.home.quickActions.addMember", icon: <FaUserPlus /> },
   { to: "/AdminCommittees", labelKey: "shell.nav.committees", icon: <FaLayerGroup /> },
   { to: "/Reports", labelKey: "shell.nav.reports", icon: <FaChartLine /> },

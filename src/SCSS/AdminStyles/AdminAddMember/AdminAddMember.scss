@@ -4,6 +4,90 @@
    Admin Add Member Page · Modern Redesign (Reference UI)
    ========================================================================== */
 
+/* Top Underline Indicator Navigation Bar (Shared Across Admin Views) */
+.member-navigation-header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  max-width: 1400px;
+  margin-top: 10px;
+  margin-bottom: 42px;
+  border-bottom: 1.5px solid var(--separator, #e6dcf7);
+}
+
+.underline-tab-bar {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  position: relative;
+  user-select: none;
+  margin-bottom: -1.5px;
+}
+
+.underline-tab {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 6px 16px 6px;
+  background: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  font-family: inherit;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--label-muted, #8b7eb5);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+
+  .tab-icon {
+    font-size: 1rem;
+    color: var(--purple-400, #9d7bf0);
+    transition: color 0.2s ease;
+  }
+
+  .tab-count-pill {
+    font-size: 0.76rem;
+    font-weight: 700;
+    padding: 2px 10px;
+    background: var(--purple-100, #eae2f8);
+    color: var(--purple-800, #3b2a82);
+    border-radius: var(--r-pill, 9999px);
+    margin-left: 2px;
+    transition: all 0.2s ease;
+  }
+
+  &:hover:not(.active) {
+    color: var(--label, #1e163b);
+
+    .tab-icon {
+      color: var(--purple-600, #6b52d1);
+    }
+  }
+
+  &.active {
+    color: var(--purple-700, #563eb5);
+    font-weight: 700;
+
+    .tab-icon {
+      color: var(--purple-600, #6b52d1);
+    }
+
+    .active-underline {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3.5px;
+      background: var(--gradient-primary, linear-gradient(135deg, #6b52d1 0%, #9d7bf0 100%));
+      border-radius: 4px 4px 0 0;
+      box-shadow: 0 2px 8px rgba(107, 82, 209, 0.35);
+    }
+  }
+}
+
 .admin-add-member-page {
   min-height: 100vh;
   width: 100%;
@@ -15,105 +99,21 @@
   .admin-add-member-main {
     margin-left: 240px;
     width: calc(100% - 240px);
-    padding: 24px 36px 64px;
+    padding: 32px 40px 72px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     transition: margin-left 0.25s ease, width 0.25s ease;
   }
 
   .admin-member-container {
     width: 100%;
-    max-width: 1140px;
+    max-width: 1400px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
-  }
-
-  /* -------------------------------------------------------------------------
-     Top Underline Indicator Navigation Bar (Constant Left Alignment & Generous Spacing)
-     ------------------------------------------------------------------------- */
-  .member-navigation-header {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100%;
-    max-width: 1140px;
-    margin-top: 10px;
-    margin-bottom: 42px;
-    border-bottom: 1.5px solid var(--separator);
-  }
-
-  .underline-tab-bar {
-    display: flex;
-    align-items: center;
-    gap: 36px;
-    position: relative;
-    user-select: none;
-    margin-bottom: -1.5px;
-  }
-
-  .underline-tab {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 6px 16px 6px;
-    background: transparent;
-    border: none;
-    font-family: inherit;
-    font-size: 0.98rem;
-    font-weight: 600;
-    color: var(--label-muted);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    position: relative;
-
-    .tab-icon {
-      font-size: 1rem;
-      color: var(--purple-400);
-      transition: color 0.2s ease;
-    }
-
-    .tab-count-pill {
-      font-size: 0.76rem;
-      font-weight: 700;
-      padding: 2px 10px;
-      background: var(--purple-100);
-      color: var(--purple-800);
-      border-radius: var(--r-pill);
-      margin-left: 2px;
-      transition: all 0.2s ease;
-    }
-
-    &:hover:not(.active) {
-      color: var(--label);
-
-      .tab-icon {
-        color: var(--purple-600);
-      }
-    }
-
-    &.active {
-      color: var(--purple-700);
-      font-weight: 700;
-
-      .tab-icon {
-        color: var(--purple-600);
-      }
-
-      .active-underline {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 3.5px;
-        background: var(--gradient-primary);
-        border-radius: 4px 4px 0 0;
-        box-shadow: 0 2px 8px rgba(107, 82, 209, 0.35);
-      }
-    }
+    align-items: stretch;
   }
 
   /* -------------------------------------------------------------------------

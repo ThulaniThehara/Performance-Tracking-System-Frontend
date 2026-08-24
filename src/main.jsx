@@ -14,7 +14,6 @@ import AdminHome from "./Pages/Admin/AdminHome.jsx";
 import AdminDashboard from "./Pages/Admin/AdminDashboard.jsx";
 import AdminProjects from "./Pages/Admin/AdminProjects.jsx";
 import AdminCommittees from "./Pages/Admin/AdminCommitees.jsx";
-import AdminAddProject from "./Pages/Admin/AdminAddProject.jsx";
 import AdminAddMember from "./Pages/Admin/AdminAddMember.jsx";
 import AdminViewAccount from "./Pages/Admin/AdminViewAccount.jsx";
 import AdminFeedbackPage from "./Pages/Admin/AdminFeedbackPage.jsx";
@@ -145,7 +144,7 @@ const router = createBrowserRouter([
     ),
     errorElement: <RouteErrorBoundary />,
   },
-  { path: "/AdminAddProjects", element: <AdminAddProject />, errorElement: <div>Page Not Found</div> },
+  { path: "/AdminAddProjects", element: <AdminProjects />, errorElement: <RouteErrorBoundary /> },
   { path: "/AdminAddMember", element: <AdminAddMember />, errorElement: <div>Page Not Found</div> },
   { path: "/AdminCommittees", element: <AdminCommittees />, errorElement: <div>Page Not Found</div> },
   { path: "/AdminViewAccount", element: <AdminViewAccount />, errorElement: <div>Page Not Found</div> },

@@ -144,7 +144,7 @@ const ReportsComponents = () => {
         {/* Page Hero Header */}
         <header className="reports-hero">
           <div className="hero-left">
-            <span className="hero-eyebrow">{t('reports.hero.eyebrow')}</span>
+            <span className="hero-eyebrow">ANALYTICS</span>
             <h1>{t('reports.hero.title')}</h1>
             <p className="hero-sub">
               {t('reports.hero.subtitle')}
