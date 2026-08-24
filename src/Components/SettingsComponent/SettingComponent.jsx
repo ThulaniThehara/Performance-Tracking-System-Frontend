@@ -82,15 +82,13 @@ const SettingComponent = () => {
     <div className="settings-page">
       <div className="settings-container">
         {/* Header */}
-        <div className="settings-header">
-          <div className="header-content">
-            <FaCog className="header-icon" />
-            <div>
-              <h1>{t('settings.title')}</h1>
-              <p>{t('settings.subtitle')}</p>
-            </div>
+        <header className="pm-hero" style={{ marginBottom: "32px" }}>
+          <div>
+            <p className="pm-eyebrow">PREFERENCES</p>
+            <h1>{t('settings.title', { defaultValue: 'Settings' })}</h1>
+            <p className="pm-hero-sub">{t('settings.subtitle', { defaultValue: 'Manage your system preferences and notification settings' })}</p>
           </div>
-        </div>
+        </header>
 
         {/* Tabs */}
         <div className="settings-tabs">

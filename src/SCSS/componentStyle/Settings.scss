@@ -16,15 +16,15 @@
 }
 
 .settings-page {
-  margin-left: 220px;
-  margin-top: 70px;
+  margin-left: 240px;
   min-height: 100vh;
-  background-color: var(--page-bg);
-  padding: 28px 32px;
+  background-color: var(--bg, #f8f6fe);
+  padding: 32px 40px 72px;
+  font-family: "Poppins", sans-serif;
 }
 
 .settings-container {
-  max-width: 1000px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 

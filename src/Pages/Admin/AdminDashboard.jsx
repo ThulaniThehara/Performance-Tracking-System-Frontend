@@ -55,26 +55,29 @@ const AdminDashboard = () => {
     return new Date().toLocaleDateString("en-US", { month: "short", year: "numeric" });
   };
 
-  // Profile State containing all registered member profile fields
-  const [profile, setProfile] = useState({
-    name: "Thulani Thehara",
-    role: "ADMIN",
-    indexNo: "ADM001",
-    email: "thulanithehara03@gmail.com",
-    phone: "0770000000",
-    gender: "Male",
-    dob: "2001-05-15",
-    location: "Faculty of IT",
-    batch: "21",
-    joinedDate: "Aug 2026",
-    profileImage: null,
+  // Profile State initialized cleanly from logged-in session user
+  const [profile, setProfile] = useState(() => {
+    const localUser = getUser() || {};
+    return {
+      name: localUser.name || localUser.username || "",
+      role: localUser.userRole || localUser.role || "ADMIN",
+      indexNo: localUser.indexNo || "",
+      email: localUser.email || "",
+      phone: localUser.contactNO || localUser.phone || "",
+      gender: localUser.gender || "",
+      dob: localUser.dob || "",
+      location: localUser.faculy || localUser.faculty || "",
+      batch: localUser.batch ? String(localUser.batch).replace("Batch ", "") : "",
+      joinedDate: "",
+      profileImage: localUser.profileImage || localUser.avatar || null,
+    };
   });
 
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({ ...profile });
   const [saveSuccess, setSaveSuccess] = useState(false);
 
-  // Fetch logged-in user details
+  // Fetch logged-in user details dynamically
   useEffect(() => {
     const fetchAdminDetails = async () => {
       try {
@@ -83,15 +86,15 @@ const AdminDashboard = () => {
         if (localUser) {
           const formattedDate = formatJoinedDate(localUser.createdAt || localUser.created_at, localUser._id || localUser.id);
           const initialData = {
-            name: localUser.name || localUser.username || "Thulani Thehara",
-            email: localUser.email || "thulanithehara03@gmail.com",
+            name: localUser.name || localUser.username || "",
+            email: localUser.email || "",
             role: localUser.userRole || localUser.role || "ADMIN",
-            indexNo: localUser.indexNo || "ADM001",
-            phone: localUser.contactNO || localUser.phone || "0770000000",
-            gender: localUser.gender || "Male",
-            dob: localUser.dob || "2001-05-15",
-            location: localUser.faculy || localUser.faculty || "Faculty of IT",
-            batch: localUser.batch ? String(localUser.batch).replace("Batch ", "") : "21",
+            indexNo: localUser.indexNo || "",
+            phone: localUser.contactNO || localUser.phone || "",
+            gender: localUser.gender || "",
+            dob: localUser.dob || "",
+            location: localUser.faculy || localUser.faculty || "",
+            batch: localUser.batch ? String(localUser.batch).replace("Batch ", "") : "",
             joinedDate: formattedDate,
             profileImage: localUser.profileImage || localUser.avatar || null,
           };
@@ -110,18 +113,18 @@ const AdminDashboard = () => {
           const data = await res.json();
           const adminData = Array.isArray(data) ? (data.find((u) => (u.userRole || u.role) === "ADMIN") || data[0]) : data;
 
-          if (adminData && adminData.name) {
+          if (adminData) {
             const formattedDate = formatJoinedDate(adminData.createdAt || adminData.created_at, adminData._id || adminData.id);
             const fetchedData = {
-              name: adminData.name,
-              role: adminData.userRole || "ADMIN",
-              indexNo: adminData.indexNo || "ADM001",
-              email: adminData.email || "thulanithehara03@gmail.com",
-              phone: adminData.contactNO || "0770000000",
-              gender: adminData.gender || "Male",
-              dob: adminData.dob ? adminData.dob.split("T")[0] : "2001-05-15",
-              location: adminData.faculy || adminData.faculty || "Faculty of IT",
-              batch: adminData.batch ? String(adminData.batch).replace("Batch ", "") : "21",
+              name: adminData.name || localUser?.name || "",
+              role: adminData.userRole || adminData.role || localUser?.userRole || "ADMIN",
+              indexNo: adminData.indexNo || localUser?.indexNo || "",
+              email: adminData.email || localUser?.email || "",
+              phone: adminData.contactNO || adminData.phone || localUser?.contactNO || "",
+              gender: adminData.gender || localUser?.gender || "",
+              dob: adminData.dob ? adminData.dob.split("T")[0] : localUser?.dob || "",
+              location: adminData.faculy || adminData.faculty || localUser?.faculy || "",
+              batch: adminData.batch ? String(adminData.batch).replace("Batch ", "") : localUser?.batch || "",
               joinedDate: formattedDate,
               profileImage: adminData.profileImage || adminData.avatar || localUser?.profileImage || null,
             };
@@ -205,7 +208,7 @@ const AdminDashboard = () => {
   };
 
   const getInitials = (name) => {
-    if (!name) return "TT";
+    if (!name) return "AD";
     const parts = name.trim().split(/\s+/);
     if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
     return name.slice(0, 2).toUpperCase();
@@ -219,11 +222,14 @@ const AdminDashboard = () => {
       <main className="admin-dashboard-main">
         <div className="dashboard-content-container">
 
-          {/* Page Top Header with Title and Edit Action */}
-          <div className="profile-page-header">
-            <div className="header-titles">
-              <h1>Personal Profile</h1>
-              <p>View and update your personal account details</p>
+          {/* Page Hero Header with Title and Edit Action */}
+          <header className="pm-hero">
+            <div>
+              <p className="pm-eyebrow">ACCOUNT &amp; PROFILE</p>
+              <h1>{t('admin.profile.title', { defaultValue: 'Personal Profile' })}</h1>
+              <p className="pm-hero-sub">
+                {t('admin.profile.subtitle', { defaultValue: 'View and manage your personal administrator profile & account details' })}
+              </p>
             </div>
 
             <div className="header-actions">
@@ -263,7 +269,7 @@ const AdminDashboard = () => {
                 </div>
               )}
             </div>
-          </div>
+          </header>
 
           {/* Form Card Layout */}
           <div className="personal-details-form-card">
@@ -297,11 +303,11 @@ const AdminDashboard = () => {
               </div>
 
               <div className="header-user-info">
-                <h2 className="user-name">{profile.name}</h2>
+                <h2 className="user-name">{profile.name || "Admin Profile"}</h2>
                 <div className="user-pills-row">
-                  <span className="role-badge"><FaUserShield /> {profile.role}</span>
-                  <span className="id-badge">ID: {profile.indexNo}</span>
-                  <span className="batch-badge">Batch {profile.batch}</span>
+                  {profile.role && <span className="role-badge"><FaUserShield /> {profile.role}</span>}
+                  {profile.indexNo && <span className="id-badge">ID: {profile.indexNo}</span>}
+                  {profile.batch && <span className="batch-badge">Batch {profile.batch}</span>}
                 </div>
               </div>
             </div>
@@ -427,7 +433,7 @@ const AdminDashboard = () => {
                   <label><FaLayerGroup className="field-icon" /> Batch</label>
                   <input
                     type="text"
-                    value={`Batch ${profile.batch}`}
+                    value={profile.batch ? `Batch ${profile.batch}` : ""}
                     readOnly
                     className="form-control read-only system-field"
                   />

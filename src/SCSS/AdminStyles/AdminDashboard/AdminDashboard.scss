@@ -15,68 +15,109 @@
   .admin-dashboard-main {
     margin-left: 240px;
     width: calc(100% - 240px);
-    padding: 36px 40px 64px;
+    padding: 32px 40px 72px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     transition: margin-left 0.25s ease, width 0.25s ease;
   }
 
   .dashboard-content-container {
     width: 100%;
-    max-width: 960px;
+    max-width: 1400px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     gap: 28px;
   }
 
-  /* ---------------- 1. Page Header Bar ---------------- */
-  .profile-page-header {
+  /* ---------------- 1. Page Header Bar & Action Buttons ---------------- */
+  .pm-hero {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 20px;
     flex-wrap: wrap;
+    width: 100%;
+  }
 
-    .header-titles {
-      h1 {
-        margin: 0;
-        font-size: 1.65rem;
-        font-weight: 800;
-        color: var(--label, #1e163b);
-        letter-spacing: -0.02em;
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .save-toast-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: rgba(107, 82, 209, 0.08);
+      color: var(--accent, #6b52d1);
+      border: 1px solid rgba(107, 82, 209, 0.22);
+      border-radius: 12px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      animation: fadeIn 0.25s ease;
+    }
+
+    /* Primary Brand Theme Edit Button */
+    .btn-header-edit {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 44px;
+      padding: 0 22px;
+      border-radius: 12px;
+      background: var(--gradient-primary, linear-gradient(135deg, #6b52d1 0%, #9d7bf0 100%));
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(107, 82, 209, 0.28);
+      transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+
+      &:hover {
+        background: linear-gradient(135deg, #563eb5 0%, #8b5cf6 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(107, 82, 209, 0.38);
       }
 
-      p {
-        margin: 4px 0 0 0;
-        font-size: 0.88rem;
-        color: var(--label-muted, #8b7eb5);
+      &:active {
+        transform: translateY(0) scale(0.98);
       }
     }
 
-    .header-actions {
+    .edit-action-group {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
 
-      .save-toast-badge {
+      .btn-header-cancel {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        padding: 8px 16px;
-        background: rgba(107, 82, 209, 0.08);
-        color: var(--accent, #6b52d1);
-        border: 1px solid rgba(107, 82, 209, 0.22);
+        height: 44px;
+        padding: 0 18px;
         border-radius: 12px;
-        font-size: 0.84rem;
+        background: var(--purple-50, #f8f6fe);
+        color: var(--label-2, #5b45b0);
+        border: 1px solid var(--separator, #e6dcf7);
+        font-family: inherit;
+        font-size: 0.88rem;
         font-weight: 700;
-        animation: fadeIn 0.25s ease;
+        cursor: pointer;
+        transition: all 0.18s ease;
+
+        &:hover {
+          background: var(--accent-soft, #eae2f8);
+          color: var(--accent-hover, #563eb5);
+        }
       }
 
-      /* Primary Brand Theme Edit Button */
-      .btn-header-edit {
+      .btn-header-save {
         display: inline-flex;
         align-items: center;
         gap: 8px;
@@ -85,13 +126,13 @@
         border-radius: 12px;
         background: var(--gradient-primary, linear-gradient(135deg, #6b52d1 0%, #9d7bf0 100%));
         color: #ffffff;
-        font-family: inherit;
-        font-size: 0.9rem;
-        font-weight: 700;
         border: none;
+        font-family: inherit;
+        font-size: 0.88rem;
+        font-weight: 700;
         cursor: pointer;
         box-shadow: 0 6px 18px rgba(107, 82, 209, 0.28);
-        transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.22s ease;
 
         &:hover {
           background: linear-gradient(135deg, #563eb5 0%, #8b5cf6 100%);
@@ -103,67 +144,14 @@
           transform: translateY(0) scale(0.98);
         }
       }
-
-      .edit-action-group {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-
-        .btn-header-cancel {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          height: 44px;
-          padding: 0 18px;
-          border-radius: 12px;
-          background: var(--purple-50, #f8f6fe);
-          color: var(--label-2, #5b45b0);
-          border: 1px solid var(--separator, #e6dcf7);
-          font-family: inherit;
-          font-size: 0.88rem;
-          font-weight: 700;
-          cursor: pointer;
-          transition: all 0.18s ease;
-
-          &:hover {
-            background: var(--accent-soft, #eae2f8);
-            color: var(--accent-hover, #563eb5);
-          }
-        }
-
-        .btn-header-save {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          height: 44px;
-          padding: 0 22px;
-          border-radius: 12px;
-          background: var(--gradient-primary, linear-gradient(135deg, #6b52d1 0%, #9d7bf0 100%));
-          color: #ffffff;
-          border: none;
-          font-family: inherit;
-          font-size: 0.88rem;
-          font-weight: 700;
-          cursor: pointer;
-          box-shadow: 0 6px 18px rgba(107, 82, 209, 0.28);
-          transition: all 0.22s ease;
-
-          &:hover {
-            background: linear-gradient(135deg, #563eb5 0%, #8b5cf6 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(107, 82, 209, 0.38);
-          }
-
-          &:active {
-            transform: translateY(0) scale(0.98);
-          }
-        }
-      }
     }
   }
 
   /* ---------------- 2. Personal Details Form Card ---------------- */
   .personal-details-form-card {
+    width: 100%;
+    max-width: 920px;
+    margin: 0 auto;
     background: #ffffff;
     border-radius: 24px;
     border: 1px solid var(--separator, #e6dcf7);

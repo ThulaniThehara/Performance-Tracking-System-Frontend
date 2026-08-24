@@ -14,7 +14,6 @@ import AdminHome from "./Pages/Admin/AdminHome.jsx";
 import AdminDashboard from "./Pages/Admin/AdminDashboard.jsx";
 import AdminProjects from "./Pages/Admin/AdminProjects.jsx";
 import AdminCommittees from "./Pages/Admin/AdminCommitees.jsx";
-import AdminAddProject from "./Pages/Admin/AdminAddProject.jsx";
 import AdminAddMember from "./Pages/Admin/AdminAddMember.jsx";
 import AdminViewAccount from "./Pages/Admin/AdminViewAccount.jsx";
 
@@ -144,7 +143,6 @@ const router = createBrowserRouter([
     ),
     errorElement: <RouteErrorBoundary />,
   },
-  { path: "/AdminAddProjects", element: <AdminAddProject />, errorElement: <RouteErrorBoundary /> },
   { path: "/AdminAddMember", element: <AdminAddMember />, errorElement: <RouteErrorBoundary /> },
   { path: "/AdminCommittees", element: <AdminCommittees />, errorElement: <RouteErrorBoundary /> },
   { path: "/AdminViewAccount", element: <AdminViewAccount />, errorElement: <RouteErrorBoundary /> },

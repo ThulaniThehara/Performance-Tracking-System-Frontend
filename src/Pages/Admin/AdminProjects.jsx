@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { FaPlus, FaSearch, FaCrown, FaArrowRight, FaFolderOpen } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 
@@ -31,6 +31,7 @@ const emptyForm = () => ({
  */
 const AdminProjects = () => {
   const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -60,7 +61,7 @@ const AdminProjects = () => {
     load();
   }, [load]);
 
-  const openCreate = async () => {
+  const openCreate = useCallback(async () => {
     setForm(emptyForm());
     setFormError("");
     setShowCreate(true);
@@ -71,7 +72,18 @@ const AdminProjects = () => {
     } catch (e) {
       setFormError(e.message || t('admin.projects.loadMembersError'));
     }
-  };
+  }, [t]);
+
+  useEffect(() => {
+    if (searchParams.get("create") === "true") {
+      openCreate();
+      // Remove param from URL without page reload
+      setSearchParams((params) => {
+        params.delete("create");
+        return params;
+      }, { replace: true });
+    }
+  }, [searchParams, openCreate, setSearchParams]);
 
   const onFormChange = (e) => {
     setFormError("");
