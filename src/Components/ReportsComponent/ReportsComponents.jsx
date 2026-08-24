@@ -1,17 +1,13 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import {
   FaFileAlt,
-  FaComments,
-  FaExclamationCircle,
   FaDownload,
   FaChartBar,
   FaSearch,
-  FaPaperPlane,
   FaTimes,
   FaUsers,
   FaCheckCircle,
   FaTasks,
-  FaShieldAlt,
   FaSyncAlt,
   FaArrowUp,
   FaSitemap,
@@ -19,12 +15,10 @@ import {
 } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import { apiFetch } from '../../utils/api';
-import { getUser } from '../../utils/auth';
 import '../../SCSS/componentStyle/Reports.scss';
 
 const ReportsComponents = () => {
   const { t } = useTranslation();
-  const currentUser = getUser();
 
   const [activeTab, setActiveTab] = useState('performance');
   const [searchQuery, setSearchQuery] = useState('');
@@ -33,7 +27,6 @@ const ReportsComponents = () => {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [submitting, setSubmitting] = useState(false);
 
   const [kpi, setKpi] = useState({
     avgPerformance: '100.0',
@@ -47,29 +40,6 @@ const ReportsComponents = () => {
 
   const [performanceList, setPerformanceList] = useState([]);
   const [projectList, setProjectList] = useState([]);
-  const [feedbackList, setFeedbackList] = useState([]);
-  const [complaintList, setComplaintList] = useState([]);
-
-  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
-  const [showComplaintsModal, setShowComplaintsModal] = useState(false);
-
-  const [feedback, setFeedback] = useState({
-    type: 'Suggestion',
-    author: currentUser?.name || '',
-    message: '',
-    rating: 5,
-  });
-
-  const [complaint, setComplaint] = useState({
-    category: 'Technical Issue',
-    title: '',
-    description: '',
-    priority: 'Medium',
-    from: currentUser?.name || '',
-  });
-
-  const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
-  const [complaintSubmitted, setComplaintSubmitted] = useState(false);
 
   // Fetch live reports and analytics data from backend
   const loadReports = useCallback(async () => {
@@ -82,8 +52,6 @@ const ReportsComponents = () => {
       setKpi(res.data.kpi || {});
       setPerformanceList(res.data.performance || []);
       setProjectList(res.data.projects || []);
-      setFeedbackList(res.data.feedback || []);
-      setComplaintList(res.data.complaints || []);
     } catch (e) {
       setError(e.message || t('reports.loadError'));
     } finally {
@@ -122,125 +90,6 @@ const ReportsComponents = () => {
     });
   }, [projectList, searchQuery, statusFilter]);
 
-  // Filtered Feedback Data
-  const filteredFeedback = useMemo(() => {
-    return feedbackList.filter((item) => {
-      const q = searchQuery.toLowerCase();
-      return (
-        (item.author || '').toLowerCase().includes(q) ||
-        (item.message || '').toLowerCase().includes(q) ||
-        (item.type || '').toLowerCase().includes(q)
-      );
-    });
-  }, [feedbackList, searchQuery]);
-
-  // Filtered Complaints Data
-  const filteredComplaints = useMemo(() => {
-    return complaintList.filter((item) => {
-      const q = searchQuery.toLowerCase();
-      const matchesSearch =
-        (item.from || '').toLowerCase().includes(q) ||
-        (item.title || '').toLowerCase().includes(q) ||
-        (item.description || '').toLowerCase().includes(q) ||
-        (item.category || '').toLowerCase().includes(q);
-      const matchesStatus =
-        statusFilter === 'all' || (item.status || '').toLowerCase().replace(' ', '') === statusFilter.toLowerCase().replace(' ', '');
-      return matchesSearch && matchesStatus;
-    });
-  }, [complaintList, searchQuery, statusFilter]);
-
-  // Submit Feedback to backend
-  const handleFeedbackSubmit = async (e) => {
-    e.preventDefault();
-    if (!feedback.message.trim()) return;
-
-    try {
-      setSubmitting(true);
-      const res = await apiFetch('/pm/reports/feedback', {
-        method: 'POST',
-        body: JSON.stringify({
-          author: feedback.author.trim() || currentUser?.name || t('reports.anonymous'),
-          type: feedback.type,
-          message: feedback.message.trim(),
-          rating: feedback.rating,
-        }),
-      });
-
-      if (res?.data) {
-        setFeedbackList([
-          {
-            id: res.data._id,
-            author: res.data.author,
-            role: res.data.role,
-            type: res.data.type,
-            message: res.data.message,
-            rating: res.data.rating,
-            date: new Date().toISOString().split('T')[0],
-          },
-          ...feedbackList,
-        ]);
-      }
-
-      setFeedbackSubmitted(true);
-      setTimeout(() => {
-        setFeedbackSubmitted(false);
-        setShowFeedbackModal(false);
-        setFeedback({ type: 'Suggestion', author: currentUser?.name || '', message: '', rating: 5 });
-      }, 1200);
-    } catch (err) {
-      alert(err.message || t('reports.feedbackSubmitError'));
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  // Submit Complaint to backend
-  const handleComplaintSubmit = async (e) => {
-    e.preventDefault();
-    if (!complaint.title.trim() || !complaint.description.trim()) return;
-
-    try {
-      setSubmitting(true);
-      const res = await apiFetch('/pm/reports/complaint', {
-        method: 'POST',
-        body: JSON.stringify({
-          from: complaint.from.trim() || currentUser?.name || t('reports.anonymous'),
-          category: complaint.category,
-          title: complaint.title.trim(),
-          description: complaint.description.trim(),
-          priority: complaint.priority,
-        }),
-      });
-
-      if (res?.data) {
-        setComplaintList([
-          {
-            id: res.data._id,
-            from: res.data.from,
-            category: res.data.category,
-            title: res.data.title,
-            description: res.data.description,
-            priority: res.data.priority,
-            status: res.data.status,
-            date: new Date().toISOString().split('T')[0],
-          },
-          ...complaintList,
-        ]);
-      }
-
-      setComplaintSubmitted(true);
-      setTimeout(() => {
-        setComplaintSubmitted(false);
-        setShowComplaintsModal(false);
-        setComplaint({ category: 'Technical Issue', title: '', description: '', priority: 'Medium', from: currentUser?.name || '' });
-      }, 1200);
-    } catch (err) {
-      alert(err.message || t('reports.complaintSubmitError'));
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   // Download CSV Export
   const downloadReportCSV = () => {
     let headers = [];
@@ -255,7 +104,7 @@ const ReportsComponents = () => {
         `"${p.faculty || ''}"`,
         `"${p.batch || ''}"`,
         `"${p.project || ''}"`,
-        p.score,
+        p.score !== null && p.score !== undefined ? `${p.score}%` : 'N/A',
         p.tasksDone,
         p.totalTasks,
         p.completedOnTime,
@@ -276,27 +125,6 @@ const ReportsComponents = () => {
         p.totalTasks,
         `"${p.status || ''}"`,
         `"${p.budgetHealth || ''}"`,
-      ]);
-    } else if (activeTab === 'feedback') {
-      headers = ['Author', 'Role', 'Type', 'Rating', 'Message', 'Date'];
-      rows = filteredFeedback.map((f) => [
-        `"${f.author || ''}"`,
-        `"${f.role || 'Member'}"`,
-        `"${f.type || ''}"`,
-        f.rating,
-        `"${(f.message || '').replace(/"/g, '""')}"`,
-        f.date,
-      ]);
-    } else {
-      headers = ['From', 'Category', 'Title', 'Priority', 'Status', 'Date', 'Description'];
-      rows = filteredComplaints.map((c) => [
-        `"${c.from || ''}"`,
-        `"${c.category || ''}"`,
-        `"${c.title || ''}"`,
-        `"${c.priority || ''}"`,
-        `"${c.status || ''}"`,
-        c.date,
-        `"${(c.description || '').replace(/"/g, '""')}"`,
       ]);
     }
 
@@ -324,9 +152,6 @@ const ReportsComponents = () => {
           </div>
 
           <div className="hero-actions">
-            <button className="rpt-btn rpt-btn-secondary" onClick={() => setShowComplaintsModal(true)}>
-              <FaExclamationCircle aria-hidden="true" /> {t('reports.hero.reportIssue')}
-            </button>
             <button className="rpt-btn rpt-btn-primary" onClick={downloadReportCSV}>
               <FaDownload aria-hidden="true" /> {t('reports.hero.exportCsv')}
             </button>
@@ -415,20 +240,6 @@ const ReportsComponents = () => {
               <FaFileAlt aria-hidden="true" /> {t('reports.tabs.projects')}
               <span className="tab-badge">{filteredProjects.length}</span>
             </button>
-            <button
-              className={`nav-tab-btn ${activeTab === 'feedback' ? 'is-active' : ''}`}
-              onClick={() => setActiveTab('feedback')}
-            >
-              <FaComments aria-hidden="true" /> {t('reports.tabs.feedback')}
-              <span className="tab-badge">{filteredFeedback.length}</span>
-            </button>
-            <button
-              className={`nav-tab-btn ${activeTab === 'complaints' ? 'is-active' : ''}`}
-              onClick={() => setActiveTab('complaints')}
-            >
-              <FaShieldAlt aria-hidden="true" /> {t('reports.tabs.complaints')}
-              <span className="tab-badge">{filteredComplaints.length}</span>
-            </button>
           </div>
         </div>
 
@@ -459,6 +270,7 @@ const ReportsComponents = () => {
                     <option value="excellent">{t('reports.filters.excellent')}</option>
                     <option value="good">{t('reports.filters.good')}</option>
                     <option value="needs attention">{t('reports.filters.needsAttention')}</option>
+                    <option value="unassigned">Unassigned</option>
                   </>
                 )}
                 {activeTab === 'projects' && (
@@ -466,13 +278,6 @@ const ReportsComponents = () => {
                     <option value="active">{t('reports.filters.active')}</option>
                     <option value="completed">{t('reports.filters.completed')}</option>
                     <option value="upcoming">{t('reports.filters.upcoming')}</option>
-                  </>
-                )}
-                {activeTab === 'complaints' && (
-                  <>
-                    <option value="resolved">{t('reports.filters.resolved')}</option>
-                    <option value="inprogress">{t('reports.filters.inProgress')}</option>
-                    <option value="open">{t('reports.filters.open')}</option>
                   </>
                 )}
               </select>
@@ -566,21 +371,31 @@ const ReportsComponents = () => {
                           </td>
                           <td>
                             <div className="task-count-cell">
-                              {t('reports.performancePane.tasksDoneRatio', { done: item.tasksDone, total: item.totalTasks })}
+                              {item.totalTasks > 0 ? (
+                                t('reports.performancePane.tasksDoneRatio', { done: item.tasksDone, total: item.totalTasks })
+                              ) : (
+                                <span className="rpt-no-tasks-subtle">0 / 0 Done</span>
+                              )}
                             </div>
                           </td>
                           <td>
-                            <div className="rpt-score-meter">
-                              <div className="meter-track">
-                                <div
-                                  className={`meter-fill ${
-                                    item.score >= 90 ? 'is-high' : item.score >= 75 ? 'is-med' : 'is-low'
-                                  }`}
-                                  style={{ width: `${item.score}%` }}
-                                />
+                            {item.totalTasks > 0 || (item.score !== null && item.score !== undefined) ? (
+                              <div className="rpt-score-meter">
+                                <div className="meter-track">
+                                  <div
+                                    className={`meter-fill ${
+                                      item.score >= 90 ? 'is-high' : item.score >= 75 ? 'is-med' : 'is-low'
+                                    }`}
+                                    style={{ width: `${item.score}%` }}
+                                  />
+                                </div>
+                                <span className="meter-val">{item.score}%</span>
                               </div>
-                              <span className="meter-val">{item.score}%</span>
-                            </div>
+                            ) : (
+                              <div className="rpt-no-score">
+                                <span className="rpt-no-tasks-badge">No assigned tasks</span>
+                              </div>
+                            )}
                           </td>
                           <td>
                             <span
@@ -589,20 +404,28 @@ const ReportsComponents = () => {
                                   ? 'is-excellent'
                                   : item.status === 'Good'
                                   ? 'is-good'
-                                  : 'is-warning'
+                                  : item.status === 'Needs Attention'
+                                  ? 'is-warning'
+                                  : 'is-unassigned'
                               }`}
                             >
-                              {item.status}
+                              {item.status || 'Unassigned'}
                             </span>
                           </td>
                           <td className="rpt-date-cell">
-                            <span style={{ color: '#059669', fontWeight: 600 }}>
-                              {t('reports.performancePane.onTimeCount', { count: item.completedOnTime || 0 })}
-                            </span>
-                            {item.overdueTasks > 0 && (
-                              <span style={{ color: '#dc2626', marginLeft: '6px', fontWeight: 600 }}>
-                                • {t('reports.performancePane.overdueCount', { count: item.overdueTasks })}
-                              </span>
+                            {item.totalTasks > 0 ? (
+                              <>
+                                <span style={{ color: '#059669', fontWeight: 600 }}>
+                                  {t('reports.performancePane.onTimeCount', { count: item.completedOnTime || 0 })}
+                                </span>
+                                {item.overdueTasks > 0 && (
+                                  <span style={{ color: '#dc2626', marginLeft: '6px', fontWeight: 600 }}>
+                                    • {t('reports.performancePane.overdueCount', { count: item.overdueTasks })}
+                                  </span>
+                                )}
+                              </>
+                            ) : (
+                              <span className="rpt-muted-dash">—</span>
                             )}
                           </td>
                         </tr>
@@ -710,332 +533,8 @@ const ReportsComponents = () => {
               )}
             </div>
           )}
-
-          {/* TAB 3: FEEDBACK HUB */}
-          {activeTab === 'feedback' && (
-            <div className="reports-pane">
-              <div className="pane-header">
-                <div>
-                  <h2>{t('reports.feedbackPane.title')}</h2>
-                  <p>{t('reports.feedbackPane.subtitle')}</p>
-                </div>
-                <button className="rpt-btn rpt-btn-primary" onClick={() => setShowFeedbackModal(true)}>
-                  <FaComments aria-hidden="true" /> {t('reports.feedbackPane.submitNew')}
-                </button>
-              </div>
-
-              {loading ? (
-                <div className="pm-skeleton-list" style={{ padding: '24px', textAlign: 'center' }}>
-                  <FaSpinner className="spin" style={{ fontSize: '1.8rem', color: 'var(--accent)' }} />
-                </div>
-              ) : filteredFeedback.length === 0 ? (
-                <div className="reports-empty-state">
-                  <FaComments className="empty-icon" />
-                  <h3>{t('reports.feedbackPane.emptyTitle')}</h3>
-                  <p>{t('reports.feedbackPane.emptyBody')}</p>
-                </div>
-              ) : (
-                <div className="rpt-feedback-list">
-                  {filteredFeedback.map((item) => (
-                    <article key={item.id} className="rpt-feedback-card">
-                      <div className="f-card-header">
-                        <div className="f-author-block">
-                          <div className="member-avatar">
-                            {(item.author || 'M')
-                              .split(' ')
-                              .map((n) => n[0])
-                              .join('')}
-                          </div>
-                          <div>
-                            <h4>{item.author}</h4>
-                            <span className="f-role-badge">{item.role || t('enums.role.MEMBER')}</span>
-                          </div>
-                        </div>
-
-                        <div className="f-meta-right">
-                          <span className="f-type-tag">{item.type}</span>
-                          <div className="f-stars-row" title={t('reports.feedbackPane.ratedOf5', { rating: item.rating })}>
-                            {[1, 2, 3, 4, 5].map((star) => (
-                              <span key={star} className={star <= item.rating ? 'star-filled' : 'star-empty'}>
-                                ★
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-
-                      <p className="f-message">"{item.message}"</p>
-
-                      <div className="f-card-footer">
-                        <span className="f-date">{t('reports.feedbackPane.submittedOn', { date: item.date })}</span>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* TAB 4: ISSUE TRACKER */}
-          {activeTab === 'complaints' && (
-            <div className="reports-pane">
-              <div className="pane-header">
-                <div>
-                  <h2>{t('reports.complaintsPane.title')}</h2>
-                  <p>{t('reports.complaintsPane.subtitle')}</p>
-                </div>
-                <button className="rpt-btn rpt-btn-primary" onClick={() => setShowComplaintsModal(true)}>
-                  <FaExclamationCircle aria-hidden="true" /> {t('reports.complaintsPane.fileIssue')}
-                </button>
-              </div>
-
-              {loading ? (
-                <div className="pm-skeleton-list" style={{ padding: '24px', textAlign: 'center' }}>
-                  <FaSpinner className="spin" style={{ fontSize: '1.8rem', color: 'var(--accent)' }} />
-                </div>
-              ) : filteredComplaints.length === 0 ? (
-                <div className="reports-empty-state">
-                  <FaShieldAlt className="empty-icon" />
-                  <h3>{t('reports.complaintsPane.emptyTitle')}</h3>
-                  <p>{t('reports.complaintsPane.emptyBody')}</p>
-                </div>
-              ) : (
-                <div className="rpt-issues-list">
-                  {filteredComplaints.map((issue) => (
-                    <article key={issue.id} className="rpt-issue-card">
-                      <div className="issue-left-icon">
-                        <FaExclamationCircle aria-hidden="true" />
-                      </div>
-
-                      <div className="issue-body">
-                        <div className="issue-title-row">
-                          <h4>{issue.title}</h4>
-                          <span
-                            className={`rpt-pill ${
-                              issue.status === 'Resolved'
-                                ? 'is-excellent'
-                                : issue.status === 'In Progress'
-                                ? 'is-good'
-                                : 'is-warning'
-                            }`}
-                          >
-                            {issue.status}
-                          </span>
-                        </div>
-
-                        <p className="issue-desc">{issue.description}</p>
-
-                        <div className="issue-meta-tags">
-                          <span className="meta-badge category">{issue.category}</span>
-                          <span
-                            className={`meta-badge priority ${
-                              issue.priority === 'High' || issue.priority === 'Critical'
-                                ? 'is-high-priority'
-                                : ''
-                            }`}
-                          >
-                            {t('reports.complaintsPane.priority', { value: issue.priority })}
-                          </span>
-                          <span className="meta-badge from">{t('reports.complaintsPane.reportedBy', { name: issue.from })}</span>
-                          <span className="meta-badge date">{issue.date}</span>
-                        </div>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
         </main>
       </div>
-
-      {/* FEEDBACK MODAL */}
-      {showFeedbackModal && (
-        <div className="rpt-modal-overlay" onClick={() => setShowFeedbackModal(false)}>
-          <div className="rpt-modal-box" onClick={(e) => e.stopPropagation()}>
-            <div className="rpt-modal-header">
-              <h2>{t('reports.feedbackModal.title')}</h2>
-              <button className="rpt-modal-close" onClick={() => setShowFeedbackModal(false)}>
-                <FaTimes />
-              </button>
-            </div>
-
-            {feedbackSubmitted ? (
-              <div className="rpt-modal-success">
-                <div className="success-icon">✓</div>
-                <h3>{t('reports.feedbackModal.successTitle')}</h3>
-                <p>{t('reports.feedbackModal.successBody')}</p>
-              </div>
-            ) : (
-              <form onSubmit={handleFeedbackSubmit} className="rpt-form">
-                <div className="rpt-form-group">
-                  <label>{t('reports.feedbackModal.nameLabel')}</label>
-                  <input
-                    type="text"
-                    placeholder={t('reports.feedbackModal.namePlaceholder')}
-                    value={feedback.author}
-                    onChange={(e) => setFeedback({ ...feedback, author: e.target.value })}
-                  />
-                </div>
-
-                <div className="rpt-form-group">
-                  <label>{t('reports.feedbackModal.categoryLabel')}</label>
-                  <select
-                    value={feedback.type}
-                    onChange={(e) => setFeedback({ ...feedback, type: e.target.value })}
-                  >
-                    <option value="Suggestion">{t('reports.feedbackModal.categories.suggestion')}</option>
-                    <option value="Feature Request">{t('reports.feedbackModal.categories.featureRequest')}</option>
-                    <option value="General">{t('reports.feedbackModal.categories.general')}</option>
-                    <option value="Bug Report">{t('reports.feedbackModal.categories.bugReport')}</option>
-                  </select>
-                </div>
-
-                <div className="rpt-form-group">
-                  <label>{t('reports.feedbackModal.ratingLabel')}</label>
-                  <div className="interactive-stars">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <button
-                        type="button"
-                        key={star}
-                        className={`star-btn ${feedback.rating >= star ? 'is-active' : ''}`}
-                        onClick={() => setFeedback({ ...feedback, rating: star })}
-                      >
-                        ★
-                      </button>
-                    ))}
-                    <span className="rating-num-label">{t('reports.feedbackModal.starsOf5', { n: feedback.rating })}</span>
-                  </div>
-                </div>
-
-                <div className="rpt-form-group">
-                  <label>{t('reports.feedbackModal.messageLabel')}</label>
-                  <textarea
-                    rows={4}
-                    placeholder={t('reports.feedbackModal.messagePlaceholder')}
-                    value={feedback.message}
-                    onChange={(e) => setFeedback({ ...feedback, message: e.target.value })}
-                    required
-                  />
-                </div>
-
-                <div className="rpt-modal-actions">
-                  <button
-                    type="button"
-                    className="rpt-btn rpt-btn-secondary"
-                    onClick={() => setShowFeedbackModal(false)}
-                    disabled={submitting}
-                  >
-                    {t('common.cancel')}
-                  </button>
-                  <button type="submit" className="rpt-btn rpt-btn-primary" disabled={submitting}>
-                    {submitting ? <FaSpinner className="spin" /> : <FaPaperPlane aria-hidden="true" />} {t('reports.feedbackModal.submit')}
-                  </button>
-                </div>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* COMPLAINT / ISSUE MODAL */}
-      {showComplaintsModal && (
-        <div className="rpt-modal-overlay" onClick={() => setShowComplaintsModal(false)}>
-          <div className="rpt-modal-box" onClick={(e) => e.stopPropagation()}>
-            <div className="rpt-modal-header">
-              <h2>{t('reports.complaintModal.title')}</h2>
-              <button className="rpt-modal-close" onClick={() => setShowComplaintsModal(false)}>
-                <FaTimes />
-              </button>
-            </div>
-
-            {complaintSubmitted ? (
-              <div className="rpt-modal-success">
-                <div className="success-icon">✓</div>
-                <h3>{t('reports.complaintModal.successTitle')}</h3>
-                <p>{t('reports.complaintModal.successBody')}</p>
-              </div>
-            ) : (
-              <form onSubmit={handleComplaintSubmit} className="rpt-form">
-                <div className="rpt-form-row">
-                  <div className="rpt-form-group">
-                    <label>{t('reports.complaintModal.reporterLabel')}</label>
-                    <input
-                      type="text"
-                      placeholder={t('reports.complaintModal.reporterPlaceholder')}
-                      value={complaint.from}
-                      onChange={(e) => setComplaint({ ...complaint, from: e.target.value })}
-                    />
-                  </div>
-                  <div className="rpt-form-group">
-                    <label>{t('reports.complaintModal.categoryLabel')}</label>
-                    <select
-                      value={complaint.category}
-                      onChange={(e) => setComplaint({ ...complaint, category: e.target.value })}
-                    >
-                      <option value="Technical Issue">{t('reports.complaintModal.categories.technical')}</option>
-                      <option value="Data Entry">{t('reports.complaintModal.categories.dataEntry')}</option>
-                      <option value="Access Permissions">{t('reports.complaintModal.categories.access')}</option>
-                      <option value="System Performance">{t('reports.complaintModal.categories.performance')}</option>
-                      <option value="Other">{t('reports.complaintModal.categories.other')}</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="rpt-form-row">
-                  <div className="rpt-form-group">
-                    <label>{t('reports.complaintModal.titleLabel')}</label>
-                    <input
-                      type="text"
-                      placeholder={t('reports.complaintModal.titlePlaceholder')}
-                      value={complaint.title}
-                      onChange={(e) => setComplaint({ ...complaint, title: e.target.value })}
-                      required
-                    />
-                  </div>
-                  <div className="rpt-form-group">
-                    <label>{t('reports.complaintModal.priorityLabel')}</label>
-                    <select
-                      value={complaint.priority}
-                      onChange={(e) => setComplaint({ ...complaint, priority: e.target.value })}
-                    >
-                      <option value="Low">{t('reports.complaintModal.priorities.low')}</option>
-                      <option value="Medium">{t('reports.complaintModal.priorities.medium')}</option>
-                      <option value="High">{t('reports.complaintModal.priorities.high')}</option>
-                      <option value="Critical">{t('reports.complaintModal.priorities.critical')}</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="rpt-form-group">
-                  <label>{t('reports.complaintModal.descriptionLabel')}</label>
-                  <textarea
-                    rows={4}
-                    placeholder={t('reports.complaintModal.descriptionPlaceholder')}
-                    value={complaint.description}
-                    onChange={(e) => setComplaint({ ...complaint, description: e.target.value })}
-                    required
-                  />
-                </div>
-
-                <div className="rpt-modal-actions">
-                  <button
-                    type="button"
-                    className="rpt-btn rpt-btn-secondary"
-                    onClick={() => setShowComplaintsModal(false)}
-                    disabled={submitting}
-                  >
-                    {t('common.cancel')}
-                  </button>
-                  <button type="submit" className="rpt-btn rpt-btn-primary" disabled={submitting}>
-                    {submitting ? <FaSpinner className="spin" /> : <FaPaperPlane aria-hidden="true" />} {t('reports.complaintModal.submit')}
-                  </button>
-                </div>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 };

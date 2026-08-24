@@ -122,14 +122,16 @@ const AdminFeedbackPage = () => {
 
       <main className="admin-feedback-main">
         <div className="feedback-page-wrapper">
-          {/* 1. Header (Matching Reference Style) */}
-          <div className="clean-admin-header">
-            <span className="eyebrow-tag">ADMINISTRATION</span>
-            <h1 className="main-title">Member Feedbacks & Issues</h1>
-            <p className="subtitle-text">
-              Review and manage all project-specific and platform-wide feedback, suggestions, and reported issues from members.
-            </p>
-          </div>
+          {/* 1. Header (Matching Project Page Style) */}
+          <header className="feedback-hero">
+            <div>
+              <p className="feedback-eyebrow">ADMINISTRATION</p>
+              <h1>Member Feedbacks & Issues</h1>
+              <p className="feedback-hero-sub">
+                Review and manage all project-specific and platform-wide feedback, suggestions, and reported issues from members.
+              </p>
+            </div>
+          </header>
 
           {/* 2. Premium Metric Stats Cards */}
           <div className="stats-cards-grid">

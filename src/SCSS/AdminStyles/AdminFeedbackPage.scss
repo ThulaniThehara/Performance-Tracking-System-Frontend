@@ -6,51 +6,58 @@
 
 .admin-feedback-main {
   flex: 1;
-  margin-left: 220px;
-  margin-top: 70px;
-  padding: 32px 40px 60px;
+  margin-left: 240px;
+  min-height: 100vh;
+  padding: 32px 40px 72px;
+  font-family: "Poppins", sans-serif;
   transition: all 0.2s ease;
 
   @media (max-width: 1024px) {
     margin-left: 0;
-    padding: 20px 16px;
+    padding: 24px 20px 56px;
+  }
+
+  @media (max-width: 640px) {
+    padding: 16px 14px 48px;
   }
 }
 
 .feedback-page-wrapper {
-  max-width: 1140px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
-/* ---------------- 1. Clean Header (Matching Reference Image 2) ---------------- */
-.clean-admin-header {
-  margin-bottom: 24px;
+/* ---------------- 1. Hero Header (Matching Project Page Style) ---------------- */
+.feedback-hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
 
-  .eyebrow-tag {
-    display: inline-block;
-    font-size: 0.76rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
+  .feedback-eyebrow {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: #6b52d1;
-    margin-bottom: 4px;
+    color: #7c6fd4;
+    margin-bottom: 8px;
   }
 
-  .main-title {
-    font-size: 2.1rem;
-    font-weight: 800;
-    color: #1d1545;
+  h1 {
+    font-size: clamp(1.5rem, 2.1vw, 1.9rem);
+    font-weight: 700;
     letter-spacing: -0.025em;
-    line-height: 1.15;
-    margin: 0 0 6px 0;
+    color: #1d1545;
+    margin: 0;
   }
 
-  .subtitle-text {
-    font-size: 0.95rem;
-    color: #6b6388;
-    margin: 0;
-    max-width: 760px;
-    line-height: 1.5;
+  .feedback-hero-sub {
+    margin-top: 6px;
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 0;
   }
 }
 
