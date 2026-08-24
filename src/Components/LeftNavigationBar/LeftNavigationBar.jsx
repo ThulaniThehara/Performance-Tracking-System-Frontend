@@ -118,27 +118,12 @@ function LeftNavigationBar() {
 
       {/* Bottom sidebar logout button */}
       <button
+        type="button"
         className="sidebar-logout-btn"
         onClick={handleLogout}
-        style={{
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '10px',
-          padding: '12px',
-          borderRadius: '14px',
-          border: '1px solid #fee2e2',
-          backgroundColor: '#fef2f2',
-          color: '#ef4444',
-          fontWeight: 700,
-          fontSize: '0.88rem',
-          cursor: 'pointer',
-          transition: 'all 0.2s ease',
-          marginTop: 'auto',
-        }}
+        aria-label={t('shell.logout')}
       >
-        <FaSignOutAlt style={{ fontSize: '1rem' }} />
+        <FaSignOutAlt />
         <span>{t('shell.logout')}</span>
       </button>
     </aside>

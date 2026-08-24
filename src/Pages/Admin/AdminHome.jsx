@@ -504,11 +504,15 @@ const AdminHome = () => {
                     <div className="progress-legend">
                       <span>
                         <i className="swatch ongoing" aria-hidden="true" />
-                        {t('admin.home.progressLegend.ongoing')} <strong>{stats.ongoingProjects}</strong>
+                        {t('admin.home.progressLegend.ongoing', { defaultValue: 'Ongoing' })} <strong>{stats.ongoingProjects ?? 0}</strong>
+                      </span>
+                      <span>
+                        <i className="swatch upcoming" aria-hidden="true" style={{ backgroundColor: '#9a6ebe' }} />
+                        {t('admin.home.progressLegend.upcoming', { defaultValue: 'Upcoming' })} <strong>{stats.upcomingProjects ?? Math.max(0, (stats.totalProjects || 0) - (stats.ongoingProjects || 0) - (stats.completedProjects || 0))}</strong>
                       </span>
                       <span>
                         <i className="swatch done" aria-hidden="true" />
-                        {t('admin.home.progressLegend.completed')} <strong>{stats.completedProjects}</strong>
+                        {t('admin.home.progressLegend.completed', { defaultValue: 'Completed' })} <strong>{stats.completedProjects ?? 0}</strong>
                       </span>
                     </div>
                   </div>
