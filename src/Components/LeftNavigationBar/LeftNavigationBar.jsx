@@ -90,7 +90,7 @@ function LeftNavigationBar() {
             <FaChevronRight className="nav-arrow" />
           </NavLink>
 
-          <NavLink to="/AdminDashboard" className={({ isActive }) => (isActive ? 'row active' : 'row')}>
+          <NavLink to="/Adminprofile" className={({ isActive }) => (isActive ? 'row active' : 'row')}>
             <div className="icon-wrapper">
               <FaUser className="row-icon" />
             </div>
