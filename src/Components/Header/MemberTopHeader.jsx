@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FaSearch, FaBell, FaChevronDown, FaChartLine, FaUserCog } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 import { getUser } from "../../utils/auth";
 import useNotifications from "../../hooks/useNotifications";
 import { NOTIF_ICON, timeAgo } from "../../utils/notificationDisplay";
