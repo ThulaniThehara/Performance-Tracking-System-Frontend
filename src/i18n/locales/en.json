@@ -722,7 +722,7 @@
     "anonymous": "Anonymous Member",
     "hero": {
       "eyebrow": "Analytics & Governance",
-      "title": "Reports & Feedback",
+      "title": "Reports",
       "subtitle": "Track organizational performance, project delivery metrics, and member feedback in real time.",
       "reportIssue": "Report Issue",
       "exportCsv": "Export CSV"
