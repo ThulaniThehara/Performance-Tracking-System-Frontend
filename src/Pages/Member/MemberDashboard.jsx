@@ -35,6 +35,7 @@ import {
   FaFileAlt,
   FaCog,
   FaCommentDots,
+  FaUserCog,
 } from "react-icons/fa";
 
 const EVENT_TYPE_VALUES = ["EVENT", "SPECIAL_TASK", "MEETING", "DEADLINE"];
@@ -66,8 +67,8 @@ const shortDate = (d) =>
 const MemberDashboard = () => {
   const { t } = useTranslation();
   const typeLabel = (type) => t(`admin.home.eventTypes.${type}`, { defaultValue: t('admin.home.eventTypes.EVENT') });
-  const user = getUser();
-  const firstName = (user?.name || "Member").split(" ")[0];
+  const [currentUser, setCurrentUser] = useState(() => getUser());
+  const firstName = (currentUser?.name || "Member").split(" ")[0];
   const navigate = useNavigate();
 
   // Navigation tab state: 'home' | 'projects'
@@ -76,12 +77,24 @@ const MemberDashboard = () => {
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [showNotifs, setShowNotifs] = useState(false);
   const notifRef = useRef(null);
+  const profileRef = useRef(null);
   const { items: notifItems, unreadCount, markRead, markAllRead } = useNotifications();
+
+  useEffect(() => {
+    const handleProfileUpdate = () => {
+      setCurrentUser(getUser());
+    };
+    window.addEventListener("userProfileUpdated", handleProfileUpdate);
+    return () => window.removeEventListener("userProfileUpdated", handleProfileUpdate);
+  }, []);
 
   useEffect(() => {
     function onClickOutside(e) {
       if (notifRef.current && !notifRef.current.contains(e.target)) {
         setShowNotifs(false);
+      }
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setShowUserDropdown(false);
       }
     }
     document.addEventListener("mousedown", onClickOutside);
@@ -327,11 +340,6 @@ const MemberDashboard = () => {
     <div className="member-dashboard-layout">
       {/* 1. LEFT VERTICAL SIDEBAR (Matching Layout & Alignment) */}
       <aside className="member-vertical-sidebar">
-        {/* Top Logo */}
-        <div className="sidebar-top-logo">
-          <div className="logo-circle">P/T</div>
-        </div>
-
         {/* Navigation Items (Stacked Vertically) */}
         <nav className="sidebar-nav-menu">
           <button
@@ -369,6 +377,18 @@ const MemberDashboard = () => {
             <span className="nav-btn-label">{t('shell.nav.settings')}</span>
           </button>
         </nav>
+
+        {/* Bottom sidebar logout button */}
+        <div className="sidebar-bottom-menu">
+          <button
+            className="sidebar-logout-btn"
+            onClick={handleLogout}
+            title={t('shell.logout', { defaultValue: 'Logout' })}
+          >
+            <FaSignOutAlt className="nav-btn-icon" />
+            <span className="nav-btn-label">{t('shell.logout', { defaultValue: 'Logout' })}</span>
+          </button>
+        </div>
       </aside>
 
       {/* 2. RIGHT MAIN CONTAINER */}
@@ -447,13 +467,22 @@ const MemberDashboard = () => {
 
             <div
               className="user-profile-dropdown"
+              ref={profileRef}
               onClick={() => setShowUserDropdown(!showUserDropdown)}
               style={{ position: "relative", cursor: "pointer" }}
             >
               <div className="avatar-circle">
-                {firstName.substring(0, 2).toUpperCase()}
+                {currentUser?.profileImage ? (
+                  <img
+                    src={currentUser.profileImage}
+                    alt={currentUser?.name || "Member"}
+                    style={{ width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover" }}
+                  />
+                ) : (
+                  firstName.substring(0, 2).toUpperCase()
+                )}
               </div>
-              <span className="user-display-name">{user?.name || t('shell.memberHeader.defaultName')}</span>
+              <span className="user-display-name">{currentUser?.name || t('shell.memberHeader.defaultName')}</span>
               <FaChevronDown className="dropdown-chevron" />
 
               {showUserDropdown && (
@@ -467,30 +496,44 @@ const MemberDashboard = () => {
                     borderRadius: 16,
                     border: "1px solid #eae2f8",
                     boxShadow: "0 10px 28px rgba(107, 82, 209, 0.15)",
-                    padding: "8px",
+                    padding: "6px",
                     zIndex: 1100,
-                    minWidth: 160,
+                    minWidth: 165,
                   }}
                 >
                   <button
-                    onClick={handleLogout}
+                    onClick={(e) => {
+                      e?.preventDefault();
+                      e?.stopPropagation();
+                      setShowUserDropdown(false);
+                      setActiveTab("settings");
+                    }}
                     style={{
                       width: "100%",
                       display: "flex",
                       alignItems: "center",
                       gap: 10,
-                      padding: "10px 14px",
+                      padding: "9px 14px",
                       borderRadius: 10,
                       border: "none",
-                      backgroundColor: "#fff0f0",
-                      color: "#ef4444",
-                      fontWeight: 700,
+                      background: "none",
+                      color: "#1d1545",
+                      fontWeight: 600,
                       fontSize: "0.85rem",
                       cursor: "pointer",
-                      transition: "all 0.2s ease",
+                      transition: "background-color 0.2s ease, color 0.2s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = "#f3f0ff";
+                      e.currentTarget.style.color = "#6b52d1";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = "transparent";
+                      e.currentTarget.style.color = "#1d1545";
                     }}
                   >
-                    <FaSignOutAlt /> {t('shell.logout')}
+                    <FaUserCog style={{ fontSize: "1rem", color: "#6b52d1" }} />
+                    <span>Profile Settings</span>
                   </button>
                 </div>
               )}

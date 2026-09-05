@@ -120,31 +120,48 @@
             color: #666;
 
             &.status-badge {
-              display: inline-block;
-              padding: 4px 12px;
-              border-radius: 16px;
-              font-weight: 600;
+              display: inline-flex;
+              align-items: center;
+              gap: 6px;
+              padding: 5px 12px;
+              border-radius: 9999px;
+              font-weight: 700;
               font-size: 12px;
+              border: 1px solid transparent;
+
+              &.status-todo,
+              &.status-new-task {
+                background: #faf5ff;
+                color: #9333ea;
+                border-color: rgba(147, 51, 234, 0.28);
+              }
 
               &.status-pending {
-                background: #fff3cd;
-                color: #856404;
+                background: #fffbeb;
+                color: #d97706;
+                border-color: rgba(217, 119, 6, 0.28);
               }
 
               &.status-ongoing,
               &.status-in-progress {
-                background: #cfe2ff;
-                color: #084298;
+                background: #f0f9ff;
+                color: #0284c7;
+                border-color: rgba(2, 132, 199, 0.28);
               }
 
-              &.status-completed {
-                background: #d1e7dd;
-                color: #0f5132;
+              &.status-completed,
+              &.status-complete {
+                background: #f0fdf4;
+                color: #16a34a;
+                border-color: rgba(22, 163, 74, 0.28);
               }
 
-              &.status-on-hold {
-                background: #f8d7da;
-                color: #842029;
+              &.status-on-hold,
+              &.status-failed,
+              &.status-overdue {
+                background: #fff1f2;
+                color: #e11d48;
+                border-color: rgba(225, 29, 72, 0.28);
               }
             }
           }

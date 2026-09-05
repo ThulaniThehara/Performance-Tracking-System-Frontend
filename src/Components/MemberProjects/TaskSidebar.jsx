@@ -9,12 +9,16 @@ import {
   FaCalendarAlt,
   FaCheckCircle,
   FaCheck,
+  FaPlay,
+  FaCircleNotch,
+  FaFolder,
 } from "react-icons/fa";
 
 /**
  * Left-side task sidebar for the Projects dashboard.
- * Displays ONLY pending tasks (Overdue → Due Today → Upcoming).
- * Excludes completed tasks for a clean pending-focused workspace.
+ * Displays pending tasks with a 3-step progression workflow:
+ * Step 1: To Do -> Step 2: In Progress -> Step 3: Complete.
+ * When marked Completed, task is completed and removed from the pending list.
  */
 const TaskSidebar = () => {
   const { t } = useTranslation();
@@ -39,16 +43,20 @@ const TaskSidebar = () => {
 
   useEffect(() => {
     load();
+    const handleRefresh = () => load();
+    window.addEventListener("taskStatusChanged", handleRefresh);
+    return () => window.removeEventListener("taskStatusChanged", handleRefresh);
   }, [load]);
 
-  const markCompleted = async (task) => {
+  const updateTaskStatus = async (task, newStatus) => {
     try {
       setBusyId(task._id);
       await apiFetch(`/pm/my-tasks/${task._id}/status`, {
         method: "PATCH",
-        body: JSON.stringify({ status: "COMPLETED" }),
+        body: JSON.stringify({ status: newStatus }),
       });
       await load();
+      window.dispatchEvent(new Event("taskStatusChanged"));
     } catch (e) {
       setError(e.message || t('projects.tasksWidget.updateError'));
     } finally {
@@ -65,17 +73,19 @@ const TaskSidebar = () => {
   const getPriorityBadge = (p) => {
     const priority = (p || "").toUpperCase();
     if (priority === "HIGH" || priority === "URGENT") {
-      return { label: t('memberProjects.taskSidebar.priority.high'), color: "#ef4444", bg: "#fef2f2" };
+      return { label: t('memberProjects.taskSidebar.priority.high', { defaultValue: 'High' }), color: "#e11d48", bg: "#fff1f2", border: "rgba(225, 29, 72, 0.2)" };
     }
     if (priority === "MEDIUM") {
-      return { label: t('memberProjects.taskSidebar.priority.medium'), color: "#f59e0b", bg: "#fffbeb" };
+      return { label: t('memberProjects.taskSidebar.priority.medium', { defaultValue: 'Med' }), color: "#d97706", bg: "#fffbeb", border: "rgba(217, 119, 6, 0.2)" };
     }
-    return { label: t('memberProjects.taskSidebar.priority.low'), color: "#10b981", bg: "#ecfdf5" };
+    return { label: t('memberProjects.taskSidebar.priority.low', { defaultValue: 'Low' }), color: "#16a34a", bg: "#f0fdf4", border: "rgba(22, 163, 74, 0.2)" };
   };
 
   const renderTaskItem = (task) => {
     const isBusy = busyId === task._id;
     const priority = getPriorityBadge(task.priority);
+    const rawStatus = (task.status || "TODO").toUpperCase();
+    const isInProgress = rawStatus === "IN_PROGRESS";
 
     return (
       <div
@@ -83,77 +93,61 @@ const TaskSidebar = () => {
         className="pending-task-card"
         style={{
           display: "flex",
-          alignItems: "flex-start",
-          gap: 12,
-          padding: "14px 16px",
-          borderRadius: 16,
-          backgroundColor: "#ffffff",
-          border: "1px solid #f0e9fa",
-          boxShadow: "0 2px 8px rgba(107, 82, 209, 0.04)",
-          transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
-          opacity: isBusy ? 0.6 : 1,
+          flexDirection: "column",
+          gap: 14,
+          padding: "16px 18px",
+          borderRadius: 18,
+          backgroundColor: isInProgress ? "#f8fbff" : "#ffffff",
+          border: isInProgress ? "1.5px solid #bae6fd" : "1px solid #f0e9fa",
+          boxShadow: isInProgress
+            ? "0 4px 16px rgba(2, 132, 199, 0.08)"
+            : "0 2px 8px rgba(107, 82, 209, 0.04)",
+          transition: "all 0.24s cubic-bezier(0.4, 0, 0.2, 1)",
+          opacity: isBusy ? 0.65 : 1,
         }}
       >
-        {/* Checkbox action to mark complete */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            if (!isBusy) {
-              markCompleted(task);
-            }
-          }}
-          title={t('memberProjects.taskSidebar.markCompleted')}
-          style={{
-            marginTop: 2,
-            width: 22,
-            height: 22,
-            borderRadius: 7,
-            border: "2px solid #c9b9f3",
-            backgroundColor: "#fcfaff",
-            color: "#6b52d1",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-            flexShrink: 0,
-            transition: "all 0.2s ease",
-          }}
-        >
-          {isBusy ? (
-            <div
+        {/* Top Header: Title, Tags & Priority */}
+        <div>
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 10 }}>
+            <h4
               style={{
-                width: 10,
-                height: 10,
-                borderRadius: "50%",
-                border: "2px solid #6b52d1",
-                borderTopColor: "transparent",
-                animation: "spin 0.8s linear infinite",
+                margin: 0,
+                fontSize: "0.92rem",
+                fontWeight: 700,
+                color: "#1d1545",
+                lineHeight: 1.35,
+                wordBreak: "break-word",
+                flex: 1,
               }}
-            />
-          ) : null}
-        </button>
+            >
+              {task.title}
+            </h4>
 
-        {/* Task Title and Context */}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <p
-            style={{
-              margin: 0,
-              fontSize: "0.85rem",
-              fontWeight: 700,
-              color: "#1d1545",
-              lineHeight: 1.35,
-              wordBreak: "break-word",
-            }}
-          >
-            {task.title}
-          </p>
+            <span
+              style={{
+                fontSize: "0.7rem",
+                fontWeight: 800,
+                color: priority.color,
+                backgroundColor: priority.bg,
+                border: `1px solid ${priority.border}`,
+                padding: "2px 8px",
+                borderRadius: 999,
+                textTransform: "uppercase",
+                letterSpacing: "0.03em",
+                flexShrink: 0,
+              }}
+            >
+              {priority.label}
+            </span>
+          </div>
 
+          {/* Meta Info Row */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
               gap: 8,
-              marginTop: 6,
+              marginTop: 8,
               flexWrap: "wrap",
             }}
           >
@@ -162,16 +156,17 @@ const TaskSidebar = () => {
                 style={{
                   fontSize: "0.72rem",
                   fontWeight: 600,
-                  color: "#5b5575",
+                  color: "#6b52d1",
                   display: "flex",
                   alignItems: "center",
-                  gap: 4,
-                  backgroundColor: "#f4effa",
-                  padding: "2px 8px",
-                  borderRadius: 6,
+                  gap: 5,
+                  backgroundColor: "#faf5ff",
+                  border: "1px solid rgba(147, 51, 234, 0.2)",
+                  padding: "3px 9px",
+                  borderRadius: 8,
                 }}
               >
-                <FaClock style={{ fontSize: "0.68rem", color: "#6b52d1" }} />
+                <FaClock style={{ fontSize: "0.7rem", color: "#9333ea" }} />
                 {formatDate(task.dueDate)}
               </span>
             )}
@@ -179,37 +174,314 @@ const TaskSidebar = () => {
             {task.projectName && (
               <span
                 style={{
-                  fontSize: "0.71rem",
+                  fontSize: "0.72rem",
                   fontWeight: 700,
-                  color: "#6b52d1",
-                  backgroundColor: "rgba(107, 82, 209, 0.1)",
-                  padding: "2px 8px",
-                  borderRadius: 6,
-                  maxWidth: 130,
+                  color: "#5b45b0",
+                  backgroundColor: "#f4effa",
+                  padding: "3px 9px",
+                  borderRadius: 8,
+                  maxWidth: 150,
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   whiteSpace: "nowrap",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 4,
                 }}
               >
+                <FaFolder style={{ fontSize: "0.68rem", opacity: 0.8 }} />
                 {task.projectName}
               </span>
             )}
+          </div>
+        </div>
 
-            <span
+        {/* Interactive Step Progress Stepper (Inspired by UI Reference) */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 12,
+            paddingTop: 12,
+            borderTop: "1px solid rgba(234, 226, 248, 0.75)",
+          }}
+        >
+          {/* Stepper Track */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              position: "relative",
+            }}
+          >
+            {/* Step 1: To Do */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (!isBusy && rawStatus !== "TODO") updateTaskStatus(task, "TODO");
+              }}
+              title="Set to To Do"
               style={{
-                fontSize: "0.68rem",
-                fontWeight: 800,
-                color: priority.color,
-                backgroundColor: priority.bg,
-                padding: "2px 7px",
-                borderRadius: 6,
-                textTransform: "uppercase",
-                letterSpacing: "0.03em",
-                marginLeft: "auto",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 4,
+                background: "none",
+                border: "none",
+                cursor: isBusy ? "not-allowed" : "pointer",
+                padding: 0,
+                zIndex: 2,
               }}
             >
-              {priority.label}
-            </span>
+              <div
+                style={{
+                  width: 26,
+                  height: 26,
+                  borderRadius: "50%",
+                  backgroundColor: rawStatus === "TODO" ? "#9333ea" : "#ecfdf5",
+                  border: rawStatus === "TODO" ? "2.5px solid #faf5ff" : "2px solid #86efac",
+                  boxShadow: rawStatus === "TODO" ? "0 0 0 3px rgba(147, 51, 234, 0.25)" : "none",
+                  color: rawStatus === "TODO" ? "#ffffff" : "#16a34a",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "0.75rem",
+                  fontWeight: 800,
+                  transition: "all 0.2s ease",
+                }}
+              >
+                {rawStatus === "TODO" ? "1" : <FaCheck style={{ fontSize: "0.68rem" }} />}
+              </div>
+              <span
+                style={{
+                  fontSize: "0.68rem",
+                  fontWeight: rawStatus === "TODO" ? 800 : 600,
+                  color: rawStatus === "TODO" ? "#9333ea" : "#64748b",
+                }}
+              >
+                To Do
+              </span>
+            </button>
+
+            {/* Line 1 -> 2 */}
+            <div
+              style={{
+                flex: 1,
+                height: 3,
+                backgroundColor: isInProgress ? "#0284c7" : "#e2e8f0",
+                margin: "0 6px",
+                marginBottom: 16,
+                borderRadius: 2,
+                transition: "background-color 0.25s ease",
+              }}
+            />
+
+            {/* Step 2: In Progress */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (!isBusy && !isInProgress) updateTaskStatus(task, "IN_PROGRESS");
+              }}
+              title="Set to In Progress"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 4,
+                background: "none",
+                border: "none",
+                cursor: isBusy ? "not-allowed" : "pointer",
+                padding: 0,
+                zIndex: 2,
+              }}
+            >
+              <div
+                style={{
+                  width: 26,
+                  height: 26,
+                  borderRadius: "50%",
+                  backgroundColor: isInProgress ? "#0284c7" : "#f1f5f9",
+                  border: isInProgress ? "2.5px solid #f0f9ff" : "2px solid #cbd5e1",
+                  boxShadow: isInProgress ? "0 0 0 3px rgba(2, 132, 199, 0.25)" : "none",
+                  color: isInProgress ? "#ffffff" : "#64748b",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "0.75rem",
+                  fontWeight: 800,
+                  transition: "all 0.2s ease",
+                }}
+              >
+                {isInProgress ? (
+                  <FaCircleNotch style={{ fontSize: "0.72rem", animation: "spin 2s linear infinite" }} />
+                ) : (
+                  "2"
+                )}
+              </div>
+              <span
+                style={{
+                  fontSize: "0.68rem",
+                  fontWeight: isInProgress ? 800 : 600,
+                  color: isInProgress ? "#0284c7" : "#64748b",
+                }}
+              >
+                In Progress
+              </span>
+            </button>
+
+            {/* Line 2 -> 3 */}
+            <div
+              style={{
+                flex: 1,
+                height: 3,
+                backgroundColor: "#e2e8f0",
+                margin: "0 6px",
+                marginBottom: 16,
+                borderRadius: 2,
+                transition: "background-color 0.25s ease",
+              }}
+            />
+
+            {/* Step 3: Complete */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (!isBusy) updateTaskStatus(task, "COMPLETED");
+              }}
+              title="Complete and remove from pending tasks"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 4,
+                background: "none",
+                border: "none",
+                cursor: isBusy ? "not-allowed" : "pointer",
+                padding: 0,
+                zIndex: 2,
+              }}
+            >
+              <div
+                style={{
+                  width: 26,
+                  height: 26,
+                  borderRadius: "50%",
+                  backgroundColor: "#f1f5f9",
+                  border: "2px solid #cbd5e1",
+                  color: "#64748b",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "0.75rem",
+                  fontWeight: 800,
+                  transition: "all 0.2s ease",
+                }}
+              >
+                3
+              </div>
+              <span
+                style={{
+                  fontSize: "0.68rem",
+                  fontWeight: 600,
+                  color: "#64748b",
+                }}
+              >
+                Complete
+              </span>
+            </button>
+          </div>
+
+          {/* Quick Action Button for Seamless Step Progression */}
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 2 }}>
+            {rawStatus === "TODO" ? (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (!isBusy) updateTaskStatus(task, "IN_PROGRESS");
+                }}
+                disabled={isBusy}
+                style={{
+                  flex: 1,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 7,
+                  height: 34,
+                  borderRadius: 10,
+                  backgroundColor: "#f0f9ff",
+                  color: "#0284c7",
+                  border: "1px solid rgba(2, 132, 199, 0.28)",
+                  fontSize: "0.78rem",
+                  fontWeight: 700,
+                  cursor: isBusy ? "not-allowed" : "pointer",
+                  transition: "all 0.18s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#0284c7";
+                  e.currentTarget.style.color = "#ffffff";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#f0f9ff";
+                  e.currentTarget.style.color = "#0284c7";
+                }}
+              >
+                {isBusy ? (
+                  <FaCircleNotch style={{ animation: "spin 0.8s linear infinite" }} />
+                ) : (
+                  <>
+                    <FaPlay style={{ fontSize: "0.65rem" }} />
+                    <span>Start ➔ In Progress</span>
+                  </>
+                )}
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (!isBusy) updateTaskStatus(task, "COMPLETED");
+                }}
+                disabled={isBusy}
+                style={{
+                  flex: 1,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 7,
+                  height: 34,
+                  borderRadius: 10,
+                  backgroundColor: "#f0fdf4",
+                  color: "#16a34a",
+                  border: "1px solid rgba(22, 163, 74, 0.3)",
+                  fontSize: "0.78rem",
+                  fontWeight: 700,
+                  cursor: isBusy ? "not-allowed" : "pointer",
+                  transition: "all 0.18s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#16a34a";
+                  e.currentTarget.style.color = "#ffffff";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#f0fdf4";
+                  e.currentTarget.style.color = "#16a34a";
+                }}
+              >
+                {isBusy ? (
+                  <FaCircleNotch style={{ animation: "spin 0.8s linear infinite" }} />
+                ) : (
+                  <>
+                    <FaCheckCircle style={{ fontSize: "0.85rem" }} />
+                    <span>Complete Task (Finish)</span>
+                  </>
+                )}
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -258,7 +530,7 @@ const TaskSidebar = () => {
             {tasks.length}
           </span>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {tasks.map(renderTaskItem)}
         </div>
       </div>
@@ -290,7 +562,7 @@ const TaskSidebar = () => {
         alignSelf: "stretch",
       }}
     >
-      {/* Pending Tasks Header - Integrated inside unified sidebar box */}
+      {/* Pending Tasks Header */}
       <div
         style={{
           display: "flex",
@@ -351,7 +623,7 @@ const TaskSidebar = () => {
             <div
               key={i}
               style={{
-                height: 64,
+                height: 90,
                 borderRadius: 16,
                 backgroundColor: "#f4effa",
                 marginBottom: 12,

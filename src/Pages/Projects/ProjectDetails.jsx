@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams, Link, useSearchParams } from "react-router-dom";
-import { FaArrowLeft, FaPlus, FaSitemap, FaTasks, FaUsers, FaCommentDots, FaExclamationTriangle, FaStar, FaPen, FaProjectDiagram, FaTrashAlt, FaUserPlus } from "react-icons/fa";
+import { FaArrowLeft, FaPlus, FaSitemap, FaTasks, FaUsers, FaCommentDots, FaExclamationTriangle, FaStar, FaPen, FaProjectDiagram, FaTrashAlt, FaUserPlus, FaSpinner } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 
 import Header from "../../Components/Header/Header";
@@ -138,7 +138,8 @@ const ProjectDetails = () => {
       const res = await apiFetch(`/pm/projects/${projectId}`);
       if (!res) return;
       setData(res.data);
-      if (res.data?.project?.PName) {
+      const canViewSubmissions = isAdmin || res.data?.myRole === 'CHAIRPERSON';
+      if (res.data?.project?.PName && canViewSubmissions) {
         fetchProjectSubmissions(res.data.project.PName);
       }
     } catch (e) {
@@ -403,6 +404,10 @@ const ProjectDetails = () => {
   }
 
   const unassigned = membersByCommittee.none || [];
+  // Feedback/complaints reported by one member about another are private to
+  // that pair plus oversight — only this project's chairperson or an admin
+  // may browse the full list.
+  const canViewSubmissions = isAdmin || myRole === 'CHAIRPERSON';
 
   return (
     <>
@@ -427,25 +432,29 @@ const ProjectDetails = () => {
               <FaProjectDiagram /> Project Details
             </button>
 
-            <button
-              className={`project-tab-btn ${projectDetailTab === 'feedbacks' ? 'active' : ''}`}
-              onClick={() => setProjectDetailTab('feedbacks')}
-            >
-              <FaCommentDots /> Feedbacks
-              {projectFeedbacks.length > 0 && (
-                <span className="tab-badge-pill">{projectFeedbacks.length}</span>
-              )}
-            </button>
+            {canViewSubmissions && (
+              <>
+                <button
+                  className={`project-tab-btn ${projectDetailTab === 'feedbacks' ? 'active' : ''}`}
+                  onClick={() => setProjectDetailTab('feedbacks')}
+                >
+                  <FaCommentDots /> Feedbacks
+                  {projectFeedbacks.length > 0 && (
+                    <span className="tab-badge-pill">{projectFeedbacks.length}</span>
+                  )}
+                </button>
 
-            <button
-              className={`project-tab-btn ${projectDetailTab === 'complaints' ? 'active' : ''}`}
-              onClick={() => setProjectDetailTab('complaints')}
-            >
-              <FaExclamationTriangle /> Issues & Complaints
-              {projectComplaints.length > 0 && (
-                <span className="tab-badge-pill">{projectComplaints.length}</span>
-              )}
-            </button>
+                <button
+                  className={`project-tab-btn ${projectDetailTab === 'complaints' ? 'active' : ''}`}
+                  onClick={() => setProjectDetailTab('complaints')}
+                >
+                  <FaExclamationTriangle /> Issues & Complaints
+                  {projectComplaints.length > 0 && (
+                    <span className="tab-badge-pill">{projectComplaints.length}</span>
+                  )}
+                </button>
+              </>
+            )}
           </div>
 
           {/* =========================================================================
@@ -678,7 +687,7 @@ const ProjectDetails = () => {
           {/* =========================================================================
              TAB 2: PROJECT FEEDBACKS VIEW
              ========================================================================= */}
-          {projectDetailTab === 'feedbacks' && (
+          {projectDetailTab === 'feedbacks' && canViewSubmissions && (
             <div className="project-submissions-panel">
               <div className="panel-header-row">
                 <h3>Member Feedbacks for {data.project?.PName}</h3>
@@ -718,7 +727,7 @@ const ProjectDetails = () => {
           {/* =========================================================================
              TAB 3: PROJECT ISSUES & COMPLAINTS VIEW
              ========================================================================= */}
-          {projectDetailTab === 'complaints' && (
+          {projectDetailTab === 'complaints' && canViewSubmissions && (
             <div className="project-submissions-panel">
               <div className="panel-header-row">
                 <h3>Reported Issues & Complaints for {data.project?.PName}</h3>

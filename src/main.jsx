@@ -133,6 +133,7 @@ const router = createBrowserRouter([
   { path: "/ManageTasks", element: <ManageTask />, errorElement: <RouteErrorBoundary /> },
 
   { path: "/AdminHome", element: <AdminHome />, errorElement: <RouteErrorBoundary /> },
+  { path: "/Adminprofile", element: <AdminDashboard />, errorElement: <RouteErrorBoundary /> },
   { path: "/AdminDashboard", element: <AdminDashboard />, errorElement: <RouteErrorBoundary /> },
   // Where projects are actually created and assigned a chairperson.
   {

@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { FaSearch, FaBell, FaChevronDown, FaSignOutAlt, FaBars } from 'react-icons/fa'
+import { FaSearch, FaBell, FaChevronDown, FaBars, FaUserCog } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { getUser, logout } from '../../utils/auth'
+import { getUser } from '../../utils/auth'
 import useNotifications from '../../hooks/useNotifications'
 import { NOTIF_ICON, timeAgo } from '../../utils/notificationDisplay'
 import '../../SCSS/Header.scss'
@@ -14,12 +14,16 @@ function Header() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showNotifs, setShowNotifs] = useState(false);
   const notifRef = useRef(null);
+  const profileRef = useRef(null);
   const { items, unreadCount, markRead, markAllRead } = useNotifications();
 
   useEffect(() => {
     function onClickOutside(e) {
       if (notifRef.current && !notifRef.current.contains(e.target)) {
         setShowNotifs(false);
+      }
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setShowDropdown(false);
       }
     }
     document.addEventListener('mousedown', onClickOutside);
@@ -37,11 +41,11 @@ function Header() {
     user?.image ||
     `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=6b52d1&color=fff`;
 
-  const handleLogout = (e) => {
+  const handleProfileClick = (e) => {
     e?.preventDefault();
     e?.stopPropagation();
-    logout();
-    window.location.href = '/';
+    setShowDropdown(false);
+    navigate('/Adminprofile');
   };
 
   const toggleMobileNav = () => {
@@ -118,6 +122,7 @@ function Header() {
 
         <div
           className="user-profile-menu"
+          ref={profileRef}
           onClick={() => setShowDropdown(!showDropdown)}
           style={{ position: 'relative', cursor: 'pointer' }}
         >
@@ -140,28 +145,39 @@ function Header() {
                 border: '1px solid #eae2f8',
                 borderRadius: 12,
                 boxShadow: '0 8px 24px rgba(107, 82, 209, 0.15)',
-                padding: '8px 0',
-                minWidth: 140,
+                padding: '6px',
+                minWidth: 165,
                 zIndex: 1000,
               }}
             >
               <button
-                onClick={handleLogout}
+                onClick={handleProfileClick}
                 style={{
                   width: '100%',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 8,
-                  padding: '8px 16px',
+                  gap: 10,
+                  padding: '9px 14px',
                   border: 'none',
                   background: 'none',
-                  color: '#ef4444',
+                  color: '#1d1545',
                   fontWeight: 600,
                   fontSize: '0.85rem',
                   cursor: 'pointer',
+                  borderRadius: 8,
+                  transition: 'background-color 0.2s ease, color 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#f3f0ff';
+                  e.currentTarget.style.color = '#6b52d1';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.color = '#1d1545';
                 }}
               >
-                <FaSignOutAlt /> {t('shell.logout')}
+                <FaUserCog style={{ fontSize: '1rem', color: '#6b52d1' }} />
+                <span>Profile Settings</span>
               </button>
             </div>
           )}
