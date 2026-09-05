@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useSearchParams } from "react-router-dom";
 import { FaArrowLeft, FaPlus, FaSitemap, FaTasks, FaUsers, FaCommentDots, FaExclamationTriangle, FaStar, FaPen, FaProjectDiagram, FaTrashAlt, FaUserPlus } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 
@@ -77,8 +77,17 @@ const ProjectDetails = () => {
   const [saving, setSaving] = useState(false);
   const [modalError, setModalError] = useState("");
 
+  const [searchParams] = useSearchParams();
+  const urlTab = searchParams.get("tab");
+
   // Project Tabs (Image 2 style: Project Details, Feedbacks, Issues/Complaints)
-  const [projectDetailTab, setProjectDetailTab] = useState("details"); // 'details' | 'feedbacks' | 'complaints'
+  const [projectDetailTab, setProjectDetailTab] = useState(urlTab || "details"); // 'details' | 'feedbacks' | 'complaints'
+
+  useEffect(() => {
+    if (urlTab && ["details", "feedbacks", "complaints"].includes(urlTab)) {
+      setProjectDetailTab(urlTab);
+    }
+  }, [urlTab]);
   const [projectFeedbacks, setProjectFeedbacks] = useState([]);
   const [projectComplaints, setProjectComplaints] = useState([]);
   const [loadingSubmissions, setLoadingSubmissions] = useState(false);
